@@ -1,0 +1,7 @@
+# Example SMILES file (name\tsmiles)
+Caffeine	Cn1cnc2n(C)c(=O)n(C)c(=O)c12
+Aspirin	CC(=O)Oc1ccccc1C(=O)O
+Ibuprofen	CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O
+Lidocaine	CCN(CC)C(=O)Nc1cccc(C)c1N(C)C
+Diazepam	CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21
+

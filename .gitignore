@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.csv
+!tests/data/*.csv
+*.tsv
+*.xlsx
+*.parquet
+.DS_Store
+.env
+.venv/
+venv/
+.envrc
+.idea/
+.vscode/
+reports/
+/picklists/
+outputs/
+
+# crash dumps / local artifacts
+/core
+/core.*
+_t*/
+=*

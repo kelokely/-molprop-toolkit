@@ -1,0 +1,36 @@
+{
+  "picklists": [
+    {
+      "key": "cns_clean_20",
+      "name": "CNS clean top 20",
+      "description": "Example custom picklist: CNS MPO + basic red-flag avoidance.",
+      "logic": "all",
+      "filters": [
+        {"column": "CNS_MPO", "op": ">=", "value": 4.8, "missing": "warn_skip"},
+        {"column": "Tox_Risk", "op": "notin", "value": ["High"], "missing": "warn_skip"},
+        {"column": "hERG_Risk", "op": "notin", "value": ["High"], "missing": "warn_skip"}
+      ],
+      "sort": [
+        {"column": "CNS_MPO", "ascending": false}
+      ],
+      "limit": 20,
+      "include_categories": ["cns_mpo", "toxicity", "herg"]
+    },
+    {
+      "key": "any_red_flag",
+      "name": "Any red flag (review)",
+      "description": "Example OR-style picklist: include compound if ANY condition matches.",
+      "logic": "any",
+      "filters": [
+        {"column": "Tox_Risk", "op": "in", "value": ["High"], "missing": "warn_skip"},
+        {"column": "CYP_Total_Inhibition", "op": ">=", "value": 3, "missing": "warn_skip"},
+        {"column": "RO5_Violations", "op": ">=", "value": 2, "missing": "warn_skip"}
+      ],
+      "sort": [
+        {"column": "Tox_Total_Alerts", "ascending": false}
+      ],
+      "include_categories": ["toxicity", "cyp", "rule_of_5"]
+    }
+  ]
+}
+

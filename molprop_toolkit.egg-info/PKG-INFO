@@ -1,0 +1,384 @@
+Metadata-Version: 2.4
+Name: molprop-toolkit
+Version: 0.5.0
+Summary: MolProp Toolkit: calculators, analyzers, reports, picklists, and series analytics for medicinal chemistry property tables
+Author: Easy-Peasy.AI
+License: MIT
+Keywords: cheminformatics,rdkit,medchem,admet,cns-mpo
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=1.5
+Requires-Dist: numpy>=1.23
+Provides-Extra: rdkit
+Requires-Dist: rdkit-pypi>=2022.9.5; extra == "rdkit"
+Provides-Extra: dimorphite
+Requires-Dist: dimorphite-dl>=1.3.2; extra == "dimorphite"
+Provides-Extra: report
+Requires-Dist: matplotlib>=3.7; extra == "report"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"
+Requires-Dist: ruff>=0.1.9; extra == "dev"
+Dynamic: license-file
+
+# MolProp Toolkit
+
+MolProp Toolkit is a small, practical repository for generating and analyzing cheminformatics property tables from SMILES and for producing category focused reports from those tables. The project is organized around two ideas. The first idea is to compute a wide descriptor table where the first columns are the ones medicinal chemists typically want to see first, such as CNS MPO, oral bioavailability filters, Rule of 5 and Rule of 3, med‑chem structural flags, toxicity alerts, and metabolic soft‑spot summaries. The second idea is to treat the resulting CSV as a dataset and provide multiple analyzers, one per category, so that you can quickly answer questions such as which compounds have PAINS flags, which compounds have high hERG risk, which compounds are predicted to be poorly soluble, or which compounds have too many metabolic soft spots.
+
+The analyzers are written to keep the compound identity visible in every output. Each analyzer automatically detects a compound identifier column, preferring `Compound_ID` when present, and will always print that name alongside the key metrics that the analysis is summarizing.
+
+## Repository layout
+
+The calculators live in `calculators/` and create a results CSV from an input SMILES file. The analyzers live in `analyzers/` and read a results CSV and print a detailed report to the terminal while optionally exporting a smaller category CSV. Additional background explanations and column definitions are in `docs/`. A minimal example SMILES file and a helper shell script are in `examples/`.
+
+## Installation
+
+This repository uses only `pandas` and `numpy` for analysis. The property calculators, if you choose to use them, require RDKit and optional scientific/cheminformatics libraries; those are intentionally not forced into `requirements.txt` because RDKit installation is environment dependent.
+
+### Recommended: conda environment (RDKit-friendly)
+
+A ready-to-use conda environment definition is provided in `environment.yml`.
+
+```bash
+conda env create -f environment.yml
+conda activate molprop-toolkit
+```
+
+### Pip / virtualenv (analysis-only or pip-first installs)
+
+Create a virtual environment and install the analysis requirements.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+If you want an installable package with console scripts, you can also install the repo itself:
+
+```bash
+pip install -e .
+
+# Dev/test tooling
+pip install -e ".[dev]"
+```
+
+This exposes console commands like `molprop-calc-v5`, `molprop-analyze`, `molprop-report`, `molprop-sketch`, `molprop-series`, and `molprop-picklists`.
+
+If you plan to run the calculator scripts, you must also install RDKit in your environment. On conda, the typical approach is installing from conda-forge. If you already have a results CSV from another pipeline, you can skip RDKit entirely and use only the analyzers.
+
+## Input and output formats
+
+The canonical workflow is that an input SMILES file produces a single wide CSV, then category analyzers produce smaller CSVs and printed reports.
+
+The SMILES input file can be one of these common formats: `name<tab>smiles`, `smiles<tab>name`, `name smiles`, or `smiles name`. The calculators attempt to detect which token is the SMILES by looking for typical SMILES characters.
+
+The results CSV is expected to contain at least a compound identifier column, ideally `Compound_ID`, and then any number of additional columns. The analyzers are designed to be tolerant of missing columns, so you can use them even if you compute only a subset of properties.
+
+## Structure preparation (standardization, tautomers, stereo)
+
+## pH / ionization handling (Task 2)
+
+The calculators can also emit simple pH-dependent ionization features that are useful for triage and for later selection among enumerated protomers. In the current subtask, this is implemented as a heuristic Henderson–Hasselbalch model driven by the toolkit’s estimated pKa values. It adds `Ion_*` columns such as `Ion_State`, `Ion_NetCharge_Est`, and `Ion_LogD_pH_Est` and does not modify the structure used for descriptor calculation.
+
+You can set the pH and you can disable these columns if you want to keep the table minimal.
+
+```bash
+python calculators/mpo_v5.py examples/example.smi -o results.csv --ph 7.4 --ionization heuristic
+python calculators/mpo_v5.py examples/example.smi -o results.csv --ionization none
+```
+
+### Enumeration mode (Task 2B): Dimorphite-DL protomer enumeration
+
+If you want actual protonated/deprotonated SMILES at a user-specified pH range, you can enable Dimorphite-DL protomer enumeration. This is an optional dependency.
+
+Install:
+
+```bash
+pip install dimorphite_dl
+```
+
+Run:
+
+```bash
+# Enumerate protomers around pH 7.4 (default range is ph±0.5)
+python calculators/mpo_v5.py examples/example.smi -o results.csv --ionization dimorphite --ph 7.4
+
+# Control pH window and enumeration size
+python calculators/mpo_v5.py examples/example.smi -o results.csv \
+  --ionization dimorphite --ph-min 7.0 --ph-max 7.4 \
+  --dimorphite-precision 1.0 --dimorphite-max-variants 64 \
+  --protomer-select closest-charge
+
+# (Optional) compute descriptors on selected protomer
+python calculators/mpo_v5.py examples/example.smi -o results.csv \
+  --ionization dimorphite --ph 7.4 --calc-on-protomer
+```
+
+This mode adds `Protomer_*` metadata columns. By default, it records the selected protomer but computes descriptors on the neutral prepared structure. If `--calc-on-protomer` is set, descriptors are computed on the selected protomer and `Calc_Canonical_SMILES` will reflect that.
+
+
+## Stereochemistry (Task 4)
+
+Stereochemistry is often under-specified in early SMILES lists. MolProp Toolkit can preserve, strip, or enumerate stereoisomers for unassigned stereo.
+
+```bash
+# Preserve stereochemistry (default)
+python calculators/mpo_v5.py examples/example.smi -o results.csv --stereo-mode keep
+
+# Strip stereochemistry (treat as unspecified/racemic)
+python calculators/mpo_v5.py examples/example.smi -o results.csv --stereo-mode strip
+
+# Enumerate stereoisomers for unassigned stereo and select a representative
+python calculators/mpo_v5.py examples/example.smi -o results.csv --stereo-mode enumerate --stereo-max 32 --stereo-topk 5 --stereo-select canonical
+```
+
+This adds `Stereo_*` metadata columns to the output.
+
+## Structure sketching (Task 5)
+
+You can generate quick 2D depictions (SVG and/or PNG) and an optional `index.html` for browsing compound structures. This is designed to work directly from a calculator results CSV, using the best available SMILES column (by default it prefers `Calc_Canonical_SMILES`).
+
+```bash
+# 1) Create a results table
+python calculators/mpo_v5.py examples/example.smi -o results.csv
+
+# 2) Render structures and a browsable HTML index (single structure per compound)
+python tools/sketch_structures.py results.csv --outdir sketches --format svg --html
+
+# Render both svg and png
+python tools/sketch_structures.py results.csv --outdir sketches --format svg,png --html
+
+# Visual extension: compare Input vs Prepared vs Calc Base vs Calc structures side-by-side
+python tools/sketch_structures.py results.csv --outdir sketches_compare --format svg --html --compare
+
+# Optionally include protomer column when present
+python tools/sketch_structures.py results.csv --outdir sketches_compare --format svg --html --compare --include-protomer
+```
+
+The output directory will contain `structures/` and (if enabled) an `index.html` file.
+
+## Tautomers (Task 3)
+
+Tautomer handling is often a hidden source of inconsistencies in property tables. MolProp Toolkit now supports an explicit tautomer mode. By default (`--tautomer-mode prep-canonical`) the preparation step canonicalizes a single tautomer (fast and deterministic). If you enable enumeration (`--tautomer-mode enumerate`), the calculator will enumerate a set of tautomers and report `Tautomer_Count` and `Tautomer_TopK_SMILES`, while selecting a representative tautomer for calculations.
+
+```bash
+# Default behavior (single canonical tautomer during preparation)
+python calculators/mpo_v5.py examples/example.smi -o results.csv
+
+# Enumerate tautomers, report set size, and select a representative tautomer
+python calculators/mpo_v5.py examples/example.smi -o results.csv --tautomer-mode enumerate --tautomer-max 64 --tautomer-topk 5
+
+# Disable tautomer processing entirely
+python calculators/mpo_v5.py examples/example.smi -o results.csv --tautomer-mode none
+```
+
+
+Both calculators now support an optional RDKit preparation step that runs before computing properties. This step is meant to make the downstream property table more consistent when your input contains salts, mixtures, charge variants, or tautomeric forms. The preparation pipeline attempts to clean up the structure, select a fragment parent, optionally uncharge and reionize, canonicalize the tautomer, and assign stereochemistry while reporting whether any stereocenters are unassigned.
+
+The preparation metadata is written to columns such as `Input_Canonical_SMILES`, `Canonical_SMILES`, `Prep_SaltsStripped`, `Prep_TautomerChanged`, and `Prep_StereoStatus`. The analyzers will ignore these columns if they are not needed, but they are extremely useful for debugging and traceability.
+
+You can disable preparation or parts of it using these flags.
+
+```bash
+# Disable all preparation
+python calculators/mpo_v5.py examples/example.smi -o results.csv --no-prep
+
+# Keep original tautomer form
+python calculators/mpo_v5.py examples/example.smi -o results.csv --no-tautomer
+
+# Keep charges (skip uncharging)
+python calculators/mpo_v5.py examples/example.smi -o results.csv --keep-charges
+```
+
+## Calculators
+
+### v4 (2D + drug-likeness + alerts; optional Mordred)
+
+`calculators/mpo_v4.py` computes a broad set of properties with first columns for CNS MPO, oral bioavailability filters, Rule of 5 and Rule of 3, med‑chem flags, toxicity alerts, and metabolic soft‑spot indicators. It also supports `--fill-missing` to produce a machine learning friendly matrix where missing values are replaced by a constant such as 0.
+
+Example.
+
+```bash
+python calculators/mpo_v4.py examples/example.smi -o results.csv --fill-missing 0
+```
+
+### v5 (extended; optional 3D descriptors)
+
+`calculators/mpo_v5.py` extends the v4 approach with additional property families such as basic solubility and permeability estimators, partial charge summaries, PK heuristics, and optional 3D descriptors. Because 3D descriptor calculation requires conformer generation and optional minimization, runtime can increase substantially.
+
+To enable 3D shape descriptors (Task 7):
+
+```bash
+python calculators/mpo_v5.py examples/example.smi -o results.csv --3d --3d-num-confs 10 --3d-minimize mmff
+```
+
+## Analyzers
+
+The category analyzers are intended to be used as independent tools. Each script prints an explanation of the category, prints dataset level summaries, then prints compound level lists that include the compound name, and optionally exports a CSV.
+
+### Master analyzer
+
+The master analyzer is useful when you want a single entry point.
+
+```bash
+python analyzers/analyzer_master.py results.csv --list
+python analyzers/analyzer_master.py results.csv --category toxicity
+python analyzers/analyzer_master.py results.csv --report -o report.txt
+```
+
+## Developability indices (Task 8)
+
+The calculators also emit a small set of interpretable developability-oriented columns prefixed with `Dev_` (for example, GSK 4/400, Pfizer 3/75, and a simple risk/score aggregation).
+
+```bash
+python calculators/mpo_v5.py examples/example.smi -o results.csv
+python analyzers/analyzer_master.py results.csv --category developability
+```
+
+## Series analytics (Task 13)
+
+If you want series-level annotations (scaffolds and similarity clusters) that you can join back into your main results table, run the combined series analytics runner.
+
+```bash
+# Generate scaffold + cluster assignments and an enriched CSV
+python tools/series_analytics.py results.csv
+
+# Choose output directory and similarity threshold
+python tools/series_analytics.py results.csv --outdir series/run1 --similarity 0.7
+
+# Disable generating SVG thumbnails
+python tools/series_analytics.py results.csv --no-images
+```
+
+The output directory contains:
+
+- `scaffolds/scaffold_assignments.csv`, `scaffolds/scaffold_summary.csv`
+- `clusters/cluster_assignments.csv`, `clusters/cluster_summary.csv`
+- an enriched CSV named `<input_stem>_series.csv` with `Scaffold_*` and `Cluster_*` columns added
+
+## Reports (Task 12)
+
+If you want a shareable report artifact (Markdown + HTML + plots) rather than a terminal-focused text report, use the report builder.
+
+```bash
+python tools/build_report.py results.csv
+
+# Choose output directory
+python tools/build_report.py results.csv --outdir reports/run1
+
+# Limit categories
+python tools/build_report.py results.csv --categories cns_mpo,toxicity,solubility
+```
+
+The output directory contains `report.md`, `report.html`, and `plots/*.png`. Plot generation uses matplotlib; if your environment does not have it installed you can disable plots with `--no-plots`.
+
+## Picklists (Task 14)
+
+If you want operational “decision filter” outputs (CSV picklists and optional lightweight HTML pages), use the picklist generator.
+
+```bash
+# List built-in picklists
+python tools/picklists.py results.csv --list-builtins
+
+# Generate all built-in picklists (and any picklists provided via --config)
+python tools/picklists.py results.csv
+
+# Generate specific picklists
+python tools/picklists.py results.csv --picklists top_cns_followup,oral_low_ddi_risk
+
+# Write HTML pages (index + per-picklist pages)
+python tools/picklists.py results.csv --html
+
+# Reuse Task 5 structure sketches in HTML by copying assets from a sketches directory
+python tools/picklists.py results.csv --html --sketch-dir sketches_compare --structure-views calc
+```
+
+You can also define your own rules in JSON/YAML and run them without code changes:
+
+```bash
+python tools/picklists.py results.csv --config my_picklists.json --html
+```
+
+A minimal example config is included at `examples/picklists.example.json`.
+
+## CSV schema / manifest (Task 11)
+
+MolProp Toolkit includes a lightweight, self-describing schema for results tables at `docs/schema.json`. This can be used to validate tables, catch type issues early, and to generate column reference docs.
+
+```bash
+# Validate a CSV against the schema (warn on unknown columns by default)
+python tools/validate_csv_schema.py results.csv
+
+# Require that certain registry categories are present in the dataset
+python tools/validate_csv_schema.py results.csv --require-category cns_mpo --require-category toxicity
+
+# Fail if unknown columns are present
+python tools/validate_csv_schema.py results.csv --fail-unknown
+
+# Generate a Markdown column reference from the schema
+python tools/generate_columns_md_from_schema.py
+```
+
+The generated column reference is written to `docs/columns_schema.md`.
+
+### Category analyzers
+
+You can run individual analyzers directly.
+
+```bash
+python analyzers/analyzer_cns.py results.csv -o cns.csv
+python analyzers/analyzer_medchem.py results.csv -o medchem.csv
+python analyzers/analyzer_toxicity.py results.csv -o tox.csv
+python analyzers/analyzer_metabolism.py results.csv -o metabolism.csv
+python analyzers/analyzer_herg.py results.csv -o herg.csv
+python analyzers/analyzer_cyp.py results.csv -o cyp.csv
+python analyzers/analyzer_solubility.py results.csv -o solubility.csv
+python analyzers/analyzer_permeability.py results.csv -o permeability.csv
+python analyzers/analyzer_pk.py results.csv -o pk.csv
+python analyzers/analyzer_lead.py results.csv -o lead.csv
+python analyzers/analyzer_qed.py results.csv -o qed.csv
+python analyzers/analyzer_sa.py results.csv -o sa.csv
+python analyzers/analyzer_scaffolds.py results.csv --outdir series/scaffolds
+python analyzers/analyzer_clustering.py results.csv --outdir series/clusters
+
+# Or run both and write an enriched CSV (adds Scaffold_* and Cluster_* columns)
+python tools/series_analytics.py results.csv --outdir series/run1
+```
+
+## Why `--fill-missing 0` exists and what it means
+
+Many descriptor families produce values only when the corresponding structural feature exists. For example, a descriptor related to a chlorine E‑state is undefined for a molecule with no chlorine. In raw tables those cells should be treated as not applicable rather than as numeric zeros. Machine learning pipelines often require dense matrices, so the calculators provide `--fill-missing` to replace missing values with a constant. If you use `--fill-missing 0`, document the choice in your model card, because you are turning “not applicable” into a numeric input that some models can interpret as meaningful.
+
+## Documentation
+
+- `docs/columns_schema.md`: generated column-level reference (from `docs/schema.json`)
+- `docs/feature_families.md`: feature-to-columns table grouping common `*_` column families
+- `docs/categories.md`: narrative descriptions of major analysis categories
+
+`docs/categories.md` describes each category in narrative form, including how to interpret typical thresholds and how to think about optimization levers. `docs/columns.md` explains the naming conventions used in the tables and how the analyzers locate groups of columns.
+
+## Reproducibility and disclaimers
+
+The alert and rule based outputs in this repository are heuristic. They are designed for triage and prioritization and are not a substitute for experimental ADME/Tox or validated predictive models. The toxicity and metabolism sections are primarily substructure alert based, so they may overflag or underflag depending on chemistry, dose, exposure, and context.
+
+## How to publish to GitHub
+
+This repository is already a git repository after you download it from this environment. To publish it under your GitHub account, create an empty repository on GitHub, then set the remote and push.
+
+```bash
+git branch -M main
+git remote add origin https://github.com/<YOUR_ORG>/<YOUR_REPO>.git
+git add .
+git commit -m "Initial commit: calculators + analyzers + docs"
+git push -u origin main
+```
+
+## References
+
+The concepts implemented here are based on commonly cited medicinal chemistry heuristics and publicly discussed property definitions. For CNS MPO, see the Pfizer CNS MPO publication by Wager et al. For QED, see the QED publication by Bickerton et al.
+
+Wager, T. T. et al., “Defining Desirable Central Nervous System Drug Space through the Alignment of Molecular Properties, In Vitro ADME, and Safety Attributes,” ACS Chemical Neuroscience (2010). https://pubs.acs.org/doi/10.1021/cn100007x
+
+Bickerton, G. R. et al., “Quantifying the chemical beauty of drugs,” Nature Chemistry (2012). https://www.nature.com/articles/nchem.1243
+

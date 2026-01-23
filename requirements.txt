@@ -1,0 +1,10 @@
+pandas>=2.0.0
+# RDKit pip wheels are currently built against NumPy 1.x.
+# Pin NumPy < 2 for compatibility when installing rdkit-pypi via pip.
+numpy>=1.24.0,<2
+
+# Core cheminformatics engine
+rdkit-pypi>=2022.9.5
+
+# Optional: protomer enumeration (Task 2B)
+# dimorphite_dl>=2.0.0

@@ -1,0 +1,638 @@
+{
+  "schema_version": "0.5",
+  "title": "MolProp Toolkit Results CSV Schema",
+  "description": "Self-describing column metadata for MolProp Toolkit results tables. This schema is designed to validate and document wide CSV outputs produced by calculators (mpo_v4/mpo_v5) and to remain tolerant of partial tables. It supports both explicit per-column metadata and regex-based patterns for column families.",
+  "columns": {
+    "Compound_ID": {
+      "type": "string",
+      "required": true,
+      "units": null,
+      "description": "Compound identifier used for display and joining. Preferred ID column name for all analyzers/tools.",
+      "produced_by": ["input"],
+      "tags": ["identifier"]
+    },
+    "Name": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Alternative compound identifier sometimes used by upstream pipelines.",
+      "produced_by": ["input"],
+      "tags": ["identifier"]
+    },
+    "SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Raw input SMILES if provided in the upstream table.",
+      "produced_by": ["input"],
+      "tags": ["structure"]
+    },
+
+    "Input_Canonical_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "RDKit-canonicalized SMILES as parsed from the input before preparation.",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["prep", "structure"]
+    },
+    "Canonical_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "RDKit-canonicalized SMILES after preparation (standardization/parent selection/optional uncharge+reionize/tautomer handling).",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["prep", "structure"]
+    },
+    "Calc_Base_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Base structure SMILES used as the starting point for calculation structure selection (e.g., after prep + tautomer + stereo handling, before optional protomer selection).",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["calc", "structure"]
+    },
+    "Calc_Canonical_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Canonical SMILES for the exact structure used to compute descriptors. If calc-on-protomer is enabled, this may reflect a selected protomer.",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["calc", "structure"]
+    },
+
+    "Prep_Changed": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether preparation modified the structure.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep"]
+    },
+    "Prep_SaltsStripped": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether salts/fragments were stripped during parent selection.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep"]
+    },
+    "Prep_Uncharged": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether the structure was neutralized during preparation.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep"]
+    },
+    "Prep_Reionized": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether the structure was reionized after neutralization.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep"]
+    },
+    "Prep_TautomerChanged": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether preparation changed the tautomer form.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep", "tautomer"]
+    },
+    "Prep_StereoStatus": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Stereo completeness diagnostic from preparation (e.g., specified vs unassigned).",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep", "stereo"]
+    },
+    "Prep_UnassignedChiral": {
+      "type": "int",
+      "required": false,
+      "units": "count",
+      "description": "Number of unassigned chiral centers detected during preparation.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep", "stereo"]
+    },
+    "Prep_UnassignedStereoBonds": {
+      "type": "int",
+      "required": false,
+      "units": "count",
+      "description": "Number of unassigned stereogenic double bonds detected during preparation.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep", "stereo"]
+    },
+    "Prep_Notes": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Free-text notes from the preparation step.",
+      "produced_by": ["calculators/prep.py"],
+      "tags": ["prep"]
+    },
+
+    "Stereo_Mode": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Stereochemistry handling mode (keep/strip/enumerate).",
+      "produced_by": ["calculators/stereo.py"],
+      "tags": ["stereo"]
+    },
+    "Stereo_IsomerCount": {
+      "type": "int",
+      "required": false,
+      "units": "count",
+      "description": "Number of stereoisomers considered in enumerate mode (bounded by config).",
+      "produced_by": ["calculators/stereo.py"],
+      "tags": ["stereo"]
+    },
+    "Stereo_Selected_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Representative stereoisomer SMILES selected for calculations.",
+      "produced_by": ["calculators/stereo.py"],
+      "tags": ["stereo", "structure"]
+    },
+    "Stereo_TopK_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Semicolon-separated list of up to K stereoisomer SMILES for quick inspection.",
+      "produced_by": ["calculators/stereo.py"],
+      "tags": ["stereo", "structure"]
+    },
+    "Stereo_Changed": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether stereochemistry handling changed the calculation structure.",
+      "produced_by": ["calculators/stereo.py"],
+      "tags": ["stereo"]
+    },
+    "Stereo_Notes": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Free-text notes from stereochemistry handling.",
+      "produced_by": ["calculators/stereo.py"],
+      "tags": ["stereo"]
+    },
+
+    "Tautomer_Mode": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Tautomer handling mode (none/prep-canonical/enumerate).",
+      "produced_by": ["calculators/tautomers.py"],
+      "tags": ["tautomer"]
+    },
+    "Tautomer_Count": {
+      "type": "int",
+      "required": false,
+      "units": "count",
+      "description": "Number of tautomers enumerated (bounded by config).",
+      "produced_by": ["calculators/tautomers.py"],
+      "tags": ["tautomer"]
+    },
+    "Tautomer_Selected_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Representative tautomer SMILES selected.",
+      "produced_by": ["calculators/tautomers.py"],
+      "tags": ["tautomer", "structure"]
+    },
+    "Tautomer_TopK_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Semicolon-separated list of up to K tautomer SMILES.",
+      "produced_by": ["calculators/tautomers.py"],
+      "tags": ["tautomer", "structure"]
+    },
+    "Tautomer_Changed": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether tautomer handling changed the calculation structure.",
+      "produced_by": ["calculators/tautomers.py"],
+      "tags": ["tautomer"]
+    },
+
+    "Protomer_Mode": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Protomer handling mode (none/heuristic/dimorphite).",
+      "produced_by": ["calculators/protomers.py", "calculators/ionization.py"],
+      "tags": ["protomer", "ionization"]
+    },
+    "Protomer_pH_Min": {
+      "type": "float",
+      "required": false,
+      "units": "pH",
+      "description": "Minimum pH used for protomer enumeration window.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_pH_Max": {
+      "type": "float",
+      "required": false,
+      "units": "pH",
+      "description": "Maximum pH used for protomer enumeration window.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_Precision": {
+      "type": "float",
+      "required": false,
+      "units": "pH",
+      "description": "Dimorphite precision parameter controlling microstate generation.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_MaxVariants": {
+      "type": "int",
+      "required": false,
+      "units": "count",
+      "description": "Maximum protomer variants retained.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_CalcOnProtomer": {
+      "type": "bool",
+      "required": false,
+      "units": null,
+      "description": "Whether descriptors were computed on the selected protomer.",
+      "produced_by": ["calculators/mpo_v5.py"],
+      "tags": ["protomer", "calc"]
+    },
+    "Protomer_Count": {
+      "type": "int",
+      "required": false,
+      "units": "count",
+      "description": "Number of protomers enumerated (bounded by config).",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_Selected_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Representative protomer SMILES selected.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer", "structure"]
+    },
+    "Protomer_Selected_Charge": {
+      "type": "int",
+      "required": false,
+      "units": "e",
+      "description": "Formal charge of the selected protomer (RDKit).",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_Target_Charge": {
+      "type": "int",
+      "required": false,
+      "units": "e",
+      "description": "Target charge used by selection logic (if applicable).",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+    "Protomer_TopK_SMILES": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Semicolon-separated list of up to K protomer SMILES.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer", "structure"]
+    },
+    "Protomer_Notes": {
+      "type": "string",
+      "required": false,
+      "units": null,
+      "description": "Free-text notes from protomer enumeration/selection.",
+      "produced_by": ["calculators/protomers.py"],
+      "tags": ["protomer"]
+    },
+
+    "MolWt": {
+      "type": "float",
+      "required": false,
+      "units": "Da",
+      "description": "Molecular weight (Daltons) of the calculation structure.",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["core"]
+    },
+    "LogP": {
+      "type": "float",
+      "required": false,
+      "units": "log10",
+      "description": "Crippen logP estimate (unitless log10).",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["core"]
+    },
+    "TPSA": {
+      "type": "float",
+      "required": false,
+      "units": "A^2",
+      "description": "Topological polar surface area (Å^2).",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["core"]
+    },
+    "HBD": {"type": "int", "required": false, "units": "count", "description": "H-bond donor count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+    "HBA": {"type": "int", "required": false, "units": "count", "description": "H-bond acceptor count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+    "RotBonds": {"type": "int", "required": false, "units": "count", "description": "Rotatable bond count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+    "Rings": {"type": "int", "required": false, "units": "count", "description": "Ring count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+    "AromaticRings": {"type": "int", "required": false, "units": "count", "description": "Aromatic ring count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+    "HeavyAtoms": {"type": "int", "required": false, "units": "count", "description": "Heavy atom count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+    "FractionCSP3": {"type": "float", "required": false, "units": "fraction", "description": "Fraction sp3 carbon (0–1).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["core"]},
+
+    "pKa_Basic": {"type": "float", "required": false, "units": "pKa", "description": "Estimated basic pKa (heuristic/fragment-based).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["pka"]},
+    "pKa_Acidic": {"type": "float", "required": false, "units": "pKa", "description": "Estimated acidic pKa (heuristic/fragment-based).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["pka"]},
+    "pKa_Type": {"type": "string", "required": false, "units": null, "description": "Dominant pKa type label (basic/acidic/neutral) used for simplified modeling.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["pka"]},
+    "cLogD_7.4": {"type": "float", "required": false, "units": "log10", "description": "Approximate logD at pH 7.4 derived from LogP and estimated pKa.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["ionization", "core"]},
+
+    "Ion_Mode": {"type": "string", "required": false, "units": null, "description": "Ionization feature mode (none/heuristic/dimorphite).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["ionization"]},
+    "Ion_pH": {"type": "float", "required": false, "units": "pH", "description": "pH used for heuristic ionization features.", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+    "Ion_State": {"type": "string", "required": false, "units": null, "description": "Dominant ionization class at Ion_pH (neutral/cationic/anionic/zwitterionic).", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+    "Ion_NetCharge_Est": {"type": "float", "required": false, "units": "e", "description": "Estimated net charge at Ion_pH (single-site approximation).", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+    "Ion_NetCharge_Round": {"type": "int", "required": false, "units": "e", "description": "Rounded net charge estimate at Ion_pH.", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+    "Ion_LogD_pH_Est": {"type": "float", "required": false, "units": "log10", "description": "Estimated logD at Ion_pH.", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+    "Ion_FracProtonatedBase": {"type": "float", "required": false, "units": "fraction", "description": "Fraction protonated for a base site at Ion_pH.", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+    "Ion_FracDeprotonatedAcid": {"type": "float", "required": false, "units": "fraction", "description": "Fraction deprotonated for an acid site at Ion_pH.", "produced_by": ["calculators/ionization.py"], "tags": ["ionization"]},
+
+    "CNS_MPO": {"type": "float", "required": false, "units": "score", "description": "CNS MPO total score (0–6).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "CNS_MPO_Class": {"type": "string", "required": false, "units": null, "description": "CNS MPO qualitative class (Excellent/Good/Moderate/Poor).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "BBB_Likely": {"type": "bool", "required": false, "units": null, "description": "Heuristic BBB penetration likelihood flag derived from MPO and property bounds.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "MPO_MW": {"type": "float", "required": false, "units": "desirability", "description": "CNS MPO desirability subscore for MW.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "MPO_LogP": {"type": "float", "required": false, "units": "desirability", "description": "CNS MPO desirability subscore for LogP.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "MPO_LogD": {"type": "float", "required": false, "units": "desirability", "description": "CNS MPO desirability subscore for logD.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "MPO_TPSA": {"type": "float", "required": false, "units": "desirability", "description": "CNS MPO desirability subscore for TPSA.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "MPO_HBD": {"type": "float", "required": false, "units": "desirability", "description": "CNS MPO desirability subscore for HBD.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+    "MPO_pKa": {"type": "float", "required": false, "units": "desirability", "description": "CNS MPO desirability subscore for basic pKa.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["cns_mpo"]},
+
+    "Veber_Pass": {"type": "bool", "required": false, "units": null, "description": "Veber oral filter pass flag.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["oral_bioavailability"]},
+    "Egan_Pass": {"type": "bool", "required": false, "units": null, "description": "Egan oral filter pass flag.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["oral_bioavailability"]},
+    "Ghose_Pass": {"type": "bool", "required": false, "units": null, "description": "Ghose filter pass flag.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["oral_bioavailability"]},
+    "Muegge_Pass": {"type": "bool", "required": false, "units": null, "description": "Muegge filter pass flag.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["oral_bioavailability"]},
+    "Bioavail_Score": {"type": "int", "required": false, "units": "count", "description": "Count of passed oral filters (0–4).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["oral_bioavailability"]},
+
+    "RO5_Pass": {"type": "bool", "required": false, "units": null, "description": "Lipinski Rule-of-5 pass flag (≤1 violation).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_5"]},
+    "RO5_Violations": {"type": "int", "required": false, "units": "count", "description": "Number of RO5 violations.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_5"]},
+    "RO5_MW": {"type": "bool", "required": false, "units": null, "description": "RO5 MW criterion (MW<=500).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_5"]},
+    "RO5_LogP": {"type": "bool", "required": false, "units": null, "description": "RO5 LogP criterion (LogP<=5).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_5"]},
+    "RO5_HBD": {"type": "bool", "required": false, "units": null, "description": "RO5 HBD criterion (HBD<=5).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_5"]},
+    "RO5_HBA": {"type": "bool", "required": false, "units": null, "description": "RO5 HBA criterion (HBA<=10).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_5"]},
+
+    "RO3_Pass": {"type": "bool", "required": false, "units": null, "description": "Rule-of-3 pass flag (0 violations).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_Violations": {"type": "int", "required": false, "units": "count", "description": "Number of RO3 violations.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_MW": {"type": "bool", "required": false, "units": null, "description": "RO3 MW criterion (MW<=300).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_LogP": {"type": "bool", "required": false, "units": null, "description": "RO3 LogP criterion (LogP<=3).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_HBD": {"type": "bool", "required": false, "units": null, "description": "RO3 HBD criterion (HBD<=3).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_HBA": {"type": "bool", "required": false, "units": null, "description": "RO3 HBA criterion (HBA<=3).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_RotBonds": {"type": "bool", "required": false, "units": null, "description": "RO3 rotatable bonds criterion (RotBonds<=3).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+    "RO3_TPSA": {"type": "bool", "required": false, "units": null, "description": "RO3 TPSA criterion (TPSA<=60).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["rule_of_3"]},
+
+    "PAINS": {"type": "bool", "required": false, "units": null, "description": "PAINS alert flag (RDKit FilterCatalog).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["medchem_flags"]},
+    "PAINS_Type": {"type": "string", "required": false, "units": null, "description": "PAINS alert description if flagged.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["medchem_flags"]},
+    "BRENK": {"type": "bool", "required": false, "units": null, "description": "BRENK alert flag (RDKit FilterCatalog).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["medchem_flags"]},
+    "NIH": {"type": "bool", "required": false, "units": null, "description": "NIH alert flag (RDKit FilterCatalog).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["medchem_flags"]},
+    "ZINC": {"type": "bool", "required": false, "units": null, "description": "ZINC alert flag (RDKit FilterCatalog).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["medchem_flags"]},
+    "MedChem_Alerts": {"type": "int", "required": false, "units": "count", "description": "Total medchem alert count (PAINS/BRENK/NIH/ZINC).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["medchem_flags"]},
+
+    "Tox_Risk": {"type": "string", "required": false, "units": null, "description": "Toxicity risk class (Low/Medium/High) derived from alert families.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["toxicity"]},
+    "Tox_Total_Alerts": {"type": "int", "required": false, "units": "count", "description": "Total toxicity alert family count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["toxicity"]},
+
+    "Met_Stability": {"type": "string", "required": false, "units": null, "description": "Metabolic stability class (High/Medium/Low) from soft-spot burden heuristic.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["metabolism"]},
+    "Met_Total_Sites": {"type": "int", "required": false, "units": "count", "description": "Total metabolic soft-spot count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["metabolism"]},
+    "Met_Glucuronidation": {"type": "bool", "required": false, "units": null, "description": "Phase II glucuronidation handle heuristic.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["metabolism"]},
+    "Met_Sulfation": {"type": "bool", "required": false, "units": null, "description": "Phase II sulfation handle heuristic.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["metabolism"]},
+    "Met_Acetylation": {"type": "bool", "required": false, "units": null, "description": "Phase II acetylation handle heuristic.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["metabolism"]},
+    "Met_Methylation": {"type": "bool", "required": false, "units": null, "description": "Phase II methylation handle heuristic.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["metabolism"]},
+
+    "hERG_Risk": {"type": "string", "required": false, "units": null, "description": "hERG risk class (Low/Medium/High) from heuristic features.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["herg"]},
+    "hERG_Alerts": {"type": "int", "required": false, "units": "count", "description": "hERG alert feature count.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["herg"]},
+
+    "CYP3A4_Inhibitor": {"type": "bool", "required": false, "units": null, "description": "CYP3A4 inhibition risk flag (heuristic).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["cyp"]},
+    "CYP2D6_Inhibitor": {"type": "bool", "required": false, "units": null, "description": "CYP2D6 inhibition risk flag (heuristic).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["cyp"]},
+    "CYP2C9_Inhibitor": {"type": "bool", "required": false, "units": null, "description": "CYP2C9 inhibition risk flag (heuristic).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["cyp"]},
+    "CYP_MBI_Risk": {"type": "bool", "required": false, "units": null, "description": "Mechanism-based inactivation motif risk flag.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["cyp"]},
+    "CYP_Total_Inhibition": {"type": "int", "required": false, "units": "count", "description": "Total CYP inhibition burden (sum of flags).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"], "tags": ["cyp"]},
+
+    "Sol_ESOL_LogS": {"type": "float", "required": false, "units": "log10(mol/L)", "description": "ESOL predicted logS.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["solubility"]},
+    "Sol_ESOL_mg_L": {"type": "float", "required": false, "units": "mg/L", "description": "ESOL predicted solubility converted to mg/L.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["solubility"]},
+    "Sol_ESOL_Class": {"type": "string", "required": false, "units": null, "description": "ESOL solubility class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["solubility"]},
+
+    "Perm_Caco2_LogPapp": {"type": "float", "required": false, "units": "log10(Papp)", "description": "Heuristic Caco-2 log(Papp) estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+    "Perm_Caco2_Class": {"type": "string", "required": false, "units": null, "description": "Caco-2 permeability class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+    "Perm_PAMPA_LogPe": {"type": "float", "required": false, "units": "log10(Pe)", "description": "Heuristic PAMPA log(Pe) estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+    "Perm_PAMPA_Class": {"type": "string", "required": false, "units": null, "description": "PAMPA permeability class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+    "Perm_GI_Absorption": {"type": "string", "required": false, "units": null, "description": "GI absorption class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+    "Perm_Skin_LogKp": {"type": "float", "required": false, "units": "log10(cm/s)", "description": "Heuristic skin permeability logKp estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+    "Perm_Pgp_Likelihood": {"type": "string", "required": false, "units": null, "description": "P-gp substrate likelihood class (Low/Medium/High).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["permeability"]},
+
+    "PPB_Est_%": {"type": "float", "required": false, "units": "%", "description": "Estimated percent protein bound (heuristic).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "PPB_FreeEst_%": {"type": "float", "required": false, "units": "%", "description": "Estimated percent unbound (100 - PPB_Est_%).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "PPB_Class": {"type": "string", "required": false, "units": null, "description": "Protein binding class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "Vd_Est_L_kg": {"type": "float", "required": false, "units": "L/kg", "description": "Heuristic volume of distribution estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "Vd_Class": {"type": "string", "required": false, "units": null, "description": "Vd class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "CL_SoftSpots": {"type": "int", "required": false, "units": "count", "description": "Clearance soft-spot burden (copied from Met_Total_Sites).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "CL_Risk": {"type": "string", "required": false, "units": null, "description": "Clearance risk class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "T_half_Est": {"type": "string", "required": false, "units": null, "description": "Half-life class estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "F_Score": {"type": "int", "required": false, "units": "count", "description": "Oral F scoring heuristic (0–4).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "F_Est_%": {"type": "string", "required": false, "units": "%", "description": "Oral F estimate band (text, e.g., '>70').", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+    "F_Class": {"type": "string", "required": false, "units": null, "description": "Oral bioavailability class label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["pk"]},
+
+    "Lead_LE": {"type": "float", "required": false, "units": "pIC50/HA", "description": "Ligand efficiency estimate (requires meaningful pIC50).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_LLE": {"type": "float", "required": false, "units": "pIC50-logP", "description": "Lipophilic ligand efficiency estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_LELP": {"type": "float", "required": false, "units": "logP/LE", "description": "LELP estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_BEI": {"type": "float", "required": false, "units": "pIC50/(MW/1000)", "description": "Binding efficiency index estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_SEI": {"type": "float", "required": false, "units": "pIC50/(TPSA/100)", "description": "Surface efficiency index estimate.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_LE_Quality": {"type": "string", "required": false, "units": null, "description": "LE quality label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_LLE_Quality": {"type": "string", "required": false, "units": null, "description": "LLE quality label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+    "Lead_LELP_Quality": {"type": "string", "required": false, "units": null, "description": "LELP quality label.", "produced_by": ["calculators/mpo_v5.py"], "tags": ["lead"]},
+
+    "QED": {"type": "float", "required": false, "units": "score", "description": "Quantitative Estimate of Drug-likeness (0–1).", "produced_by": ["calculators/mpo_v5.py"], "tags": ["qed"]},
+
+    "SA_Score": {"type": "float", "required": false, "units": "score", "description": "Synthetic accessibility score (Ertl–Schuffenhauer), scaled 1–10 where lower is easier.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "SA_Class": {"type": "string", "required": false, "units": null, "description": "Coarse SA score class (Easy/Moderate/Hard).", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+
+    "Complexity_BertzCT": {"type": "float", "required": false, "units": "index", "description": "Bertz complexity index (graph complexity).", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_BalabanJ": {"type": "float", "required": false, "units": "index", "description": "Balaban J index.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_HallKierAlpha": {"type": "float", "required": false, "units": "index", "description": "Hall–Kier alpha value.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_NumSpiroAtoms": {"type": "int", "required": false, "units": "count", "description": "Number of spiro atoms.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_NumBridgeheadAtoms": {"type": "int", "required": false, "units": "count", "description": "Number of bridgehead atoms.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_NumStereoCenters": {"type": "int", "required": false, "units": "count", "description": "Number of atom stereocenters (specified).", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_NumUnspecifiedStereoCenters": {"type": "int", "required": false, "units": "count", "description": "Number of unspecified atom stereocenters.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_NumHeteroAtoms": {"type": "int", "required": false, "units": "count", "description": "Number of heteroatoms.", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+    "Complexity_AromaticAtomFrac": {"type": "float", "required": false, "units": "fraction", "description": "Fraction of heavy atoms that are aromatic (0–1).", "produced_by": ["calculators/sa_score.py"], "tags": ["sa_complexity"]},
+
+    "Scaffold_ID": {"type": "string", "required": false, "units": null, "description": "Murcko scaffold identifier assigned in descending frequency order within the analyzed dataset.", "produced_by": ["analyzers/analyzer_scaffolds.py", "tools/series_analytics.py"], "tags": ["series"]},
+    "Scaffold_SMILES": {"type": "string", "required": false, "units": null, "description": "Canonical Murcko scaffold SMILES.", "produced_by": ["analyzers/analyzer_scaffolds.py", "tools/series_analytics.py"], "tags": ["series"]},
+    "Scaffold_Size": {"type": "int", "required": false, "units": "count", "description": "Number of compounds sharing the scaffold.", "produced_by": ["analyzers/analyzer_scaffolds.py", "tools/series_analytics.py"], "tags": ["series"]},
+
+    "Cluster_ID": {"type": "int", "required": false, "units": null, "description": "Similarity cluster assignment (Butina clustering on Morgan fingerprints).", "produced_by": ["analyzers/analyzer_clustering.py", "tools/series_analytics.py"], "tags": ["series"]},
+    "Cluster_Size": {"type": "int", "required": false, "units": "count", "description": "Number of compounds in the similarity cluster.", "produced_by": ["analyzers/analyzer_clustering.py", "tools/series_analytics.py"], "tags": ["series"]},
+    "Cluster_Representative_ID": {"type": "string", "required": false, "units": null, "description": "Compound_ID of the cluster medoid (representative).", "produced_by": ["analyzers/analyzer_clustering.py", "tools/series_analytics.py"], "tags": ["series"]},
+    "Cluster_MedoidMeanSim": {"type": "float", "required": false, "units": "tanimoto", "description": "Mean Tanimoto similarity of the medoid to other cluster members.", "produced_by": ["analyzers/analyzer_clustering.py", "tools/series_analytics.py"], "tags": ["series"]},
+
+    "3D_Mode": {"type": "string", "required": false, "units": null, "description": "3D descriptor mode/status (off/etkdg/fail).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_NumConfs": {"type": "int", "required": false, "units": "count", "description": "Number of conformers embedded for 3D descriptors.", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_SelectedConfId": {"type": "int", "required": false, "units": null, "description": "Conformer ID selected for descriptor calculation (lowest energy when minimized).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_Minimizer": {"type": "string", "required": false, "units": null, "description": "Minimizer used for conformers (mmff/uff/none).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_Converged": {"type": "bool", "required": false, "units": null, "description": "Whether the selected conformer minimization converged (best-effort).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_BestEnergy": {"type": "float", "required": false, "units": "kcal/mol", "description": "Force-field energy of the selected conformer (RDKit FF units; qualitative).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+
+    "3D_Asphericity": {"type": "float", "required": false, "units": null, "description": "RDKit 3D Asphericity descriptor.", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_Eccentricity": {"type": "float", "required": false, "units": null, "description": "RDKit 3D Eccentricity descriptor.", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_InertialShapeFactor": {"type": "float", "required": false, "units": null, "description": "RDKit 3D InertialShapeFactor descriptor.", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_NPR1": {"type": "float", "required": false, "units": null, "description": "RDKit 3D NPR1 (normalized principal moment ratio 1).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_NPR2": {"type": "float", "required": false, "units": null, "description": "RDKit 3D NPR2 (normalized principal moment ratio 2).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_PMI1": {"type": "float", "required": false, "units": null, "description": "RDKit 3D PMI1 (principal moment of inertia 1).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_PMI2": {"type": "float", "required": false, "units": null, "description": "RDKit 3D PMI2 (principal moment of inertia 2).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_PMI3": {"type": "float", "required": false, "units": null, "description": "RDKit 3D PMI3 (principal moment of inertia 3).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_RadiusOfGyration": {"type": "float", "required": false, "units": "angstrom", "description": "RDKit 3D RadiusOfGyration descriptor.", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_SpherocityIndex": {"type": "float", "required": false, "units": null, "description": "RDKit 3D SpherocityIndex descriptor.", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+    "3D_PBF": {"type": "float", "required": false, "units": null, "description": "RDKit 3D Plane of Best Fit (PBF) descriptor (lower is more planar).", "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"], "tags": ["3d"]},
+
+    "Dev_GSK_4_400_Pass": {"type": "bool", "required": false, "units": null, "description": "GSK 4/400 rule: MW <= 400 and LogP <= 4.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Pfizer_3_75_Pass": {"type": "bool", "required": false, "units": null, "description": "Pfizer 3/75 rule: LogP <= 3 and TPSA <= 75.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_GoldenTriangle_Pass": {"type": "bool", "required": false, "units": null, "description": "Coarse golden triangle check: 200 <= MW <= 500 and 1 <= cLogD_7.4 <= 3.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Solubility_Risk": {"type": "string", "required": false, "units": null, "description": "Solubility risk class derived from Sol_ESOL_LogS when available (Low/Medium/High).", "produced_by": ["calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_BasePoints": {"type": "int", "required": false, "units": "points", "description": "Base points used to build Dev_Score (counts property-space passes and other positive signals).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Risk_Burden": {"type": "int", "required": false, "units": "points", "description": "Aggregated risk burden points from available red flags (tox/hERG/etc.).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Risk_Class": {"type": "string", "required": false, "units": null, "description": "Risk class derived from Dev_Risk_Burden (Low/Medium/High).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Score": {"type": "int", "required": false, "units": "points", "description": "Composite developability score (heuristic): max(0, Dev_BasePoints - Dev_Risk_Burden).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Class": {"type": "string", "required": false, "units": null, "description": "Developability class derived from Dev_Score and Dev_Risk_Class (Low/Medium/High).", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]},
+    "Dev_Flags": {"type": "string", "required": false, "units": null, "description": "Comma-separated short flags explaining key contributors to risk burden.", "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py", "calculators/developability.py"], "tags": ["developability"]}
+  },
+  "patterns": [
+    {
+      "match": "^Tox_",
+      "type": "auto",
+      "units": null,
+      "description": "Toxicity structural alert family columns. These may be boolean flags or alert counts depending on implementation.",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["toxicity"]
+    },
+    {
+      "match": "^Met_",
+      "type": "auto",
+      "units": null,
+      "description": "Metabolism/soft-spot columns (counts, boolean handles, or summary fields).",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["metabolism"]
+    },
+    {
+      "match": "^hERG_",
+      "type": "auto",
+      "units": null,
+      "description": "hERG risk feature columns.",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["herg"]
+    },
+    {
+      "match": "^CYP",
+      "type": "auto",
+      "units": null,
+      "description": "CYP inhibition risk columns.",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["cyp"]
+    },
+    {
+      "match": "^Sol_",
+      "type": "auto",
+      "units": null,
+      "description": "Solubility prediction columns.",
+      "produced_by": ["calculators/mpo_v5.py"],
+      "tags": ["solubility"]
+    },
+    {
+      "match": "^Perm_",
+      "type": "auto",
+      "units": null,
+      "description": "Permeability prediction columns.",
+      "produced_by": ["calculators/mpo_v5.py"],
+      "tags": ["permeability"]
+    },
+    {
+      "match": "^Lead_",
+      "type": "auto",
+      "units": null,
+      "description": "Lead optimization metric columns.",
+      "produced_by": ["calculators/mpo_v5.py"],
+      "tags": ["lead"]
+    },
+    {
+      "match": "^SA_",
+      "type": "auto",
+      "units": null,
+      "description": "Synthetic accessibility family columns.",
+      "produced_by": ["calculators/sa_score.py"],
+      "tags": ["sa_complexity"]
+    },
+    {
+      "match": "^Complexity_",
+      "type": "auto",
+      "units": null,
+      "description": "Complexity descriptor family columns.",
+      "produced_by": ["calculators/sa_score.py"],
+      "tags": ["sa_complexity"]
+    },
+    {
+      "match": "^Scaffold_",
+      "type": "auto",
+      "units": null,
+      "description": "Series analytics scaffold columns (Murcko scaffolds).",
+      "produced_by": ["analyzers/analyzer_scaffolds.py", "tools/series_analytics.py"],
+      "tags": ["series"]
+    },
+    {
+      "match": "^Cluster_",
+      "type": "auto",
+      "units": null,
+      "description": "Series analytics similarity clustering columns.",
+      "produced_by": ["analyzers/analyzer_clustering.py", "tools/series_analytics.py"],
+      "tags": ["series"]
+    },
+    {
+      "match": "^3D_",
+      "type": "auto",
+      "units": null,
+      "description": "3D conformer-based descriptor columns (Task 7; v5 calculator optional).",
+      "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"],
+      "tags": ["3d"]
+    },
+    {
+      "match": "^Dev_",
+      "type": "auto",
+      "units": null,
+      "description": "Developability indices and aggregated risk/score columns (Task 8).",
+      "produced_by": ["calculators/developability.py", "calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["developability"]
+    },
+    {
+      "match": "^RDKit_",
+      "type": "float",
+      "units": null,
+      "description": "Namespaced RDKit descriptor columns (long-form descriptor table).",
+      "produced_by": ["calculators/mpo_v4.py", "calculators/mpo_v5.py"],
+      "tags": ["descriptors"]
+    },
+    {
+      "match": "^Mordred_",
+      "type": "float",
+      "units": null,
+      "description": "Namespaced Mordred descriptor columns (optional family, if enabled).",
+      "produced_by": ["calculators/mpo_v4.py"],
+      "tags": ["descriptors"]
+    }
+  ]
+}
+
