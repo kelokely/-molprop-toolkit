@@ -24,11 +24,22 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
 import os
+import sys
+from datetime import datetime
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+# Optional: Parquet output support for results tables.
+try:  # package context
+    from molprop_toolkit.core.io import write_table
+    from molprop_toolkit.core.metadata import write_run_metadata
+except Exception:  # script-only context
+    write_table = None  # type: ignore
+    write_run_metadata = None  # type: ignore
 
 from rdkit import Chem
 from rdkit.Chem import Crippen, Descriptors, QED, rdMolDescriptors
@@ -768,6 +779,33 @@ def write_csv(rows: List[Dict[str, object]], out_path: str, fill_missing: Option
         w.writerows(rows)
 
 
+def write_output(rows: List[Dict[str, object]], out_path: str, fill_missing: Optional[float]) -> None:
+    """Write results to CSV (default) or Parquet (when out_path ends with .parquet/.pq).
+
+    Task 3: metadata sidecar is written by main() after output is successfully created.
+    """
+
+    ext = Path(out_path).suffix.lower()
+    if ext in (".parquet", ".pq"):
+        if write_table is None:
+            raise SystemExit(
+                "Parquet output requires the molprop_toolkit package context. Run via the installed console script "
+                "(molprop-calc-v4) or from the repository root so molprop_toolkit is importable."
+            )
+        try:
+            import pandas as pd
+
+            df = pd.DataFrame(rows)
+            if fill_missing is not None:
+                df = df.fillna(fill_missing)
+            write_table(df, out_path)
+        except Exception as e:
+            raise SystemExit(f"Failed to write Parquet output: {e}")
+        return
+
+    write_csv(rows, out_path, fill_missing)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="MolProp Toolkit calculator (v4)")
     ap.add_argument("input", help="Input SMILES file")
@@ -899,7 +937,34 @@ def main() -> None:
         props["SMILES"] = smiles
         rows.append(props)
 
-    write_csv(rows, out_path, args.fill_missing)
+    write_output(rows, out_path, args.fill_missing)
+
+    # Task 3: provenance metadata next to the output table.
+    if write_run_metadata is not None:
+        try:
+            write_run_metadata(
+                tool="molprop-calc-v4",
+                output_table_path=out_path,
+                input_path=args.input,
+                smiles_column="Calc_Canonical_SMILES",
+                parameters={
+                    "calculator": "v4",
+                    "pIC50": getattr(args, "pIC50", None),
+                    "prep": not bool(getattr(args, "no_prep", False)),
+                    "tautomer_mode": str(args.tautomer_mode),
+                    "tautomer_max": int(args.tautomer_max),
+                    "stereo_mode": str(args.stereo_mode),
+                    "stereo_max": int(args.stereo_max),
+                    "ionization": str(args.ionization),
+                    "ph": float(args.ph),
+                    "protomer_select": str(args.protomer_select),
+                    "calc_on_protomer": bool(args.calc_on_protomer),
+                    "fill_missing": args.fill_missing,
+                },
+            )
+        except Exception as e:
+            print(f"[molprop-calc-v4] warning: failed to write metadata sidecar: {e}", file=sys.stderr)
+
     print(f"Saved: {out_path} (compounds={len(rows)}, columns={len(rows[0])})")
 
 

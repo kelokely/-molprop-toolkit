@@ -31,15 +31,17 @@ from typing import Dict, List, Optional
 # Allow running directly without installing the package.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from molprop_toolkit.core import detect_id_column, read_csv
+from molprop_toolkit.core import detect_id_column, read_table, write_run_metadata
 from molprop_toolkit.picklists.builtins import BUILTIN_PICKLISTS
 from molprop_toolkit.picklists.engine import (
     PicklistDefinition,
-    build_picklists,
+    build_picklists_from_df,
     load_picklist_config,
     registry_category_columns,
     select_output_columns,
 )
+from molprop_toolkit.fingerprints import FingerprintSpec, compute_similarity_columns, load_reference_smiles
+from molprop_toolkit.core.columns import detect_best_smiles_column
 from molprop_toolkit.picklists.html import StructureAssetSpec, copy_structure_assets, write_index_html, write_picklist_html
 
 
@@ -108,6 +110,54 @@ def main() -> None:
         help="Which columns to include in each picklist CSV/HTML table",
     )
 
+    # Optional similarity-to-reference columns (fingerprints)
+    ap.add_argument(
+        "--fp",
+        default=None,
+        help=(
+            "Optional fingerprint kind for similarity columns: morgan, rdkit, maccs, atom_pair, torsion, usr, usrcat. "
+            "If set, you can provide one or more --sim-ref-* values to compute Sim_<kind> columns and use them in picklist rules."
+        ),
+    )
+    ap.add_argument("--fp-radius", type=int, default=2, help="Morgan radius (only for --fp morgan)")
+    ap.add_argument("--fp-nbits", type=int, default=2048, help="Fingerprint bit length (where applicable)")
+    ap.add_argument("--fp-chirality", action="store_true", help="Use chirality in Morgan fingerprints")
+    ap.add_argument("--fp-features", action="store_true", help="Use feature-invariants for Morgan fingerprints")
+    ap.add_argument("--fp-3d-num-confs", type=int, default=10, help="Conformers for 3D fingerprints (usr/usrcat)")
+    ap.add_argument(
+        "--fp-3d-minimize",
+        choices=["none", "uff", "mmff"],
+        default="none",
+        help="Optional geometry minimization for 3D fingerprints",
+    )
+    ap.add_argument(
+        "--sim-ref-id",
+        action="append",
+        default=[],
+        help="Reference Compound_ID (or detected ID) in the input CSV. Can be provided multiple times.",
+    )
+    ap.add_argument(
+        "--sim-ref-smiles",
+        action="append",
+        default=[],
+        help="Reference SMILES string. Can be provided multiple times.",
+    )
+    ap.add_argument(
+        "--sim-ref-file",
+        default=None,
+        help="Reference SMILES file (.smi). Lines can be 'name smiles' or 'smiles name'.",
+    )
+    ap.add_argument(
+        "--sim-prefix",
+        default="Sim",
+        help="Column prefix for generated similarity columns (default: Sim)",
+    )
+    ap.add_argument(
+        "--write-similarity-csv",
+        action="store_true",
+        help="If similarity columns are computed, write an enriched CSV containing them into the output directory.",
+    )
+
     args = ap.parse_args()
 
     if args.list_builtins:
@@ -130,11 +180,44 @@ def main() -> None:
     picklist_keys = _parse_csv_list(args.picklists)
     defs = _resolve_definitions(picklist_keys=picklist_keys, config_defs=config_defs)
 
-    df_full = read_csv(csv_path)
+    df_full = read_table(csv_path)
     id_col = detect_id_column(df_full)
 
+    # Optional: compute similarity columns to a reference set so picklists can filter by similarity.
+    if args.fp and (args.sim_ref_id or args.sim_ref_smiles or args.sim_ref_file):
+        smiles_col = detect_best_smiles_column(df_full)
+        refs = load_reference_smiles(
+            df=df_full,
+            id_col=id_col,
+            smiles_col=smiles_col,
+            ref_ids=args.sim_ref_id,
+            ref_smiles=args.sim_ref_smiles,
+            ref_file=args.sim_ref_file,
+        )
+        spec = FingerprintSpec(
+            kind=args.fp,
+            radius=int(args.fp_radius),
+            nbits=int(args.fp_nbits),
+            use_chirality=bool(args.fp_chirality),
+            use_features=bool(args.fp_features),
+            num_confs=int(args.fp_3d_num_confs),
+            minimize=args.fp_3d_minimize,
+        )
+        df_full = compute_similarity_columns(
+            df_full,
+            refs=refs,
+            spec=spec,
+            smiles_col=smiles_col,
+            id_col=id_col,
+            column_prefix=str(args.sim_prefix),
+        )
+
+        if args.write_similarity_csv:
+            enriched_path = outdir / f"{stem}_with_similarity.csv"
+            enriched_path.write_text(df_full.to_csv(index=False), encoding="utf-8")
+
     # Run picklists
-    _, _, results = build_picklists(csv_path, defs)
+    _, _, results = build_picklists_from_df(df_full, defs)
 
     # Optional structure asset setup
     asset_spec: Optional[StructureAssetSpec] = None
@@ -146,6 +229,20 @@ def main() -> None:
         )
 
     index_entries = []
+
+    # Run-level metadata (written once per invocation)
+    run_meta = {
+        "source": str(Path(csv_path).name),
+        "picklists_requested": _parse_csv_list(args.picklists),
+        "config": str(args.config) if args.config else None,
+        "html": bool(args.html),
+        "columns_mode": str(args.columns),
+        "similarity": {
+            "enabled": bool(args.fp and (args.sim_ref_id or args.sim_ref_smiles or args.sim_ref_file)),
+            "fp": str(args.fp) if args.fp else None,
+            "prefix": str(args.sim_prefix),
+        },
+    }
 
     for res in results:
         d = res.definition
@@ -175,6 +272,31 @@ def main() -> None:
         # Write CSV
         csv_out = outdir / f"{d.key}.csv"
         csv_out.write_text(df_out.to_csv(index=False), encoding="utf-8")
+
+        # Task 3: sidecar metadata per picklist output
+        try:
+            write_run_metadata(
+                tool="molprop-picklists",
+                output_table_path=csv_out,
+                input_path=csv_path,
+                smiles_column=None,
+                parameters={
+                    "picklist_key": d.key,
+                    "picklist_name": d.name,
+                    "logic": getattr(d, "logic", "all"),
+                    "filters": [
+                        {"column": f.column, "op": f.op, "value": f.value, "value2": f.value2, "missing": f.missing}
+                        for f in d.filters
+                    ],
+                    "sort": [{"column": s.column, "ascending": s.ascending} for s in d.sort],
+                    "limit": int(d.limit or 0),
+                    "include_categories": list(d.include_categories or []),
+                    "columns_mode": str(args.columns),
+                },
+                artifacts={"outdir": str(outdir.resolve()), "html": bool(args.html)},
+            )
+        except Exception:
+            pass
 
         # HTML per picklist
         html_href = ""
@@ -207,6 +329,13 @@ def main() -> None:
             subtitle=f"Source: {Path(csv_path).name} • Generated: {datetime.now().isoformat(timespec='seconds')}",
             entries=index_entries,
         )
+
+    # Task 3: run-level metadata file (directory artifact)
+    try:
+        meta_path = outdir / "picklists_run.metadata.json"
+        meta_path.write_text(json.dumps(run_meta, indent=2) + "\n", encoding="utf-8")
+    except Exception:
+        pass
 
     print(f"Picklists written to: {outdir}")
     for k, name, count, href in index_entries:
