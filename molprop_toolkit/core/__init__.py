@@ -1,9 +1,8 @@
 # ruff: noqa: F401
 
-"""Shared utilities for MolProp Toolkit (Task 10).
+"""Shared utilities for MolProp Toolkit.
 
-This subpackage is intentionally lightweight and dependency-minimal; analyzers
-already depend on pandas/numpy.
+This subpackage is intentionally lightweight and dependency-minimal; analyzers already depend on pandas/numpy.
 """
 
 from __future__ import annotations

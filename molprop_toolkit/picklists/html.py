@@ -1,8 +1,7 @@
-"""HTML rendering for picklists (Task 14).
+"""HTML rendering for picklists.
 
-The HTML is intentionally lightweight and self-contained.
-If a Task 5 sketches directory is provided, we can copy the required structure
-images into the picklists output directory and embed them in tables.
+The HTML is intentionally lightweight and self-contained. If a sketches directory is provided, we can copy the required
+structure images into the picklists output directory and embed them in tables.
 """
 
 from __future__ import annotations

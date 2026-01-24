@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build shareable report artifacts from a results CSV (Task 12).
+"""Build shareable report artifacts from a results CSV.
 
 Outputs a directory containing:
 - report.md

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate 2D structure sketches + an optional HTML index (Task 5).
+"""Generate 2D structure sketches + an optional HTML index.
 
 Supports:
 - input SMILES files (space/tab/comma separated like calculators)

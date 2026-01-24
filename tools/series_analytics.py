@@ -1,16 +1,8 @@
 #!/usr/bin/env python3
-"""Series analytics runner (Task 13).
+"""Series analytics runner.
 
-Convenience wrapper that runs:
-- Murcko scaffolds (Task 13A)
-- Similarity clustering (Task 13B)
-
-and writes an enriched CSV with:
-- Scaffold_* columns
-- Cluster_* columns
-
-This lets downstream tooling (master analyzer, reports, picklists) consume the
-series annotations directly.
+Convenience wrapper that runs Murcko scaffolds and similarity clustering and then writes an enriched CSV with `Scaffold_*`
+and `Cluster_*` columns so downstream tooling (analyzers, reports, picklists) can consume series annotations directly.
 """
 
 from __future__ import annotations
@@ -32,7 +24,7 @@ from analyzers.analyzer_scaffolds import analyze_scaffolds
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="MolProp Toolkit series analytics (Task 13)")
+    ap = argparse.ArgumentParser(description="MolProp Toolkit series analytics")
     ap.add_argument("input", help="Results CSV")
     ap.add_argument("--outdir", default=None, help="Output directory")
     ap.add_argument("--smiles-col", default=None, help="Override SMILES column")

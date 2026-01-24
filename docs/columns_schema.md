@@ -2,7 +2,7 @@
 
 This file is generated from `docs/schema.json`. Do not edit by hand; update the schema and re-run the generator.
 
-Generated: `2026-01-23T16:56:08`
+Generated: `2026-01-24T08:46:09`
 
 ## 3d
 
@@ -346,7 +346,7 @@ Patterns define metadata for whole families of columns, typically produced with 
 | `^Complexity_` | `auto` | sa_complexity | Complexity descriptor family columns. |
 | `^Scaffold_` | `auto` | series | Series analytics scaffold columns (Murcko scaffolds). |
 | `^Cluster_` | `auto` | series | Series analytics similarity clustering columns. |
-| `^3D_` | `auto` | 3d | 3D conformer-based descriptor columns (Task 7; v5 calculator optional). |
-| `^Dev_` | `auto` | developability | Developability indices and aggregated risk/score columns (Task 8). |
+| `^3D_` | `auto` | 3d | 3D conformer-based descriptor columns (v5 calculator optional). |
+| `^Dev_` | `auto` | developability | Developability indices and aggregated risk/score columns. |
 | `^RDKit_` | `float` | descriptors | Namespaced RDKit descriptor columns (long-form descriptor table). |
 | `^Mordred_` | `float` | descriptors | Namespaced Mordred descriptor columns (optional family, if enabled). |

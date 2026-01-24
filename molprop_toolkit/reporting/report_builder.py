@@ -1,4 +1,4 @@
-"""Registry-driven report builder (Task 12).
+"""Registry-driven report builder.
 
 Outputs:
 - report.md (Markdown)

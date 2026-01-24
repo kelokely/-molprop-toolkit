@@ -1,9 +1,7 @@
-"""Category registry (Task 10C).
+"""Category registry.
 
-The registry is the canonical source of category metadata used by:
-- analyzer_master (interactive CLI)
-- future report builders (Task 12)
-- future schema/manifest generation (Task 11)
+The registry is the canonical source of category metadata used by the master analyzer, the report builder, picklist column
+selection, and schema-driven documentation.
 """
 
 from __future__ import annotations

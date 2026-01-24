@@ -605,7 +605,7 @@
       "match": "^3D_",
       "type": "auto",
       "units": null,
-      "description": "3D conformer-based descriptor columns (Task 7; v5 calculator optional).",
+      "description": "3D conformer-based descriptor columns (v5 calculator optional).",
       "produced_by": ["calculators/mpo_v5.py", "calculators/geom3d.py"],
       "tags": ["3d"]
     },
@@ -613,7 +613,7 @@
       "match": "^Dev_",
       "type": "auto",
       "units": null,
-      "description": "Developability indices and aggregated risk/score columns (Task 8).",
+      "description": "Developability indices and aggregated risk/score columns.",
       "produced_by": ["calculators/developability.py", "calculators/mpo_v4.py", "calculators/mpo_v5.py"],
       "tags": ["developability"]
     },

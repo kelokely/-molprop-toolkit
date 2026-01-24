@@ -1,4 +1,4 @@
-"""Picklist engine (Task 14).
+"""Picklist engine.
 
 A picklist is defined as:
 - a list of filters (column/operator/value)

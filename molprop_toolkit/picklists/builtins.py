@@ -1,4 +1,4 @@
-"""Built-in picklists (Task 14).
+"""Built-in picklists.
 
 These are intended as useful defaults that work across many projects.
 They are heuristic and should be tuned with project context.

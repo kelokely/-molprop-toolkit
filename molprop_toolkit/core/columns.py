@@ -1,9 +1,6 @@
 """Column detection helpers.
 
-Task 10 centralizes the logic that was previously duplicated across analyzers.
-
-The toolkit accepts many possible upstream CSV formats, so we try multiple
-common identifier and SMILES column names.
+The toolkit accepts many possible upstream CSV formats, so we try multiple common identifier and SMILES column names.
 """
 
 from __future__ import annotations

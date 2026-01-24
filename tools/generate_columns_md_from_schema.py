@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a Markdown column reference from docs/schema.json (Task 11B).
+"""Generate a Markdown column reference from docs/schema.json.
 
 This generator produces a *generated* documentation artifact so that column
 metadata does not drift over time.

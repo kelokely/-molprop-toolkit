@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a results CSV against a MolProp Toolkit schema (Task 11A).
+"""Validate a results CSV against a MolProp Toolkit schema.
 
 This tool is designed for pragmatic validation:
 - Results tables are often partial (not every calculator computes every column).

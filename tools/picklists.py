@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Picklist generator CLI (Task 14).
+"""Picklist generator CLI.
 
 Generates operational decision filters from a results CSV.
 
 Outputs:
 - one CSV per picklist
 - optional HTML index + per-picklist HTML pages
-- optional copying of Task 5 structure sketches (so HTML is portable)
+- optional copying of structure sketches (so HTML is portable)
 
 Examples:
   python tools/picklists.py results.csv --list-builtins
@@ -16,7 +16,7 @@ Examples:
 With a user config (JSON/YAML):
   python tools/picklists.py results.csv --config my_picklists.json --html
 
-With structure sketches from Task 5:
+With structure sketches:
   python tools/picklists.py results.csv --html --sketch-dir sketches_compare --structure-views calc
 """
 
@@ -71,7 +71,7 @@ def _resolve_definitions(
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="MolProp Toolkit picklist generator (Task 14)")
+    ap = argparse.ArgumentParser(description="MolProp Toolkit picklist generator")
     ap.add_argument("input", help="Results CSV")
     ap.add_argument("--list-builtins", action="store_true", help="List built-in picklists and exit")
     ap.add_argument(

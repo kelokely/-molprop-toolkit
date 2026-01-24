@@ -1,10 +1,8 @@
-"""Schema loader utilities (Task 15).
+"""Schema loader utilities.
 
-We keep a copy of the schema inside the installable package so that:
-- `pip install molprop-toolkit` works without requiring a separate `docs/` tree
-- tools can default to the bundled schema, while still allowing overrides
-
-Tools may still accept `--schema docs/schema.json` when working from source.
+We keep a copy of the schema inside the installable package so that a normal `pip install molprop-toolkit` works without
+requiring a separate `docs/` tree. Tools default to the bundled schema, while still allowing overrides via `--schema` when
+working from a source checkout.
 """
 
 from __future__ import annotations

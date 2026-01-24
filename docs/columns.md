@@ -24,7 +24,7 @@ When heuristic ionization is enabled in the calculators (default), additional co
 
 Typical fields include `Ion_Mode` (none/heuristic/dimorphite), `Ion_pH`, `Ion_State`, `Ion_NetCharge_Est`, and `Ion_LogD_pH_Est`. These are intended as ranking signals and for selecting among enumerated protomers, not as a replacement for rigorous pKa/protomer modeling.
 
-## Stereochemistry metadata columns (Task 4)
+## Stereochemistry metadata columns
 
 The calculators may add `Stereo_*` columns when stereochemistry handling is enabled (default mode is `keep`). These columns describe whether stereochemistry was preserved, stripped, or enumerated.
 
@@ -34,13 +34,13 @@ In `enumerate` mode, the toolkit enumerates stereoisomers for unassigned stereoc
 
 Note that preparation-level stereo diagnostics are also recorded in the `Prep_*` columns (e.g., `Prep_StereoStatus`). The `Stereo_*` columns reflect what the calculator actually did with stereochemistry for the *calculation structure*.
 
-## Protomer (protonation) metadata columns (Task 2B)
+## Protomer (protonation) metadata columns
 
 When Dimorphite-DL protomer enumeration is enabled (`--ionization dimorphite`), the calculators will add `Protomer_*` columns describing the enumeration and the representative protomer selected. `Protomer_Selected_SMILES` stores the selected protomer. `Protomer_Count` stores how many unique protomers were generated (bounded by the configured maximum). `Protomer_Selected_Charge` stores the RDKit formal charge of the selected protomer.
 
 By default, the calculators only record the representative protomer. If you pass `--calc-on-protomer`, the calculators will compute descriptors on the selected protomer and `Calc_Canonical_SMILES` will reflect that protomer.
 
-## Tautomer metadata columns (Task 3)
+## Tautomer metadata columns
 
 When tautomer handling is enabled, the calculators may add `Tautomer_*` columns that describe how tautomer canonicalization/enumeration was handled. In `prep-canonical` mode, RDKit canonicalizes a single tautomer during preparation. In `enumerate` mode, RDKit enumerates a set of possible tautomers (up to a maximum) and the calculator selects a representative tautomer (currently the RDKit canonical tautomer) while also reporting the size of the tautomer set.
 
@@ -76,7 +76,7 @@ Several property families are produced as a set of columns with shared prefixes.
 
 `3D_` columns represent optional 3D conformer-based shape descriptors computed by `calculators/mpo_v5.py` when run with `--3d`. They are based on RDKit ETKDG conformer generation and optional MMFF/UFF minimization, so treat them as qualitative ranking features rather than ground truth physical properties.
 
-`Dev_` columns represent developability-oriented indices and rule-style filters (Task 8), including the GSK 4/400 and Pfizer 3/75 checks plus an aggregated risk burden and score for triage.
+`Dev_` columns represent developability-oriented indices and rule-style filters, including the GSK 4/400 and Pfizer 3/75 checks plus an aggregated risk burden and score for triage.
 
 ## Short vs long property names
 
@@ -87,7 +87,7 @@ The calculators usually provide a short set of convenience columns such as `MolW
 Some descriptor values are undefined when the corresponding structural feature does not exist in a molecule. In raw outputs, these cells are empty. In the calculators, `--fill-missing 0` can be used to replace empties with a constant, which is often necessary for model training. When you do this, it is good practice to track which descriptors are truly “not applicable” rather than “measured as zero,” because those are different concepts.
 
 
-## Schema metadata (Task 11)
+## Schema metadata
 
 If you need a machine-readable manifest of column types, units, and short guidance, see `docs/schema.json`. You can validate a results table with `tools/validate_csv_schema.py` and you can generate a schema-derived column reference doc (`docs/columns_schema.md`) with `tools/generate_columns_md_from_schema.py`.
 

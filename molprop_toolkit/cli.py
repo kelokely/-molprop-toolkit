@@ -1,11 +1,11 @@
-"""Console-script entrypoints (Task 15A).
+"""Console-script entrypoints.
 
-These wrappers keep existing workflows intact:
-- The original scripts remain runnable as `python calculators/...` etc.
-- The package adds installable console scripts that call the same `main()`.
+These wrappers keep existing workflows intact.
 
-Design note: these entrypoints intentionally avoid re-implementing argument
-parsing; they delegate to the existing script CLIs.
+The original scripts remain runnable as `python calculators/...` and `python tools/...` while the package also exposes
+installable console scripts that call the same underlying `main()` functions.
+
+Design note: these entrypoints intentionally avoid re-implementing argument parsing; they delegate to the existing script CLIs.
 """
 
 from __future__ import annotations
