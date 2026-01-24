@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-featurize • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-featurize (MolProp Toolkit): ML-ready feature packs (fingerprints, fragments, functional groups, graph tensors)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-featurize</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-featurize</code></h1>
+          <p class="muted" style="max-width:92ch">
+            Generates ML-ready feature packs from a MolProp results table (recommended) or from a SMILES file. Designed for
+            tens-of-thousands of ligands: outputs a sparse hashed fingerprint matrix for scikit-learn / XGBoost / LightGBM, plus
+            optional deep-learning exports (packed-bit fingerprints, aligned SMILES, and graph tensors) and an interpretable
+            functional-group + fragment summary for SAR review.
+          </p>
+          <p class="muted" style="margin-top:-6px">
+            Related: <a href="ligand-prep.html" style="color: var(--brand); text-decoration:none;">Ligand preparation guide</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage (from a MolProp CSV)</h3>
+            <p class="muted">Uses <code>Canonical_SMILES</code> by default when present (standardized parent structure).</p>
+            <pre><code># 1) make a MolProp table
+molprop-calc-v5 input.smi -o results.csv
+
+# 2) build a feature pack
+molprop-featurize results.csv -o features/results_features</code></pre>
+          </div>
+          <div class="card">
+            <h3>SMILES input mode</h3>
+            <p class="muted">Accepts a simple SMILES file (tab, comma, or whitespace separated).</p>
+            <pre><code>molprop-featurize library.smi -o features/library_features</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>What it writes (feature pack layout)</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Model-friendly (sparse) outputs</h3>
+              <p class="muted" style="margin:0 0 12px">
+                The main artifact is a CSR sparse matrix saved as NPZ. This is suitable for scikit-learn and gradient boosting.
+                Numeric descriptor columns from the input CSV are exported separately so you can scale/impute them explicitly.
+              </p>
+              <pre><code>X_sparse_counts_csr.npz        # CSR: data/indices/indptr/shape
+X_numeric.npy                 # optional dense numeric block
+X_numeric_columns.json        # column names for X_numeric
+ids.csv                       # row_index → Compound_ID + Canonical_SMILES
+features_metadata.json        # full reproducibility spec</code></pre>
+            </div>
+            <div class="card">
+              <h3>SAR / interpretability outputs</h3>
+              <p class="muted" style="margin:0 0 12px">
+                For quick SAR exploration and rule-based filtering, the tool can write a compact CSV of functional group counts/flags
+                plus fragment summary columns.
+              </p>
+              <pre><code>features_interpretable.csv    # FG_* + Env_* + fragment summaries
+fragments_brics.json          # BRICS vocabulary + frequencies
+fragments_recap.json          # RECAP vocabulary + frequencies</code></pre>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px">
+            <div class="card">
+              <h3>Deep learning exports</h3>
+              <p class="muted" style="margin:0 0 12px">
+                Exports are framework-agnostic and designed to avoid generating thousands of small files. Fingerprints are packed
+                to bytes by default (2048 bits → 256 bytes per molecule).
+              </p>
+              <pre><code>dl_fp_packed_uint8.npy        # packed bits (default)
+dl_smiles.csv                 # aligned SMILES (for token models)
+dl_graphs.npz                 # concatenated graph tensors (for GNNs)</code></pre>
+            </div>
+            <div class="card">
+              <h3>Feature blocks (how columns are organized)</h3>
+              <p class="muted" style="margin:0 0 12px">
+                <code>X_sparse_counts_csr.npz</code> is a concatenation of multiple blocks. The block offsets and sizes are recorded in
+                <code>features_metadata.json</code>, so you can slice or ablate feature families reproducibly.
+              </p>
+              <pre><code>FP_Morgan   (hashed counts)
+FP_AtomPair (hashed counts)
+FP_Torsion  (hashed counts)
+FG_*        (named functional-group/env features)
+Frag_BRICS  (presence features)
+Frag_RECAP  (presence features)</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common options</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              Run <code>molprop-featurize --help</code> for the full list. Common knobs include structure column choice, fragment method,
+              fingerprint sizes, numeric column selection, and which deep-learning exports to write.
+            </p>
+            <pre><code># choose which SMILES column from results.csv to featurize
+molprop-featurize results.csv --smiles-col Canonical_SMILES -o features/out
+
+# fragments (BRICS, RECAP, both, or none)
+molprop-featurize results.csv --fragments both --max-frags-per-mol 128 -o features/out
+
+# fingerprint dimensions
+molprop-featurize results.csv --morgan-nbits 4096 --ap-nbits 2048 --torsion-nbits 2048 -o features/out
+
+# deep learning exports
+molprop-featurize results.csv --dl all --dl-fp-nbits 2048 --dl-fp-format packed -o features/out
+
+# numeric block selection
+molprop-featurize results.csv --numeric-cols MolWt,LogP,TPSA,CNS_MPO -o features/out
+
+# disable the interpretable summary CSV
+molprop-featurize results.csv --no-interpretable -o features/out</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>How to load the sparse matrix (example)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              The NPZ contains CSR arrays. If SciPy is available, construct a <code>csr_matrix</code> directly. This is compatible with
+              scikit-learn estimators and can be passed into XGBoost/LightGBM.
+            </p>
+            <pre><code>import numpy as np
+from scipy.sparse import csr_matrix
+
+npz = np.load("features/out/X_sparse_counts_csr.npz")
+X = csr_matrix((npz["data"], npz["indices"], npz["indptr"]), shape=tuple(npz["shape"]))
+
+# Optional numeric block
+X_num = np.load("features/out/X_numeric.npy")</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molprop-featurize</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
