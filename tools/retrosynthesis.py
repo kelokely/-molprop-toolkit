@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -160,17 +161,83 @@ def _safe_filename(s: str) -> str:
     return out[:80] or "compound"
 
 
-def _write_html_index(outdir: Path, rows: List[dict]) -> None:
+def _copy_site_assets(outdir: Path) -> None:
+    """Copy GitHub Pages site assets into a retrosynthesis output folder.
+
+    This makes retrosynthesis HTML outputs match the look-and-feel of the Pages
+    site (docs/index.html). We copy:
+    - docs/assets/style.css
+    - docs/assets/logo.svg
+
+    If the repo docs assets are not available (e.g., pip install without docs),
+    we fall back to a minimal stylesheet so the report remains readable.
+    """
+
+    assets_out = outdir / "assets"
+    assets_out.mkdir(parents=True, exist_ok=True)
+
+    repo_root = Path(__file__).resolve().parents[1]
+    assets_src = repo_root / "docs" / "assets"
+
+    for fn in ("style.css", "logo.svg"):
+        src = assets_src / fn
+        dst = assets_out / fn
+        if src.exists() and not dst.exists():
+            shutil.copy2(src, dst)
+
+    # Minimal fallback if docs assets aren't present
+    if not (assets_out / "style.css").exists():
+        (assets_out / "style.css").write_text(
+            ":root{--bg:#0b1020;--bg2:#0d1630;--card:#111a33;--text:#e8eefc;--muted:#b8c3e1;--border:rgba(255,255,255,.10);--brand:#6ee7ff;}\n"
+            "body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);line-height:1.55}\n"
+            ".container{max-width:1100px;margin:0 auto;padding:0 22px}\n"
+            ".site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(11,16,32,.55);border-bottom:1px solid var(--border)}\n"
+            ".header-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0}\n"
+            ".brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}\n"
+            ".brand-logo{width:34px;height:34px}\n"
+            ".brand-text{display:flex;flex-direction:column}\n"
+            ".brand-name{font-weight:700}\n"
+            ".brand-tag{font-size:12px;color:var(--muted)}\n"
+            ".nav{display:flex;gap:16px;flex-wrap:wrap}\n"
+            ".nav a{color:var(--muted);text-decoration:none;font-size:14px}\n"
+            ".nav a:hover{color:var(--text)}\n"
+            ".hero{padding:34px 0 10px}\n"
+            ".section{padding:22px 0}\n"
+            ".card{background:rgba(17,26,51,.65);border:1px solid var(--border);border-radius:16px;padding:18px}\n"
+            ".muted{color:var(--muted)}\n"
+            "code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:12px}\n",
+            encoding="utf-8",
+        )
+
+    if not (assets_out / "logo.svg").exists():
+        (assets_out / "logo.svg").write_text(
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='#0b1020'/><path d='M18 42 L28 22 L40 26 L46 42 L34 50 Z' fill='none' stroke='#6ee7ff' stroke-width='4' stroke-linejoin='round'/></svg>",
+            encoding="utf-8",
+        )
+
+
+def _write_html_index(outdir: Path, rows: List[dict], site_url: str | None) -> None:
     items = []
     for r in rows:
         href = r.get("html_page", "")
         items.append(
-            f"<tr><td><a href='{href}'>{r.get('Compound_ID','')}</a></td>"
+            "<tr>"
+            f"<td><a href='{href}'>{r.get('Compound_ID','')}</a></td>"
             f"<td><code>{r.get('target','')}</code></td>"
             f"<td>{r.get('is_solved','')}</td>"
             f"<td>{r.get('top_score','')}</td>"
             f"<td>{r.get('number_of_routes','')}</td>"
-            f"<td>{r.get('search_time','')}</td></tr>"
+            f"<td>{r.get('search_time','')}</td>"
+            "</tr>"
+        )
+
+    site_links_html = ""
+    if site_url:
+        site = site_url.rstrip("/") + "/"
+        site_links_html = (
+            f"<a href='{site}'>Site home</a>"
+            f"<a href='{site}quickstart.html'>Quickstart</a>"
+            f"<a href='{site}tools/'>Tools</a>"
         )
 
     html = f"""<!doctype html>
@@ -179,49 +246,93 @@ def _write_html_index(outdir: Path, rows: List[dict]) -> None:
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>MolProp Retro • Index</title>
+  <link rel='stylesheet' href='assets/style.css'>
+  <link rel='icon' href='assets/logo.svg' type='image/svg+xml'>
   <style>
-    body{{font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:28px;}}
-    h1{{margin:0 0 8px;}}
-    p{{color:#444; max-width: 80ch;}}
-    table{{border-collapse:collapse; width:100%;}}
-    th,td{{border:1px solid #ddd; padding:8px; font-size:14px; vertical-align:top;}}
-    th{{background:#f7f7f7; text-align:left;}}
-    code{{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace; font-size:12px;}}
+    .table{{width:100%; border-collapse:collapse;}}
+    .table th,.table td{{border:1px solid rgba(255,255,255,.12); padding:10px; font-size:14px; vertical-align:top;}}
+    .table th{{background: rgba(0,0,0,.18); color: var(--text); text-align:left;}}
+    .table td{{color: var(--muted);}}
+    .table a{{color: var(--brand); text-decoration:none;}}
+    .table a:hover{{text-decoration:underline;}}
+    .table code{{color: var(--text);}}
   </style>
 </head>
 <body>
-  <h1>MolProp retrosynthesis results</h1>
-  <p>This report was generated by <code>molprop-retro</code> using AiZynthFinder. Each row links to a per-target route page.</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Compound_ID</th>
-        <th>Target</th>
-        <th>Solved</th>
-        <th>Top score</th>
-        <th>Routes</th>
-        <th>Search time (s)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {''.join(items)}
-    </tbody>
-  </table>
+  <header class='site-header'>
+    <div class='container header-inner'>
+      <a class='brand' href='./'>
+        <img class='brand-logo' src='assets/logo.svg' alt='MolProp Toolkit logo'>
+        <span class='brand-text'>
+          <span class='brand-name'>MolProp Toolkit</span>
+          <span class='brand-tag'>Retrosynthesis results (AiZynthFinder)</span>
+        </span>
+      </a>
+      <nav class='nav'>
+        <a href='routes_summary.csv'>routes_summary.csv</a>
+        <a href='routes_summary.json'>routes_summary.json</a>
+        {site_links_html}
+      </nav>
+    </div>
+  </header>
+
+  <section class='hero'>
+    <div class='container'>
+      <h1 style='margin:0 0 10px; font-size:34px; line-height:1.15'>Retrosynthesis route index</h1>
+      <p class='muted' style='max-width: 90ch'>
+        Generated by <code>molprop-retro</code>. Each row links to a per-target page with extracted routes.
+        Scores and route counts come from AiZynthFinder’s batch output.
+      </p>
+    </div>
+  </section>
+
+  <section class='section'>
+    <div class='container'>
+      <div class='card'>
+        <table class='table'>
+          <thead>
+            <tr>
+              <th>Compound_ID</th>
+              <th>Target</th>
+              <th>Solved</th>
+              <th>Top score</th>
+              <th>Routes</th>
+              <th>Search time (s)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {''.join(items)}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 </body>
 </html>"""
 
     (outdir / "index.html").write_text(html, encoding="utf-8")
 
 
-def _write_target_page(outdir: Path, cid: str, target: str, trees: list, images: List[str]) -> str:
-    rows = []
+def _write_target_page(outdir: Path, cid: str, target: str, trees: list, images: List[str], site_url: str | None) -> str:
+    site_links_html = ""
+    if site_url:
+        site = site_url.rstrip("/") + "/"
+        site_links_html = f"<a href='{site}'>Site home</a><a href='{site}tools/'>Tools</a>"
+
+    blocks = []
     for i, t in enumerate(trees):
         img = images[i] if i < len(images) else ""
-        rows.append(
-            f"<div style='border:1px solid #ddd; border-radius:10px; padding:12px; margin:12px 0'>"
-            f"<div style='font-weight:700'>Route {i+1}</div>"
-            + (f"<div style='margin-top:8px'><img src='{img}' style='max-width:100%; height:auto'></div>" if img else "")
-            + f"<details style='margin-top:8px'><summary>Route JSON</summary><pre style='white-space:pre-wrap'>{json.dumps(t, indent=2)[:200000]}</pre></details>"
+        img_src = f"../{img}" if img else ""
+
+        blocks.append(
+            "<div class='card' style='margin: 14px 0'>"
+            f"<div style='font-weight:800; margin-bottom:8px'>Route {i+1}</div>"
+            + (
+                f"<div style='margin:10px 0'><img src='{img_src}' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div>"
+                if img_src
+                else ""
+            )
+            + f"<details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{json.dumps(t, indent=2)[:200000]}</pre></details>"
             + "</div>"
         )
 
@@ -231,18 +342,39 @@ def _write_target_page(outdir: Path, cid: str, target: str, trees: list, images:
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>MolProp Retro • {cid}</title>
-  <style>
-    body{{font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:28px;}}
-    a{{color:#0b66d6; text-decoration:none;}}
-    a:hover{{text-decoration:underline;}}
-    code{{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace; font-size:12px;}}
-  </style>
+  <link rel='stylesheet' href='../assets/style.css'>
+  <link rel='icon' href='../assets/logo.svg' type='image/svg+xml'>
 </head>
 <body>
-  <div style='margin-bottom:14px'><a href='../index.html'>&larr; Back to index</a></div>
-  <h1 style='margin:0 0 8px'>{cid}</h1>
-  <div style='color:#444; margin-bottom:14px'>Target: <code>{target}</code></div>
-  {''.join(rows) if rows else '<p>No extracted routes.</p>'}
+  <header class='site-header'>
+    <div class='container header-inner'>
+      <a class='brand' href='../index.html'>
+        <img class='brand-logo' src='../assets/logo.svg' alt='MolProp Toolkit logo'>
+        <span class='brand-text'>
+          <span class='brand-name'>MolProp Toolkit</span>
+          <span class='brand-tag'>Retrosynthesis: {cid}</span>
+        </span>
+      </a>
+      <nav class='nav'>
+        <a href='../index.html'>&larr; Index</a>
+        <a href='../routes_summary.csv'>Summary CSV</a>
+        {site_links_html}
+      </nav>
+    </div>
+  </header>
+
+  <section class='hero'>
+    <div class='container'>
+      <h1 style='margin:0 0 10px; font-size:32px; line-height:1.15'>{cid}</h1>
+      <p class='muted' style='max-width: 90ch'>Target: <code>{target}</code></p>
+    </div>
+  </section>
+
+  <section class='section'>
+    <div class='container'>
+      {''.join(blocks) if blocks else "<div class='card'><p class='muted' style='margin:0'>No extracted routes.</p></div>"}
+    </div>
+  </section>
 </body>
 </html>"""
 
@@ -296,16 +428,30 @@ def main() -> None:
         default=None,
         help="Extra args passed to aizynthcli (quoted string), e.g. --aizynth-args \"--cluster\"",
     )
+    ap.add_argument(
+        "--site-url",
+        default=None,
+        help=(
+            "Optional base URL of the MolProp Toolkit GitHub Pages site to link back to "
+            "(e.g., https://kelokely.github.io/-molprop-toolkit/). You can also set MOLPROP_SITE_URL."
+        ),
+    )
     args = ap.parse_args()
 
     targets = _read_targets(args.input, args.smiles_col, args.id_col, args.limit)
     if not targets:
         raise SystemExit("No targets found")
 
+    # Site URL used for nav links in the generated HTML
+    site_url = args.site_url or os.environ.get("MOLPROP_SITE_URL") or "https://kelokely.github.io/-molprop-toolkit/"
+
     stem = Path(args.input).stem
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     outdir = Path(args.outdir or (Path("retrosynthesis") / f"{stem}_retro_{ts}"))
     outdir.mkdir(parents=True, exist_ok=True)
+
+    # Copy the GitHub Pages site styling into this output folder
+    _copy_site_assets(outdir)
 
     smiles_file = outdir / "targets.smi"
     _write_smiles_file(targets, smiles_file)
@@ -331,7 +477,7 @@ def main() -> None:
         if not args.no_images and trees:
             images = _render_route_images(outdir, cid, trees, args.top_routes)
 
-        page_href = _write_target_page(outdir, cid, str(r.get("target", "")), trees, images)
+        page_href = _write_target_page(outdir, cid, str(r.get("target", "")), trees, images, site_url)
 
         row = {
             "Compound_ID": cid,
@@ -355,7 +501,7 @@ def main() -> None:
     df_summary.to_csv(outdir / "routes_summary.csv", index=False)
     (outdir / "routes_summary.json").write_text(json.dumps(summary_rows, indent=2), encoding="utf-8")
 
-    _write_html_index(outdir, summary_rows)
+    _write_html_index(outdir, summary_rows, site_url)
 
     print(f"Retrosynthesis outputs written to: {outdir}")
     print(f"- AiZynthFinder raw output: {output_file.name}")
