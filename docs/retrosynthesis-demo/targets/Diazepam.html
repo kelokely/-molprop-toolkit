@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>MolProp Retro • Diazepam</title>
+  <link rel='stylesheet' href='../assets/style.css'>
+  <link rel='icon' href='../assets/logo.svg' type='image/svg+xml'>
+</head>
+<body>
+  <header class='site-header'>
+    <div class='container header-inner'>
+      <a class='brand' href='../index.html'>
+        <img class='brand-logo' src='../assets/logo.svg' alt='MolProp Toolkit logo'>
+        <span class='brand-text'>
+          <span class='brand-name'>MolProp Toolkit</span>
+          <span class='brand-tag'>Retrosynthesis: Diazepam</span>
+        </span>
+      </a>
+      <nav class='nav'>
+        <a href='../index.html'>&larr; Index</a>
+        <a href='../routes_summary.csv'>Summary CSV</a>
+        <a href='https://kelokely.github.io/-molprop-toolkit/'>Site home</a><a href='https://kelokely.github.io/-molprop-toolkit/tools/'>Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class='hero'>
+    <div class='container'>
+      <h1 style='margin:0 0 10px; font-size:32px; line-height:1.15'>Diazepam</h1>
+      <p class='muted' style='max-width: 90ch'>Target: <code>CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21</code></p>
+    </div>
+  </section>
+
+  <section class='section'>
+    <div class='container'>
+      <div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 1</div><div style='margin:10px 0'><img src='../images/Diazepam/route000.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[c:1]([cH2:2])([cH2:3])[C:4](=[NH:5])[c:6]1[cH:7][cH:8][cH:9][cH:10][cH:11]1>>CC1(C)OB([c:1]([cH2:2])[cH2:3])OC1(C)C.Cl[C:4](=[NH:5])[c:6]1[cH:7][cH:8][cH:9][cH:10][cH:11]1",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "67c3a4d2905b1654f88433763a9c0de18bb1e7879e93e287030379fa82025c93",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 9,
+        "policy_probability": 0.0020999999000000003,
+        "policy_probability_rank": 8,
+        "policy_name": "uspto",
+        "template_code": 17293,
+        "template": "[#7:5]=[C;H0;D3;+0:4](-[c:6]1:[c:7]:[c:8]:[c:9]:[c:10]:[c:11]:1)-[c;H0;D3;+0:1](:[c:2]):[c:3]>>C-C1(-C)-O-B(-[c;H0;D3;+0:1](:[c:2]):[c:3])-O-C-1(-C)-C.Cl-[C;H0;D3;+0:4](=[#7:5])-[c:6]1:[c:7]:[c:8]:[c:9]:[c:10]:[c:11]:1",
+        "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([Cl:22])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21.[c:8]1([B:23]2[O:24][C:25]([CH3:26])([CH3:27])[C:28]([CH3:29])([CH3:30])[O:31]2)[cH:9][cH:10][cH:11][cH:12][c:13]1[Cl:14]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CC1(C)OB(c2ccccc2Cl)OC1(C)C",
+          "is_chemical": true,
+          "in_stock": true
+        },
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CN1C(=O)CN=C(Cl)c2cc(Cl)ccc21",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 7,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 2</div><div style='margin:10px 0'><img src='../images/Diazepam/route001.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[C:1](=[NH:2])([c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1)[c:9]([cH2:10])[cH2:11]>>Cl[C:1](=[NH:2])[c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1.OB(O)[c:9]([cH2:10])[cH2:11]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "bd22e6182c3feaa87b9664e7783a0f954726788747fcbfa64b4203b618fc6efb",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 72,
+        "policy_probability": 0.0214000009,
+        "policy_probability_rank": 1,
+        "policy_name": "uspto",
+        "template_code": 31506,
+        "template": "[#7:2]=[C;H0;D3;+0:1](-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1)-[c;H0;D3;+0:9](:[c:10]):[c:11]>>Cl-[C;H0;D3;+0:1](=[#7:2])-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1.O-B(-O)-[c;H0;D3;+0:9](:[c:10]):[c:11]",
+        "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([Cl:22])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21.[c:8]1([B:23]([OH:24])[OH:25])[cH:9][cH:10][cH:11][cH:12][c:13]1[Cl:14]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "OB(O)c1ccccc1Cl",
+          "is_chemical": true,
+          "in_stock": true
+        },
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CN1C(=O)CN=C(Cl)c2cc(Cl)ccc21",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 2,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 3</div><div style='margin:10px 0'><img src='../images/Diazepam/route002.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[c:1]([cH2:2])[cH2:3]>>Br[c:1]([cH2:2])[cH2:3]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "040c343ae717783bc69afe6e7eaa5a804411379ffa7cc87f54ca07b0443dfdc1",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 433,
+        "policy_probability": 0.0002,
+        "policy_probability_rank": 33,
+        "policy_name": "uspto",
+        "template_code": 685,
+        "template": "[c:2]:[cH;D2;+0:1]:[c:3]>>Br-[c;H0;D3;+0:1](:[c:2]):[c:3]",
+        "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][c:11]([Br:22])[cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CN1C(=O)CN=C(c2ccc(Br)cc2Cl)c2cc(Cl)ccc21",
+          "is_chemical": true,
+          "in_stock": false,
+          "children": [
+            {
+              "type": "reaction",
+              "hide": false,
+              "smiles": "[C:1](=[NH:2])([c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1)[c:9]([cH2:10])[cH2:11]>>Cl[C:1](=[NH:2])[c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1.OB(O)[c:9]([cH2:10])[cH2:11]",
+              "is_reaction": true,
+              "metadata": {
+                "template_hash": "bd22e6182c3feaa87b9664e7783a0f954726788747fcbfa64b4203b618fc6efb",
+                "classification": "0.0 Unrecognized",
+                "library_occurence": 72,
+                "policy_probability": 0.010099999600000001,
+                "policy_probability_rank": 1,
+                "policy_name": "uspto",
+                "template_code": 31506,
+                "template": "[#7:2]=[C;H0;D3;+0:1](-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1)-[c;H0;D3;+0:9](:[c:10]):[c:11]>>Cl-[C;H0;D3;+0:1](=[#7:2])-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1.O-B(-O)-[c;H0;D3;+0:9](:[c:10]):[c:11]",
+                "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][c:11]([Br:22])[cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([Cl:23])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21.[c:8]1([B:24]([OH:25])[OH:26])[cH:9][cH:10][c:11]([Br:22])[cH:12][c:13]1[Cl:14]"
+              },
+              "children": [
+                {
+                  "type": "mol",
+                  "hide": false,
+                  "smiles": "OB(O)c1ccc(Br)cc1Cl",
+                  "is_chemical": true,
+                  "in_stock": true
+                },
+                {
+                  "type": "mol",
+                  "hide": false,
+                  "smiles": "CN1C(=O)CN=C(Cl)c2cc(Cl)ccc21",
+                  "is_chemical": true,
+                  "in_stock": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9940398539,
+    "number of reactions": 2,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 36,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 4</div><div style='margin:10px 0'><img src='../images/Diazepam/route003.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[c:1]([cH2:2])[cH2:3]>>Br[c:1]([cH2:2])[cH2:3]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "040c343ae717783bc69afe6e7eaa5a804411379ffa7cc87f54ca07b0443dfdc1",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 433,
+        "policy_probability": 0.0002,
+        "policy_probability_rank": 33,
+        "policy_name": "uspto",
+        "template_code": 685,
+        "template": "[c:2]:[cH;D2;+0:1]:[c:3]>>Br-[c;H0;D3;+0:1](:[c:2]):[c:3]",
+        "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][c:10]([Br:22])[cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CN1C(=O)CN=C(c2cc(Br)ccc2Cl)c2cc(Cl)ccc21",
+          "is_chemical": true,
+          "in_stock": false,
+          "children": [
+            {
+              "type": "reaction",
+              "hide": false,
+              "smiles": "[C:1](=[NH:2])([c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1)[c:9]([cH2:10])[cH2:11]>>Cl[C:1](=[NH:2])[c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1.OB(O)[c:9]([cH2:10])[cH2:11]",
+              "is_reaction": true,
+              "metadata": {
+                "template_hash": "bd22e6182c3feaa87b9664e7783a0f954726788747fcbfa64b4203b618fc6efb",
+                "classification": "0.0 Unrecognized",
+                "library_occurence": 72,
+                "policy_probability": 0.0137999998,
+                "policy_probability_rank": 1,
+                "policy_name": "uspto",
+                "template_code": 31506,
+                "template": "[#7:2]=[C;H0;D3;+0:1](-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1)-[c;H0;D3;+0:9](:[c:10]):[c:11]>>Cl-[C;H0;D3;+0:1](=[#7:2])-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1.O-B(-O)-[c;H0;D3;+0:9](:[c:10]):[c:11]",
+                "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][c:10]([Br:22])[cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([Cl:23])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21.[c:8]1([B:24]([OH:25])[OH:26])[cH:9][c:10]([Br:22])[cH:11][cH:12][c:13]1[Cl:14]"
+              },
+              "children": [
+                {
+                  "type": "mol",
+                  "hide": false,
+                  "smiles": "OB(O)c1cc(Br)ccc1Cl",
+                  "is_chemical": true,
+                  "in_stock": true
+                },
+                {
+                  "type": "mol",
+                  "hide": false,
+                  "smiles": "CN1C(=O)CN=C(Cl)c2cc(Cl)ccc21",
+                  "is_chemical": true,
+                  "in_stock": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9940398539,
+    "number of reactions": 2,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 32,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 5</div><div style='margin:10px 0'><img src='../images/Diazepam/route004.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "CN1C(=O)CN=C(c2ccccc2Cl)c2cc(Cl)ccc21",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[c:1]([cH2:2])[cH2:3]>>Br[c:1]([cH2:2])[cH2:3]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "040c343ae717783bc69afe6e7eaa5a804411379ffa7cc87f54ca07b0443dfdc1",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 433,
+        "policy_probability": 0.0002,
+        "policy_probability_rank": 33,
+        "policy_name": "uspto",
+        "template_code": 685,
+        "template": "[c:2]:[cH;D2;+0:1]:[c:3]>>Br-[c;H0;D3;+0:1](:[c:2]):[c:3]",
+        "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[cH:9][cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[c:9]([Br:22])[cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CN1C(=O)CN=C(c2c(Cl)cccc2Br)c2cc(Cl)ccc21",
+          "is_chemical": true,
+          "in_stock": false,
+          "children": [
+            {
+              "type": "reaction",
+              "hide": false,
+              "smiles": "[C:1](=[NH:2])([c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1)[c:9]([cH2:10])[cH2:11]>>Cl[C:1](=[NH:2])[c:3]1[cH:4][cH:5][cH:6][cH:7][cH:8]1.OB(O)[c:9]([cH2:10])[cH2:11]",
+              "is_reaction": true,
+              "metadata": {
+                "template_hash": "bd22e6182c3feaa87b9664e7783a0f954726788747fcbfa64b4203b618fc6efb",
+                "classification": "0.0 Unrecognized",
+                "library_occurence": 72,
+                "policy_probability": 0.0428000018,
+                "policy_probability_rank": 3,
+                "policy_name": "uspto",
+                "template_code": 31506,
+                "template": "[#7:2]=[C;H0;D3;+0:1](-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1)-[c;H0;D3;+0:9](:[c:10]):[c:11]>>Cl-[C;H0;D3;+0:1](=[#7:2])-[c:3]1:[c:4]:[c:5]:[c:6]:[c:7]:[c:8]:1.O-B(-O)-[c;H0;D3;+0:9](:[c:10]):[c:11]",
+                "mapped_reaction_smiles": "[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([c:8]2[c:9]([Br:22])[cH:10][cH:11][cH:12][c:13]2[Cl:14])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21>>[CH3:1][N:2]1[C:3](=[O:4])[CH2:5][N:6]=[C:7]([Cl:23])[c:15]2[cH:16][c:17]([Cl:18])[cH:19][cH:20][c:21]21.[c:8]1([B:24]([OH:25])[OH:26])[c:9]([Br:22])[cH:10][cH:11][cH:12][c:13]1[Cl:14]"
+              },
+              "children": [
+                {
+                  "type": "mol",
+                  "hide": false,
+                  "smiles": "OB(O)c1c(Cl)cccc1Br",
+                  "is_chemical": true,
+                  "in_stock": true
+                },
+                {
+                  "type": "mol",
+                  "hide": false,
+                  "smiles": "CN1C(=O)CN=C(Cl)c2cc(Cl)ccc21",
+                  "is_chemical": true,
+                  "in_stock": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9940398539,
+    "number of reactions": 2,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 64,
+    "is_solved": true
+  }
+}</pre></details></div>
+    </div>
+  </section>
+</body>
+</html>

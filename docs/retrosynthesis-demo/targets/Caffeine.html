@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>MolProp Retro • Caffeine</title>
+  <link rel='stylesheet' href='../assets/style.css'>
+  <link rel='icon' href='../assets/logo.svg' type='image/svg+xml'>
+</head>
+<body>
+  <header class='site-header'>
+    <div class='container header-inner'>
+      <a class='brand' href='../index.html'>
+        <img class='brand-logo' src='../assets/logo.svg' alt='MolProp Toolkit logo'>
+        <span class='brand-text'>
+          <span class='brand-name'>MolProp Toolkit</span>
+          <span class='brand-tag'>Retrosynthesis: Caffeine</span>
+        </span>
+      </a>
+      <nav class='nav'>
+        <a href='../index.html'>&larr; Index</a>
+        <a href='../routes_summary.csv'>Summary CSV</a>
+        <a href='https://kelokely.github.io/-molprop-toolkit/'>Site home</a><a href='https://kelokely.github.io/-molprop-toolkit/tools/'>Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class='hero'>
+    <div class='container'>
+      <h1 style='margin:0 0 10px; font-size:32px; line-height:1.15'>Caffeine</h1>
+      <p class='muted' style='max-width: 90ch'>Target: <code>Cn1c(=O)c2c(ncn2C)n(C)c1=O</code></p>
+    </div>
+  </section>
+
+  <section class='section'>
+    <div class='container'>
+      <div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 1</div><div style='margin:10px 0'><img src='../images/Caffeine/route000.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[C:1][n:4]([cH:3]:[NH:2])[cH2:5]>>COS(=O)(=O)O[C:1].[NH:2]:[cH:3][n:4][cH2:5]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "93cbaf0b4b48881d9d7665df46a789855973bcb6da86f905ab1181a987e8abf0",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 99,
+        "policy_probability": 0.0141000003,
+        "policy_probability_rank": 7,
+        "policy_name": "uspto",
+        "template_code": 24589,
+        "template": "[#7;a:2]:[c:3]:[n;H0;D3;+0:4](-[CH3;D1;+0:1]):[c:5]>>C-O-S(=O)(=O)-O-[CH3;D1;+0:1].[#7;a:2]:[c:3]:[nH;D2;+0:4]:[c:5]",
+        "mapped_reaction_smiles": "[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][n:9]2[CH3:10])[n:11]([CH3:12])[c:13]1=[O:14]>>[CH3:12][O:15][S:16]([O:17][CH3:18])(=[O:19])=[O:20].[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][n:9]2[CH3:10])[nH:11][c:13]1=[O:14]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "COS(=O)(=O)OC",
+          "is_chemical": true,
+          "in_stock": true
+        },
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "Cn1c(=O)[nH]c2ncn(C)c2c1=O",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 8,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 2</div><div style='margin:10px 0'><img src='../images/Caffeine/route001.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[C:1][n:4]([cH:3]:[NH:2])[cH2:5]>>CN(C=O)[C:1].[NH:2]:[cH:3][n:4][cH2:5]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "1dfa1d2f69d4b2839e1c58440f1eb8e8fe7bcfeab48b41b3d8d193d0c03b2f92",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 29,
+        "policy_probability": 0.0063,
+        "policy_probability_rank": 12,
+        "policy_name": "uspto",
+        "template_code": 5033,
+        "template": "[#7;a:2]:[c:3]:[n;H0;D3;+0:4](-[CH3;D1;+0:1]):[c:5]>>C-N(-[CH3;D1;+0:1])-C=O.[#7;a:2]:[c:3]:[nH;D2;+0:4]:[c:5]",
+        "mapped_reaction_smiles": "[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][n:9]2[CH3:10])[n:11]([CH3:12])[c:13]1=[O:14]>>[CH3:10][N:15]([CH3:16])[CH:17]=[O:18].[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][nH:9]2)[n:11]([CH3:12])[c:13]1=[O:14]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CN(C)C=O",
+          "is_chemical": true,
+          "in_stock": true
+        },
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "Cn1c(=O)c2[nH]cnc2n(C)c1=O",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 15,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 3</div><div style='margin:10px 0'><img src='../images/Caffeine/route002.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[c:1]1[n:2][cH:3][cH:4][n:5]1>>CCO[C:1](OCC)OCC.[N:2][cH:3][cH:4][N:5]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "e6ff9d185bed3bc9074c5c734e38246897f406e8003600ca671f283182560e4a",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 244,
+        "policy_probability": 0.0051000002000000004,
+        "policy_probability_rank": 16,
+        "policy_name": "uspto",
+        "template_code": 38369,
+        "template": "[c;H0;D3;+0:3]1:[c;H0;D3;+0:4]:[n;H0;D3;+0:5]:[cH;D2;+0:1]:[n;H0;D2;+0:2]:1>>C-C-O-[CH;D3;+0:1](-O-C-C)-O-C-C.[NH2;D1;+0:2]-[c;H0;D3;+0:3]:[c;H0;D3;+0:4]-[NH;D2;+0:5]",
+        "mapped_reaction_smiles": "[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][n:9]2[CH3:10])[n:11]([CH3:12])[c:13]1=[O:14]>>[CH3:1][n:2]1[c:3](=[O:4])[c:5]([NH:9][CH3:10])[c:6]([NH2:7])[n:11]([CH3:12])[c:13]1=[O:14].[CH:8]([O:15][CH2:16][CH3:17])([O:18][CH2:19][CH3:20])[O:21][CH2:22][CH3:23]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CCOC(OCC)OCC",
+          "is_chemical": true,
+          "in_stock": true
+        },
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "CNc1c(N)n(C)c(=O)n(C)c1=O",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 20,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 4</div><div style='margin:10px 0'><img src='../images/Caffeine/route003.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[C:1][n:4]1[cH:3]:[N:2]:[cH:6][cH:5]1>>COS(=O)(=O)O[C:1].[N:2]1:[cH:3][n:4][cH:5][cH:6]:1",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "6be26eea6e0e74a6eaba384a9cfb9b42f22ea62365a7b8a8506c65da9b545744",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 55,
+        "policy_probability": 0.004699999900000001,
+        "policy_probability_rank": 17,
+        "policy_name": "uspto",
+        "template_code": 17983,
+        "template": "[CH3;D1;+0:1]-[n;H0;D3;+0:4]1:[c:3]:[#7;a:2]:[c:6]:[c:5]:1>>C-O-S(=O)(=O)-O-[CH3;D1;+0:1].[#7;a:2]1:[c:3]:[nH;D2;+0:4]:[c:5]:[c:6]:1",
+        "mapped_reaction_smiles": "[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][n:9]2[CH3:10])[n:11]([CH3:12])[c:13]1=[O:14]>>[CH3:10][O:15][S:16]([O:17][CH3:18])(=[O:19])=[O:20].[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][nH:9]2)[n:11]([CH3:12])[c:13]1=[O:14]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "COS(=O)(=O)OC",
+          "is_chemical": true,
+          "in_stock": true
+        },
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "Cn1c(=O)c2[nH]cnc2n(C)c1=O",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 2,
+    "number of pre-cursors in stock": 2
+  },
+  "metadata": {
+    "created_at_iteration": 21,
+    "is_solved": true
+  }
+}</pre></details></div><div class='card' style='margin: 14px 0'><div style='font-weight:800; margin-bottom:8px'>Route 5</div><div style='margin:10px 0'><img src='../images/Caffeine/route004.png' style='max-width:100%; height:auto; border-radius:12px; border:1px solid rgba(255,255,255,.10)'></div><details><summary class='muted' style='cursor:pointer'>Route JSON</summary><pre style='white-space:pre-wrap; overflow:auto; margin-top:10px; padding:14px; border-radius:12px; background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.08);'>{
+  "type": "mol",
+  "hide": false,
+  "smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+  "is_chemical": true,
+  "in_stock": false,
+  "children": [
+    {
+      "type": "reaction",
+      "hide": false,
+      "smiles": "[c:1](:[NH:2]):[NH:3]>>Cl[c:1](:[NH:2]):[NH:3]",
+      "is_reaction": true,
+      "metadata": {
+        "template_hash": "3340506add122eb815b18484abdb651b9456c64d4e7186ba3a9982952dca892d",
+        "classification": "0.0 Unrecognized",
+        "library_occurence": 221,
+        "policy_probability": 0.0018000000000000002,
+        "policy_probability_rank": 31,
+        "policy_name": "uspto",
+        "template_code": 8613,
+        "template": "[#7;a:2]:[cH;D2;+0:1]:[#7;a:3]>>Cl-[c;H0;D3;+0:1](:[#7;a:2]):[#7;a:3]",
+        "mapped_reaction_smiles": "[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][cH:8][n:9]2[CH3:10])[n:11]([CH3:12])[c:13]1=[O:14]>>[CH3:1][n:2]1[c:3](=[O:4])[c:5]2[c:6]([n:7][c:8]([Cl:15])[n:9]2[CH3:10])[n:11]([CH3:12])[c:13]1=[O:14]"
+      },
+      "children": [
+        {
+          "type": "mol",
+          "hide": false,
+          "smiles": "Cn1c(=O)c2c(nc(Cl)n2C)n(C)c1=O",
+          "is_chemical": true,
+          "in_stock": true
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "state score": 0.9976287063,
+    "number of reactions": 1,
+    "number of pre-cursors": 1,
+    "number of pre-cursors in stock": 1
+  },
+  "metadata": {
+    "created_at_iteration": 29,
+    "is_solved": true
+  }
+}</pre></details></div>
+    </div>
+  </section>
+</body>
+</html>
