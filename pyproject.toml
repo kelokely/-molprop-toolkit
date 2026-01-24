@@ -23,7 +23,11 @@ rdkit = ["rdkit-pypi>=2022.9.5"]
 dimorphite = ["dimorphite-dl>=1.3.2"]
 report = ["matplotlib>=3.7"]
 retro = ["aizynthfinder>=4.4.1"]
+<<<<<<< HEAD
 parquet = ["pyarrow>=14"]
+=======
+parquet = ["pyarrow>=12"]
+>>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
 dev = ["pytest>=7.4", "ruff>=0.1.9"]
 
 [project.scripts]
