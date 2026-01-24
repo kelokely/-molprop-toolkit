@@ -30,6 +30,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+# Optional: Parquet output support for results tables.
+try:  # package context
+    from molprop_toolkit.core.io import write_table
+except Exception:  # script-only context
+    write_table = None  # type: ignore
+
 from rdkit import Chem
 from rdkit.Chem import Crippen, Descriptors, QED, rdMolDescriptors
 from rdkit.Chem.FilterCatalog import FilterCatalog, FilterCatalogParams
@@ -768,6 +774,30 @@ def write_csv(rows: List[Dict[str, object]], out_path: str, fill_missing: Option
         w.writerows(rows)
 
 
+def write_output(rows: List[Dict[str, object]], out_path: str, fill_missing: Optional[float]) -> None:
+    """Write results to CSV (default) or Parquet (when out_path ends with .parquet/.pq)."""
+
+    ext = Path(out_path).suffix.lower()
+    if ext in (".parquet", ".pq"):
+        if write_table is None:
+            raise SystemExit(
+                "Parquet output requires the molprop_toolkit package context. Run via the installed console script "
+                "(molprop-calc-v4) or from the repository root so molprop_toolkit is importable."
+            )
+        try:
+            import pandas as pd
+
+            df = pd.DataFrame(rows)
+            if fill_missing is not None:
+                df = df.fillna(fill_missing)
+            write_table(df, out_path)
+        except Exception as e:
+            raise SystemExit(f"Failed to write Parquet output: {e}")
+        return
+
+    write_csv(rows, out_path, fill_missing)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="MolProp Toolkit calculator (v4)")
     ap.add_argument("input", help="Input SMILES file")
@@ -899,7 +929,7 @@ def main() -> None:
         props["SMILES"] = smiles
         rows.append(props)
 
-    write_csv(rows, out_path, args.fill_missing)
+    write_output(rows, out_path, args.fill_missing)
     print(f"Saved: {out_path} (compounds={len(rows)}, columns={len(rows[0])})")
 
 

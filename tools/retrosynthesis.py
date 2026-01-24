@@ -41,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 
-from molprop_toolkit.core import detect_id_column, read_csv
+from molprop_toolkit.core import detect_id_column, read_table
 
 
 PREFERRED_SMILES_COLUMNS = [
@@ -77,7 +77,7 @@ def _read_targets(path: str, smiles_col: Optional[str], id_col: Optional[str], l
 
     # If it's a CSV, use our normal column detection.
     if p.suffix.lower() in (".csv", ".tsv"):
-        df = read_csv(path)
+        df = read_table(path)
         smi_col = _detect_smiles_column(df, smiles_col)
 
         cid_col = id_col
