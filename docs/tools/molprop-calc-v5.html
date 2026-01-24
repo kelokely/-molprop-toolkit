@@ -58,6 +58,116 @@ python calculators/mpo_v5.py input.smi -o results.csv</code></pre>
 
       <section class="section">
         <div class="container">
+          <h2>Ligand preparation (recommended sequences)</h2>
+          <p class="muted" style="margin-top:-6px">See also: <a href="ligand-prep.html" style="color: var(--brand); text-decoration:none;">Ligand preparation guide</a></p>
+          <p class="muted" style="max-width: 92ch">
+            The calculators can work directly from the input SMILES, but most downstream comparisons only make sense if you
+            standardize structures consistently. In MolProp Toolkit, “preparation” is a chain of steps that produces traceable
+            SMILES columns: <code>Input_Canonical_SMILES</code> (canonicalized input), <code>Canonical_SMILES</code> (standardized parent),
+            <code>Calc_Base_SMILES</code> (post tautomer/stereo selection, pre-protomer), and <code>Calc_Canonical_SMILES</code> (the structure
+            actually used for descriptor calculation). Choose one sequence and keep it stable across a project.
+          </p>
+
+          <div class="tabs">
+            <input type="radio" name="prep" id="prep-standard" checked />
+            <input type="radio" name="prep" id="prep-audit" />
+            <input type="radio" name="prep" id="prep-3d" />
+            <input type="radio" name="prep" id="prep-minimal" />
+
+            <div class="tab-labels">
+              <label for="prep-standard">Standard (recommended)</label>
+              <label for="prep-audit">Audit / enumerate</label>
+              <label for="prep-3d">3D-ready / USRCAT</label>
+              <label for="prep-minimal">Minimal / raw</label>
+            </div>
+
+            <div class="tab-panels">
+              <div class="tab-panel tab-standard">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    This is the default “medchem triage” posture: normalize salts and common charge forms, canonicalize a single
+                    tautomer, keep stereochemistry as provided, and add pH-aware ionization features without enumerating explicit
+                    protonation states. This yields stable 2D descriptors and keeps the table interpretable.
+                  </p>
+                  <p class="muted" style="margin:0 0 12px">
+                    Internally, this follows RDKit MolStandardize <code>Cleanup → FragmentParent → Uncharger → Reionizer → Canonicalize tautomer</code>,
+                    then assigns stereochemistry for auditing. The structure used for calculation is recorded in <code>Calc_Canonical_SMILES</code>.
+                  </p>
+                  <pre><code>molprop-calc-v5 input.smi -o results.csv \
+  --ph 7.4 \
+  --ionization heuristic \
+  --tautomer-mode prep-canonical \
+  --stereo-mode keep</code></pre>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-audit">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    Use this when you want explicit visibility into ambiguity. The calculator enumerates plausible tautomers and
+                    unresolved stereocenters (bounded by max limits), selects a representative, and records the enumerated sets in
+                    <code>Tautomer_*</code> and <code>Stereo_*</code> columns. This is useful when you are cleaning vendor data, merging
+                    sources, or preparing a modeling-ready table where you need to understand what was “decided” by the pipeline.
+                  </p>
+                  <pre><code>molprop-calc-v5 input.smi -o results.csv \
+  --tautomer-mode enumerate --tautomer-max 64 --tautomer-topk 5 \
+  --stereo-mode enumerate --stereo-max 32 --stereo-topk 5 --stereo-select canonical</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    This still does not change the structure to a pH-selected protomer unless you enable protomer enumeration.
+                    It focuses on making tautomer/stereo assumptions explicit.
+                  </p>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-3d">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    If you will compute conformer-based 3D descriptors (<code>--3d</code>) or use 3D fingerprints for clustering
+                    (<code>--fp usr</code>/<code>--fp usrcat</code> in <code>molprop-series</code>), you should decide stereochemistry and protonation
+                    state up front. 3D geometry depends on both; leaving them ambiguous can make “the same compound” behave like a
+                    different molecule from one run or dataset to the next.
+                  </p>
+                  <p class="muted" style="margin:0 0 12px">
+                    A practical reproducible option is to enumerate protomers at a defined pH window, select one protomer, compute
+                    descriptors on that protomer, and then generate 3D conformers with an explicit seed. The chosen structure is
+                    recorded in <code>Calc_Canonical_SMILES</code>, and protomer choice is recorded in <code>Protomer_*</code> columns.
+                  </p>
+                  <pre><code># optional dependency
+pip install dimorphite_dl
+
+molprop-calc-v5 input.smi -o results.csv \
+  --ph 7.4 --ionization dimorphite --calc-on-protomer \
+  --protomer-select closest-charge \
+  --tautomer-mode prep-canonical \
+  --stereo-mode keep \
+  --3d --3d-num-confs 10 --3d-minimize mmff --3d-seed 0</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    If stereo is frequently missing in your inputs and 3D features matter, pair this with <code>--stereo-mode enumerate</code>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-minimal">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    This mode is only recommended if you have already standardized structures elsewhere and you want the calculator
+                    to treat the input as authoritative. It disables the RDKit MolStandardize preparation step. You can still compute
+                    properties, but salt forms, charge variants, and inconsistent tautomer forms will propagate into the table.
+                  </p>
+                  <pre><code>molprop-calc-v5 input.smi -o results.csv --no-prep --tautomer-mode none --ionization none</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    If you later run <code>molprop-series</code>, clustering will reflect whatever structural diversity is present in the
+                    raw inputs, including salts and alternate tautomers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
           <h2>Common options</h2>
           <div class="card">
             <p class="muted" style="margin:0 0 12px">Run <code>molprop-calc-v5 --help</code> for the complete list. Common knobs:</p>

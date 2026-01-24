@@ -103,6 +103,58 @@ code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liber
 ul{ margin: 10px 0 0 18px; color: var(--muted); }
 li{ margin: 7px 0; }
 
+/* Simple CSS-only tabs (radio-button tabs) */
+.tabs{
+  margin-top: 12px;
+}
+.tabs input[type="radio"]{
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.tab-labels{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+}
+.tab-labels label{
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(22,35,74,.55);
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 13px;
+}
+.tab-labels label:hover{
+  color: var(--text);
+  border-color: rgba(110,231,255,.35);
+}
+.tab-panels .tab-panel{ display:none; }
+.tab-panel .card{ margin-top: 0; }
+
+/* Active label */
+#prep-standard:checked ~ .tab-labels label[for="prep-standard"],
+#prep-audit:checked ~ .tab-labels label[for="prep-audit"],
+#prep-3d:checked ~ .tab-labels label[for="prep-3d"],
+#prep-minimal:checked ~ .tab-labels label[for="prep-minimal"]{
+  color: var(--text);
+  border-color: rgba(110,231,255,.35);
+  background: linear-gradient(135deg, rgba(110,231,255,.16), rgba(167,139,250,.12));
+}
+
+/* Active panel */
+#prep-standard:checked ~ .tab-panels .tab-standard,
+#prep-audit:checked ~ .tab-panels .tab-audit,
+#prep-3d:checked ~ .tab-panels .tab-3d,
+#prep-minimal:checked ~ .tab-panels .tab-minimal{ display:block; }
+
 .cta-row{ display:flex; gap: 12px; flex-wrap: wrap; align-items:center; margin: 14px 0 0; }
 .btn{
   display:inline-flex;

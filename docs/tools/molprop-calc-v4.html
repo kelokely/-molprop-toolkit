@@ -61,6 +61,21 @@ python calculators/mpo_v4.py input.smi -o results.csv</code></pre>
 
       <section class="section">
         <div class="container">
+          <h2>Ligand preparation (how the calculator standardizes structures)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              The v4 calculator uses the same preparation chain as v5 when preparation is enabled: RDKit MolStandardize
+              cleanup, parent-fragment selection (salt stripping), optional uncharging/reionization, optional canonical tautomer
+              selection, then stereochemistry assignment for auditing. The standardized structure is recorded in
+              <code>Canonical_SMILES</code> and the calculation structure is recorded in <code>Calc_Canonical_SMILES</code>. If you need
+              an “options as sequences” view (including 3D/protomer choices), use the v5 tool page.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
           <h2>Common options</h2>
           <div class="card">
             <p class="muted" style="margin:0 0 12px">
