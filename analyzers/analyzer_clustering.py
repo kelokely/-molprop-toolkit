@@ -1,35 +1,51 @@
 #!/usr/bin/env python3
-"""══════════════════════════════════════════════════════════════════════════════
-SIMILARITY CLUSTERING ANALYZER (Task 13B)
-═══════════════════════════════════════════════════════════════════════════════
+"""Similarity clustering analyzer.
 
-Performs Morgan fingerprint similarity clustering (Butina) and writes:
+Performs fingerprint-based similarity clustering (Butina) and writes:
 - cluster_assignments.csv
 - cluster_summary.csv
 - optional cluster_representatives/ (SVG depictions for cluster medoids)
 
-The main output expectation for Task 13B is a "Cluster_ID" assignment column.
-This script produces that assignment and a few helpful companion columns.
+Supported fingerprints:
+- 2D (bit-vector, Tanimoto): Morgan (ECFP-style), RDKit topological, MACCS keys, atom-pair (hashed), torsion (hashed)
+- 3D (vector, distance-based): USR, USRCAT
+
+For 2D bit-vector fingerprints, a similarity threshold `t` is converted to a Butina distance cutoff `1 - t`.
+For USR/USRCAT vectors, we define similarity as `1/(1+euclidean_distance)` and convert the threshold to a distance cutoff
+`(1/t) - 1`.
+
+The main output is a per-compound `Cluster_ID` column plus a few companion fields:
+- Cluster_Size
+- Cluster_Representative_ID (medoid)
+- Cluster_MedoidMeanSim (mean similarity of the medoid to cluster members)
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
+import os
+import platform
+import subprocess
 import sys
 from datetime import datetime
+from importlib import metadata as importlib_metadata
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
+import numpy as np
 import pandas as pd
 
 # Allow running directly without installing.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from molprop_toolkit.core import detect_best_smiles_column, detect_id_column, read_csv
+from molprop_toolkit.core import detect_best_smiles_column, detect_id_column, read_table
+from molprop_toolkit.fingerprints import FingerprintSpec, FingerprintKind, fingerprint_from_mol
+from molprop_toolkit.schema import load_schema
 
 try:
     from rdkit import Chem, DataStructs
-    from rdkit.Chem import rdFingerprintGenerator
     from rdkit.ML.Cluster import Butina
 except Exception as e:  # pragma: no cover
     raise SystemExit(
@@ -39,23 +55,53 @@ except Exception as e:  # pragma: no cover
 from calculators.depict import mol_from_smiles, sanitize_filename, save_svg
 
 
-def _morgan_fps(mols: Sequence[Chem.Mol], radius: int = 2, nbits: int = 2048):
-    gen = rdFingerprintGenerator.GetMorganGenerator(radius=radius, fpSize=nbits)
-    return [gen.GetFingerprint(m) for m in mols]
+def _sha256_file(path: Path, *, max_bytes: int = 200 * 1024 * 1024) -> Optional[str]:
+    """Return sha256 hex digest of a file, or None if file is too large or unreadable."""
+
+    try:
+        st = path.stat()
+        if st.st_size > max_bytes:
+            return None
+        h = hashlib.sha256()
+        with path.open("rb") as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return None
 
 
-def _butina_clusters(fps, cutoff: float) -> List[Tuple[int, ...]]:
-    # cutoff is a distance cutoff; if you want similarity threshold t, use cutoff = 1 - t
+def _pairwise_distances_tanimoto(fps) -> List[float]:
+    """Return condensed distance list (len=n*(n-1)/2) where dist=1-tanimoto."""
+
     dists: List[float] = []
     for i in range(1, len(fps)):
         sims = DataStructs.BulkTanimotoSimilarity(fps[i], fps[:i])
-        dists.extend([1.0 - x for x in sims])
-    clusters = Butina.ClusterData(dists, len(fps), cutoff, isDistData=True)
-    # clusters are tuples of indices
+        dists.extend([1.0 - float(x) for x in sims])
+    return dists
+
+
+def _pairwise_distances_euclidean(x: np.ndarray) -> List[float]:
+    """Return condensed Euclidean distance list for vectors."""
+
+    dists: List[float] = []
+    for i in range(1, x.shape[0]):
+        diff = x[:i, :] - x[i, :]
+        di = np.sqrt(np.sum(diff * diff, axis=1))
+        dists.extend([float(v) for v in di.tolist()])
+    return dists
+
+
+def _butina_cluster_from_distances(dists: Sequence[float], n: int, cutoff: float) -> List[Tuple[int, ...]]:
+    clusters = Butina.ClusterData(list(dists), n, float(cutoff), isDistData=True)
     return [tuple(c) for c in clusters]
 
 
-def _cluster_medoid(indices: Sequence[int], fps) -> Tuple[int, float]:
+def _usr_similarity_from_distance(dist: float) -> float:
+    return 1.0 / (1.0 + float(dist))
+
+
+def _cluster_medoid_bit(indices: Sequence[int], fps) -> Tuple[int, float]:
     # medoid = compound with highest mean similarity to others in the cluster
     if len(indices) == 1:
         return int(indices[0]), 1.0
@@ -67,7 +113,7 @@ def _cluster_medoid(indices: Sequence[int], fps) -> Tuple[int, float]:
         for j in indices:
             if i == j:
                 continue
-            sims.append(DataStructs.TanimotoSimilarity(fps[i], fps[j]))
+            sims.append(float(DataStructs.TanimotoSimilarity(fps[int(i)], fps[int(j)])))
         mean = float(sum(sims) / len(sims)) if sims else 0.0
         if mean > best_mean:
             best_mean = mean
@@ -75,20 +121,49 @@ def _cluster_medoid(indices: Sequence[int], fps) -> Tuple[int, float]:
     return best_i, best_mean
 
 
+def _cluster_medoid_vec(indices: Sequence[int], x: np.ndarray) -> Tuple[int, float]:
+    if len(indices) == 1:
+        return int(indices[0]), 1.0
+
+    idx = np.array([int(i) for i in indices], dtype=int)
+    best_i = int(idx[0])
+    best_mean = -1.0
+
+    for i in idx:
+        others = idx[idx != i]
+        if len(others) == 0:
+            continue
+        diff = x[others, :] - x[i, :]
+        dist = np.sqrt(np.sum(diff * diff, axis=1))
+        sim = 1.0 / (1.0 + dist)
+        mean = float(np.mean(sim))
+        if mean > best_mean:
+            best_mean = mean
+            best_i = int(i)
+
+    return best_i, best_mean
+
+
 def analyze_clustering(
     csv_path: str,
     outdir: str | Path,
+    *,
     smiles_col: Optional[str] = None,
     similarity: float = 0.7,
+    fp: FingerprintKind = "morgan",
     radius: int = 2,
     nbits: int = 2048,
+    use_chirality: bool = False,
+    use_features: bool = False,
+    num_confs: int = 10,
+    minimize: str = "none",
     top_images: int = 50,
     image_size: Tuple[int, int] = (260, 190),
 ) -> Dict[str, Path]:
     if similarity <= 0 or similarity >= 1:
         raise SystemExit("--similarity must be between 0 and 1 (e.g., 0.7)")
 
-    df = read_csv(csv_path)
+    df = read_table(csv_path)
     id_col = detect_id_column(df)
     smi_col = smiles_col or detect_best_smiles_column(df.columns)
     if not smi_col or smi_col not in df.columns:
@@ -97,25 +172,149 @@ def analyze_clustering(
     outdir_p = Path(outdir)
     outdir_p.mkdir(parents=True, exist_ok=True)
 
-    # Build mol list and keep mapping back to rows.
-    mols: List[Chem.Mol] = []
+    spec = FingerprintSpec(
+        kind=fp,
+        radius=int(radius),
+        nbits=int(nbits),
+        use_chirality=bool(use_chirality),
+        use_features=bool(use_features),
+        num_confs=int(num_confs),
+        minimize=minimize,  # type: ignore[arg-type]
+    )
+
+    # Build fingerprints and keep mapping back to original df rows.
+    fps: List[object] = []
     row_idx: List[int] = []
+    invalid_smiles = 0
+    fp_failures = 0
+
     for i, smi in enumerate(df[smi_col].astype(str).tolist()):
         m = Chem.MolFromSmiles(smi)
         if m is None:
+            invalid_smiles += 1
             continue
-        mols.append(m)
+        try:
+            fp_val = fingerprint_from_mol(m, spec)
+        except Exception:
+            fp_failures += 1
+            continue
+        fps.append(fp_val)
         row_idx.append(i)
 
-    if not mols:
-        raise SystemExit("No valid molecules found for clustering")
+    if not fps:
+        raise SystemExit("No valid molecules/fingerprints found for clustering")
 
-    fps = _morgan_fps(mols, radius=radius, nbits=nbits)
-    cutoff = 1.0 - float(similarity)
-    clusters = _butina_clusters(fps, cutoff=cutoff)
+    # Cluster
+    is_vec = fp in ("usr", "usrcat")
+    if is_vec:
+        x = np.asarray(fps, dtype=float)
+        dists = _pairwise_distances_euclidean(x)
+        cutoff = (1.0 / float(similarity)) - 1.0
+        clusters = _butina_cluster_from_distances(dists, n=len(fps), cutoff=cutoff)
+    else:
+        dists = _pairwise_distances_tanimoto(fps)
+        cutoff = 1.0 - float(similarity)
+        clusters = _butina_cluster_from_distances(dists, n=len(fps), cutoff=cutoff)
+
+    # Reproducibility metadata
+    clusters_sorted_preview = sorted(clusters, key=lambda c: len(c), reverse=True)
+
+    # Versions / environment
+    rdkit_version = None
+    try:  # pragma: no cover
+        import rdkit  # type: ignore
+
+        rdkit_version = getattr(rdkit, "__version__", None)
+    except Exception:
+        rdkit_version = None
+
+    pkg_version = None
+    try:  # pragma: no cover
+        pkg_version = importlib_metadata.version("molprop-toolkit")
+    except Exception:
+        pkg_version = None
+
+    schema_version = None
+    try:  # pragma: no cover
+        schema_version = str(load_schema().get("schema_version"))
+    except Exception:
+        schema_version = None
+
+    git_sha = None
+    try:  # pragma: no cover
+        repo_root = Path(__file__).resolve().parents[1]
+        git_sha = (
+            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=repo_root)
+            .decode("utf-8")
+            .strip()
+        ) or None
+    except Exception:
+        git_sha = None
+
+    distance_metric = "euclidean" if is_vec else "1 - tanimoto"
+    similarity_definition = "1/(1+euclidean_distance)" if is_vec else "tanimoto"
+
+    meta = {
+        "tool": "analyzer_clustering",
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "molprop_toolkit_version": pkg_version,
+        "schema_version": schema_version,
+        "rdkit_version": rdkit_version,
+        "git_commit": git_sha,
+        "runtime": {
+            "python_version": sys.version,
+            "python_executable": sys.executable,
+            "platform": platform.platform(),
+            "machine": platform.machine(),
+            "numpy_version": getattr(np, "__version__", None),
+            "pandas_version": getattr(pd, "__version__", None),
+        },
+        "command": {
+            "argv": sys.argv,
+            "cwd": os.getcwd(),
+        },
+        "input": {
+            "csv_name": str(Path(csv_path).name),
+            "csv_path": str(Path(csv_path).resolve()),
+            "csv_sha256": _sha256_file(Path(csv_path)),
+            "csv_mtime": datetime.fromtimestamp(Path(csv_path).stat().st_mtime).isoformat(timespec="seconds")
+            if Path(csv_path).exists()
+            else None,
+            "csv_size_bytes": int(Path(csv_path).stat().st_size) if Path(csv_path).exists() else None,
+            "smiles_column": str(smi_col),
+            "id_column": str(id_col),
+        },
+        "parameters": {
+            "similarity_threshold": float(similarity),
+            "butina_distance_cutoff": float(cutoff),
+            "distance_metric": distance_metric,
+            "similarity_definition": similarity_definition,
+            "fingerprint": {
+                "kind": spec.kind,
+                "radius": int(spec.radius),
+                "nbits": int(spec.nbits),
+                "use_chirality": bool(spec.use_chirality),
+                "use_features": bool(spec.use_features),
+                "num_confs": int(spec.num_confs),
+                "minimize": str(spec.minimize),
+            },
+        },
+        "counts": {
+            "rows_in_input": int(len(df)),
+            "molecules_clustered": int(len(fps)),
+            "invalid_smiles": int(invalid_smiles),
+            "fingerprint_failures": int(fp_failures),
+        },
+        "clusters": {
+            "count": int(len(clusters)),
+            "sizes_top10": [int(len(c)) for c in clusters_sorted_preview[:10]],
+        },
+    }
+
+    (outdir_p / "cluster_metadata.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
     # Assign cluster IDs (1..K) by descending size.
-    clusters_sorted = sorted(clusters, key=lambda c: len(c), reverse=True)
+    clusters_sorted = clusters_sorted_preview
     cluster_id_for_local: Dict[int, int] = {}
     cluster_size_for_local: Dict[int, int] = {}
     cluster_rep_for_local: Dict[int, str] = {}
@@ -126,7 +325,11 @@ def analyze_clustering(
             cluster_id_for_local[int(mi)] = cid
             cluster_size_for_local[int(mi)] = int(len(members))
 
-        medoid_i, medoid_mean = _cluster_medoid(members, fps)
+        if is_vec:
+            medoid_i, medoid_mean = _cluster_medoid_vec(members, x)  # type: ignore[arg-type]
+        else:
+            medoid_i, medoid_mean = _cluster_medoid_bit(members, fps)
+
         rep_global_row = row_idx[int(medoid_i)]
         rep_id = str(df.iloc[rep_global_row][id_col])
 
@@ -212,13 +415,27 @@ def analyze_clustering(
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Similarity clustering (Butina) analyzer (Task 13B)")
+    ap = argparse.ArgumentParser(description="Similarity clustering (Butina) analyzer")
     ap.add_argument("input", help="Results CSV")
     ap.add_argument("--outdir", default=None, help="Output directory")
     ap.add_argument("--smiles-col", default=None, help="Override SMILES column")
-    ap.add_argument("--similarity", type=float, default=0.7, help="Tanimoto similarity threshold for clustering (default 0.7)")
-    ap.add_argument("--radius", type=int, default=2, help="Morgan radius")
-    ap.add_argument("--nbits", type=int, default=2048, help="Fingerprint size")
+    ap.add_argument("--similarity", type=float, default=0.7, help="Similarity threshold for clustering (default 0.7)")
+
+    ap.add_argument(
+        "--fp",
+        default="morgan",
+        choices=["morgan", "rdkit", "maccs", "atom_pair", "torsion", "usr", "usrcat"],
+        help="Fingerprint kind for clustering",
+    )
+
+    # Keep older flags as aliases.
+    ap.add_argument("--fp-radius", "--radius", dest="fp_radius", type=int, default=2, help="Morgan radius")
+    ap.add_argument("--fp-nbits", "--nbits", dest="fp_nbits", type=int, default=2048, help="Fingerprint size (where applicable)")
+    ap.add_argument("--fp-chirality", action="store_true", help="Use chirality in Morgan fingerprints")
+    ap.add_argument("--fp-features", action="store_true", help="Use feature-invariants in Morgan fingerprints")
+    ap.add_argument("--fp-3d-num-confs", type=int, default=10, help="Conformers for 3D fingerprints (usr/usrcat)")
+    ap.add_argument("--fp-3d-minimize", choices=["none", "uff", "mmff"], default="none", help="Optional minimization for 3D fingerprints")
+
     ap.add_argument("--top-images", type=int, default=50, help="Render SVG depictions for top N cluster representatives (0 disables)")
     args = ap.parse_args()
 
@@ -231,8 +448,13 @@ def main() -> None:
         outdir=outdir,
         smiles_col=args.smiles_col,
         similarity=args.similarity,
-        radius=args.radius,
-        nbits=args.nbits,
+        fp=args.fp,
+        radius=args.fp_radius,
+        nbits=args.fp_nbits,
+        use_chirality=args.fp_chirality,
+        use_features=args.fp_features,
+        num_confs=args.fp_3d_num_confs,
+        minimize=args.fp_3d_minimize,
         top_images=args.top_images,
     )
 

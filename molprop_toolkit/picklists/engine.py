@@ -20,7 +20,7 @@ import json
 
 import pandas as pd
 
-from molprop_toolkit.core import detect_id_column, read_csv
+from molprop_toolkit.core import detect_id_column, read_table
 from molprop_toolkit.core.registry import CATEGORY_SPECS
 
 
@@ -255,16 +255,35 @@ def run_picklist(df: pd.DataFrame, definition: PicklistDefinition) -> PicklistRe
     return PicklistResult(definition=definition, df=out, warnings=warnings)
 
 
-def build_picklists(
-    csv_path: str,
+def build_picklists_from_df(
+    df: pd.DataFrame,
     definitions: Sequence[PicklistDefinition],
+    *,
+    id_col: Optional[str] = None,
 ) -> Tuple[pd.DataFrame, str, List[PicklistResult]]:
-    df = read_csv(csv_path)
-    id_col = detect_id_column(df)
+    """Run picklists using an in-memory dataframe.
+
+    This is useful when the caller wants to add computed columns (for example, similarity-to-reference columns) before
+    applying picklist rules.
+    """
+
+    if id_col is None:
+        id_col = detect_id_column(df)
+
     results: List[PicklistResult] = []
     for d in definitions:
         results.append(run_picklist(df, d))
     return df, id_col, results
+
+
+def build_picklists(
+    csv_path: str,
+    definitions: Sequence[PicklistDefinition],
+) -> Tuple[pd.DataFrame, str, List[PicklistResult]]:
+    """Backwards-compatible helper that reads a CSV and runs picklists."""
+
+    df = read_table(csv_path)
+    return build_picklists_from_df(df, definitions)
 
 
 def _load_json_or_yaml(path: str | Path) -> Dict[str, Any]:

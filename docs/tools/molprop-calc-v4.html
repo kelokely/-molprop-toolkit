@@ -44,7 +44,12 @@
         <div class="container grid-2">
           <div class="card">
             <h3>Typical usage</h3>
-            <pre><code>molprop-calc-v4 input.smi -o results.csv
+            <p class="muted">Output format is inferred from the filename extension: <code>.csv</code>, <code>.tsv</code>, or <code>.parquet</code>.</p>
+            <pre><code># CSV
+molprop-calc-v4 input.smi -o results.csv
+
+# Parquet
+molprop-calc-v4 input.smi -o results.parquet
 
 # equivalent (script form)
 python calculators/mpo_v4.py input.smi -o results.csv</code></pre>

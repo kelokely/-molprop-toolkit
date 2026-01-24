@@ -83,19 +83,22 @@
 conda activate molprop-toolkit
 
 # editable install with console scripts
-pip install -e .[dev]</code></pre>
+pip install -e .[dev]
+
+# Parquet support (recommended)
+pip install -e .[parquet]</code></pre>
             </div>
 
             <div class="card">
               <h3>Quick run (example)</h3>
-              <pre><code># calculator → results.csv
-molprop-calc-v5 examples/example.smi -o results.csv
+              <pre><code># calculator → results table (CSV or Parquet)
+molprop-calc-v5 examples/example.smi -o results.parquet
 
 # summary report (md + html)
-molprop-report results.csv
+molprop-report results.parquet
 
 # picklists
-molprop-picklists results.csv --html</code></pre>
+molprop-picklists results.parquet --html</code></pre>
             </div>
           </div>
         </div>

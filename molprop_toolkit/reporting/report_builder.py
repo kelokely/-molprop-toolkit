@@ -27,7 +27,7 @@ from typing import List, Optional, Sequence, Tuple
 
 import pandas as pd
 
-from molprop_toolkit.core import detect_id_column, read_csv
+from molprop_toolkit.core import detect_id_column, read_table
 from molprop_toolkit.core.registry import CATEGORY_SPECS, CategorySpec
 
 try:  # pragma: no cover
@@ -101,12 +101,20 @@ def _html_table(headers: Sequence[str], rows: Sequence[Sequence[object]]) -> str
 class ReportBuilder:
     def __init__(
         self,
-        csv_path: str,
+        csv_path: Optional[str] = None,
+        *,
+        df: Optional[pd.DataFrame] = None,
         categories: Optional[Sequence[str]] = None,
         top_n: int = 10,
     ):
-        self.csv_path = csv_path
-        self.df = read_csv(csv_path)
+        if df is None:
+            if not csv_path:
+                raise ValueError("csv_path is required when df is not provided")
+            self.csv_path = str(csv_path)
+            self.df = read_table(self.csv_path)
+        else:
+            self.csv_path = str(csv_path or "(in-memory)")
+            self.df = df
         self.id_col = detect_id_column(self.df)
         self.top_n = int(top_n)
 
@@ -330,6 +338,77 @@ class ReportBuilder:
             h.append("</section>")
             cat_blocks_html.append("\n".join(h))
 
+        # Optional: similarity columns (computed by molprop-report and/or molprop-picklists)
+        sim_blocks_md: List[str] = []
+        sim_blocks_html: List[str] = []
+
+        sim_numeric_cols = [c for c in self.df.columns if str(c).startswith("Sim_") and _is_numeric(self.df[c])]
+        if sim_numeric_cols:
+            md = []
+            md.append("## Similarity to reference set")
+            md.append("")
+            md.append(
+                "This section summarizes any similarity-to-reference columns present in the dataset (columns starting with `Sim_`). "
+                "These are typically produced by `molprop-report --fp ... --sim-ref-*` or `molprop-picklists --fp ... --sim-ref-*`."
+            )
+            md.append("")
+
+            h = []
+            h.append("<section class='category' id='similarity'>")
+            h.append("<h2>Similarity to reference set</h2>")
+            h.append(
+                "<p class='desc'>This section summarizes similarity-to-reference columns present in the dataset (columns starting with <code>Sim_</code>). "
+                "These are typically produced by <code>molprop-report --fp ... --sim-ref-*</code> or <code>molprop-picklists --fp ... --sim-ref-*</code>." 
+                "</p>"
+            )
+
+            for c in sim_numeric_cols[:8]:
+                s = self.df[c]
+                kind, summary_items = self._summarize_key(str(c), s)
+
+                plot_rel: Optional[str] = None
+                if make_plots and kind == "numeric":
+                    plot_name = f"similarity__{_slug(str(c))}.png"
+                    plot_path = plots_dir / plot_name
+                    try:
+                        self._plot_numeric_hist(f"Similarity: {c}", s, plot_path)
+                        plot_rel = f"plots/{plot_name}"
+                    except Exception as e:
+                        summary_items.append(("plot_error", str(e)))
+
+                # Top-N by similarity
+                df_top = self.df[[self.id_col, c] + ([f"{c}_BestRef"] if f"{c}_BestRef" in self.df.columns else [])].copy()
+                df_top[c] = pd.to_numeric(df_top[c], errors="coerce")
+                df_top = df_top.sort_values(by=c, ascending=False).head(self.top_n)
+                headers = list(df_top.columns)
+                rows = df_top.values.tolist()
+
+                md.append(f"### `{c}`")
+                md.append("")
+                md.append(_markdown_table(["metric", "value"], summary_items))
+                md.append("")
+                if plot_rel:
+                    md.append(f"![]({plot_rel})")
+                    md.append("")
+                md.append("Top compounds (preview):")
+                md.append("")
+                md.append(_markdown_table(headers, rows))
+                md.append("")
+
+                h.append(f"<h3><code>{_html_escape(str(c))}</code></h3>")
+                h.append(_html_table(["metric", "value"], summary_items))
+                if plot_rel:
+                    h.append(
+                        f"<div class='plot'><img src='{_html_escape(plot_rel)}' alt='Similarity plot'/></div>"
+                    )
+                h.append("<h3>Top compounds (preview)</h3>")
+                h.append(_html_table(headers, rows))
+
+            h.append("</section>")
+
+            sim_blocks_md.append("\n".join(md))
+            sim_blocks_html.append("\n".join(h))
+
         # Overview table
         overview_rows: List[List[object]] = []
         for cat_key in present:
@@ -363,6 +442,7 @@ class ReportBuilder:
                 "",
                 md_overview,
                 "",
+                "\n\n".join(sim_blocks_md) if sim_blocks_md else "",
                 "---",
                 "",
                 "\n\n".join(cat_blocks_md) if cat_blocks_md else "(No categories detected in dataset)",
@@ -399,6 +479,7 @@ class ReportBuilder:
 <p class="sub">Dataset: <code>{_html_escape(self.csv_path)}</code> | Generated: <code>{_html_escape(generated)}</code> | Compounds: <code>{len(self.df)}</code> | Columns: <code>{len(self.df.columns)}</code> | ID: <code>{_html_escape(self.id_col)}</code></p>
 <h2>Category coverage</h2>
 {html_overview}
+{''.join(sim_blocks_html)}
 {''.join(cat_blocks_html) if cat_blocks_html else '<p>(No categories detected in dataset)</p>'}
 </body>
 </html>
