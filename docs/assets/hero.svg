@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="880" height="520">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f1b3d"/>
+      <stop offset="1" stop-color="#111a33"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#6ee7ff"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.65 0" result="g"/>
+      <feMerge>
+        <feMergeNode in="g"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="520" rx="26" fill="url(#bg)"/>
+
+  <g opacity="0.22">
+    <circle cx="110" cy="90" r="170" fill="#6ee7ff"/>
+    <circle cx="760" cy="70" r="190" fill="#a78bfa"/>
+    <circle cx="760" cy="470" r="210" fill="#6ee7ff"/>
+  </g>
+
+  <g filter="url(#glow)" stroke="url(#g)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M210 312 L320 216 L450 248 L560 180 L690 240"/>
+    <path d="M320 216 L330 128"/>
+    <path d="M450 248 L430 340"/>
+    <path d="M560 180 L560 92"/>
+    <path d="M210 312 L160 392"/>
+    <path d="M690 240 L740 332"/>
+  </g>
+
+  <g fill="url(#g)">
+    <circle cx="210" cy="312" r="14"/>
+    <circle cx="320" cy="216" r="14"/>
+    <circle cx="450" cy="248" r="14"/>
+    <circle cx="560" cy="180" r="14"/>
+    <circle cx="690" cy="240" r="14"/>
+    <circle cx="330" cy="128" r="11"/>
+    <circle cx="430" cy="340" r="11"/>
+    <circle cx="560" cy="92" r="11"/>
+    <circle cx="160" cy="392" r="11"/>
+    <circle cx="740" cy="332" r="11"/>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace" fill="#e8eefc">
+    <text x="72" y="86" font-size="26" font-weight="700">molprop-calc-v5</text>
+    <text x="72" y="126" font-size="18" opacity="0.9">SMILES → results.csv</text>
+
+    <text x="72" y="210" font-size="18" opacity="0.85">CNS MPO • oral filters • alerts</text>
+    <text x="72" y="242" font-size="18" opacity="0.85">solubility • permeability • PK</text>
+    <text x="72" y="274" font-size="18" opacity="0.85">developability • optional 3D</text>
+
+    <text x="72" y="360" font-size="18" opacity="0.85">molprop-report → report.html</text>
+    <text x="72" y="392" font-size="18" opacity="0.85">molprop-picklists → picklists/</text>
+  </g>
+</svg>
+

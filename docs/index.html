@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MolProp Toolkit</title>
+    <meta
+      name="description"
+      content="Open-source toolkit to compute medicinal chemistry property tables from SMILES and generate category-focused analysis, reports, and picklists."
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Open-source medchem property tables • reports • picklists</span>
+          </span>
+        </a>
+
+        <nav class="nav">
+          <a href="#downloads">Downloads</a>
+          <a href="#install">Install</a>
+          <a href="#tools">Tools</a>
+          <a href="#docs">Docs</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <h1>Cheminformatics triage that feels practical.</h1>
+            <p>
+              MolProp Toolkit turns SMILES lists into analysis-ready CSV tables and then produces category-focused summaries for
+              CNS MPO, oral filters, med‑chem alerts, toxicity flags, metabolism soft spots, PK heuristics, developability indices,
+              optional 3D descriptors, series analytics, and more.
+            </p>
+
+            <div class="cta-row" id="downloads">
+              <a class="btn primary" href="https://github.com/kelokely/-molprop-toolkit/releases/latest/download/molprop-toolkit_latest.zip">Download latest release (.zip)</a>
+              <a class="btn" href="https://github.com/kelokely/-molprop-toolkit/releases" target="_blank" rel="noreferrer">Browse releases</a>
+            </div>
+
+            <div class="meta-row">
+              <a class="pill" href="https://github.com/kelokely/-molprop-toolkit/actions" target="_blank" rel="noreferrer">CI status</a>
+              <a class="pill" href="https://github.com/kelokely/-molprop-toolkit/issues" target="_blank" rel="noreferrer">Issues</a>
+              <a class="pill" href="https://github.com/kelokely/-molprop-toolkit/discussions" target="_blank" rel="noreferrer">Discussions</a>
+            </div>
+          </div>
+
+          <div class="hero-art" aria-hidden="true">
+            <img src="assets/hero.svg" alt="" />
+            <div class="hero-caption">Designed for ranking and triage; not a substitute for experiments.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="install">
+        <div class="container">
+          <h2>Install</h2>
+          <p>
+            For the calculator features you’ll need RDKit. The most reliable public install path is conda‑forge (or Docker).
+            If you already have a compatible results CSV from another pipeline, you can run analyzers without RDKit.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>Recommended: conda (RDKit‑friendly)</h3>
+              <pre><code>conda env create -f environment.yml
+conda activate molprop-toolkit
+
+# editable install with console scripts
+pip install -e .[dev]</code></pre>
+            </div>
+
+            <div class="card">
+              <h3>Quick run (example)</h3>
+              <pre><code># calculator → results.csv
+molprop-calc-v5 examples/example.smi -o results.csv
+
+# summary report (md + html)
+molprop-report results.csv
+
+# picklists
+molprop-picklists results.csv --html</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="tools">
+        <div class="container">
+          <h2>CLI tools</h2>
+          <p>
+            The toolkit ships multiple console commands. Most workflows start with a calculator (v4 or v5), then use analyzers
+            and report builders to generate shareable outputs.
+          </p>
+
+          <div class="grid-3">
+            <div class="card">
+              <h3>Calculators</h3>
+              <p class="muted">Generate a wide results table from SMILES.</p>
+              <ul>
+                <li><code>molprop-calc-v4</code> – baseline medchem table</li>
+                <li><code>molprop-calc-v5</code> – adds solubility/permeability/PK + optional 3D</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3>Analyze + report</h3>
+              <p class="muted">Summaries by category and shareable reports.</p>
+              <ul>
+                <li><code>molprop-analyze</code> – master analyzer</li>
+                <li><code>molprop-report</code> – Markdown/HTML report bundle</li>
+                <li><code>molprop-sketch</code> – 2D depictions + HTML index</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3>Operational tools</h3>
+              <p class="muted">Series analytics and decision picklists.</p>
+              <ul>
+                <li><code>molprop-series</code> – scaffolds + clustering</li>
+                <li><code>molprop-picklists</code> – configurable picklists + HTML</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="docs">
+        <div class="container">
+          <h2>Documentation</h2>
+          <p>
+            The repo includes detailed column references and narrative descriptions of analysis categories.
+            The links below open the canonical sources on GitHub.
+          </p>
+
+          <div class="grid-2">
+            <a class="card link-card" href="https://github.com/kelokely/-molprop-toolkit/blob/main/README.md" target="_blank" rel="noreferrer">
+              <h3>README</h3>
+              <p class="muted">Installation, quickstart, and workflows.</p>
+            </a>
+            <a class="card link-card" href="https://github.com/kelokely/-molprop-toolkit/blob/main/docs/columns_schema.md" target="_blank" rel="noreferrer">
+              <h3>Columns reference</h3>
+              <p class="muted">Generated schema-driven column documentation.</p>
+            </a>
+            <a class="card link-card" href="https://github.com/kelokely/-molprop-toolkit/blob/main/docs/feature_families.md" target="_blank" rel="noreferrer">
+              <h3>Feature families</h3>
+              <p class="muted">Prefix-based “feature-to-columns” cheat sheet.</p>
+            </a>
+            <a class="card link-card" href="https://github.com/kelokely/-molprop-toolkit/blob/main/docs/categories.md" target="_blank" rel="noreferrer">
+              <h3>Category narratives</h3>
+              <p class="muted">Interpretation notes for major analysis categories.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contribute">
+        <div class="container">
+          <h2>Contributing</h2>
+          <p>
+            Contributions are welcome. If you have an idea for a new property family, analyzer, picklist, or report section,
+            open an issue with an example CSV and a short description of the decision you want the tool to support.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href="https://github.com/kelokely/-molprop-toolkit/issues/new/choose" target="_blank" rel="noreferrer">Open an issue</a>
+            <a class="btn" href="https://github.com/kelokely/-molprop-toolkit/pulls" target="_blank" rel="noreferrer">View pull requests</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Open-source toolkit for medicinal chemistry triage outputs.</div>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases" target="_blank" rel="noreferrer">Releases</a>
+          <a href="#install">Install</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
