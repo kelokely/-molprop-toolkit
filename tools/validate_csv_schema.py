@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 
-from molprop_toolkit.core import read_csv
+from molprop_toolkit.core import read_table
 from molprop_toolkit.core.registry import CATEGORY_SPECS
 from molprop_toolkit.schema import load_schema
 
@@ -163,7 +163,7 @@ def _category_columns_present(df: pd.DataFrame, category_key: str) -> List[str]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Validate a MolProp Toolkit results CSV against docs/schema.json")
-    ap.add_argument("input", help="Results CSV")
+    ap.add_argument("input", help="Results table (CSV/TSV/Parquet)")
     ap.add_argument(
         "--schema",
         default=None,
@@ -188,7 +188,7 @@ def main() -> None:
     schema = _load_schema(args.schema)
     patterns = _compile_patterns(schema)
 
-    df = read_csv(args.input)
+    df = read_table(args.input)
 
     # 1) Required explicit columns
     required_missing: List[str] = []

@@ -26,14 +26,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 
-from molprop_toolkit.core import detect_id_column, read_csv
+from molprop_toolkit.core import detect_id_column, read_table
 from molprop_toolkit.core.registry import CATEGORY_SPECS
 
 
 class MasterAnalyzer:
     def __init__(self, csv_path: str):
         self.csv_path = csv_path
-        self.df = read_csv(csv_path)
+        self.df = read_table(csv_path)
         self.id_col = detect_id_column(self.df)
 
     def list_categories(self) -> None:

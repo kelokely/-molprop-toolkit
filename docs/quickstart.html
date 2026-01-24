@@ -54,11 +54,21 @@ pip install -e .[dev]</code></pre>
           </div>
           <div class="card">
             <h3>2) Generate a results table (v5)</h3>
-            <p class="muted">The v5 calculator includes solubility/permeability/PK heuristics and supports optional 3D descriptors.</p>
-            <pre><code>molprop-calc-v5 examples/example.smi -o results.csv
+            <p class="muted">
+              The v5 calculator includes solubility/permeability/PK heuristics and supports optional 3D descriptors.
+              Output format is inferred from the filename extension: <code>.csv</code>, <code>.tsv</code>, or <code>.parquet</code>.
+            </p>
+            <pre><code># CSV
+molprop-calc-v5 examples/example.smi -o results.csv
+
+# Parquet (recommended for large libraries)
+molprop-calc-v5 examples/example.smi -o results.parquet
 
 # sanity check: list analysis categories present
-molprop-analyze results.csv --list</code></pre>
+molprop-analyze results.parquet --list</code></pre>
+            <p class="muted" style="margin-top:10px">
+              Parquet requires <code>pyarrow</code>. Install via <code>pip install "molprop-toolkit[parquet]"</code> or <code>pip install pyarrow</code>.
+            </p>
           </div>
         </div>
       </section>
@@ -67,18 +77,18 @@ molprop-analyze results.csv --list</code></pre>
         <div class="container grid-2">
           <div class="card">
             <h3>3) Build a report bundle (Markdown + HTML)</h3>
-            <p class="muted">Creates a timestamped folder under <code>reports/</code> with report and plots.</p>
-            <pre><code>molprop-report results.csv</code></pre>
+            <p class="muted">Creates a timestamped folder under <code>reports/</code> with report and plots. Accepts CSV/TSV/Parquet.</p>
+            <pre><code>molprop-report results.parquet</code></pre>
             <p class="muted" style="margin-top:10px">Look for an output path like <code>reports/results_report_YYYYMMDD_HHMMSS/report.html</code>.</p>
           </div>
           <div class="card">
             <h3>4) Generate picklists (CSV + HTML)</h3>
-            <p class="muted">Picklists are operational “decision lists” derived from filters and sorts.</p>
+            <p class="muted">Picklists are operational “decision lists” derived from filters and sorts. Accepts CSV/TSV/Parquet.</p>
             <pre><code># built-in picklists
-molprop-picklists results.csv --html
+molprop-picklists results.parquet --html
 
 # list built-ins
-molprop-picklists results.csv --list-builtins</code></pre>
+molprop-picklists results.parquet --list-builtins</code></pre>
           </div>
         </div>
       </section>
@@ -124,12 +134,26 @@ molprop-retro results.csv --config aizynth_data/config.yml --top-routes 5 --npro
 
       <section class="section">
         <div class="container">
+          <h2>Notes: structure-of-record SMILES</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              Many tools need a single “structure-of-record” SMILES column. By default, MolProp Toolkit will prefer
+              <code>Calc_Canonical_SMILES</code> when present (the exact structure used for descriptor calculation), and will fall back
+              to <code>Calc_Base_SMILES</code> → <code>Canonical_SMILES</code> → <code>Input_Canonical_SMILES</code> → <code>SMILES</code>. You can override
+              this in individual tools with <code>--smiles-col</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
           <h2>Common gotchas (public installs)</h2>
           <div class="card">
             <p class="muted" style="margin:0">
               If the calculators fail to import RDKit, confirm you activated the conda environment before running the CLI.
-              If you only want to analyze an existing CSV, you can skip RDKit entirely and run <code>molprop-analyze</code>,
-              <code>molprop-report</code>, and <code>molprop-picklists</code> as long as your CSV contains the expected columns.
+              If you only want to analyze an existing results table, you can run <code>molprop-analyze</code>, <code>molprop-report</code>,
+              and <code>molprop-picklists</code> as long as your file contains the expected columns (CSV/TSV/Parquet supported).
             </p>
           </div>
         </div>

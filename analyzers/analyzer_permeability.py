@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 
-from molprop_toolkit.core import detect_id_column, read_csv, write_csv
+from molprop_toolkit.core import detect_id_column, read_table, write_csv
 
 
 DESCRIPTION = """Permeability
@@ -42,7 +42,7 @@ def analyze_permeability(csv_path: str, output_path: str | None = None, top_n: i
     print("=" * 80)
     print(DESCRIPTION.strip() + "\n")
 
-    df = read_csv(csv_path)
+    df = read_table(csv_path)
     id_col = detect_id_column(df)
 
     perm_cols = [c for c in df.columns if c.startswith("Perm_")]

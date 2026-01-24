@@ -30,7 +30,7 @@ import pandas as pd
 # Allow running directly without installing.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from molprop_toolkit.core import detect_best_smiles_column, detect_id_column, read_csv
+from molprop_toolkit.core import detect_best_smiles_column, detect_id_column, read_table
 
 try:
     from rdkit import Chem
@@ -82,7 +82,7 @@ def analyze_scaffolds(
     top_images: int = 50,
     image_size: Tuple[int, int] = (260, 190),
 ) -> Dict[str, Path]:
-    df = read_csv(csv_path)
+    df = read_table(csv_path)
     id_col = detect_id_column(df)
     smi_col = smiles_col or detect_best_smiles_column(df.columns)
     if not smi_col or smi_col not in df.columns:

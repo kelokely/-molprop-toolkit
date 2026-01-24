@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import pandas as pd
 
-from molprop_toolkit.core import detect_id_column, read_csv, write_csv
+from molprop_toolkit.core import detect_id_column, read_table, write_csv
 
 
 DESCRIPTION = """Metabolism and soft spots
@@ -44,7 +44,7 @@ def analyze_metabolism(csv_path: str, output_path: str | None = None, top_n: int
     print("=" * 80)
     print(DESCRIPTION.strip() + "\n")
 
-    df = read_csv(csv_path)
+    df = read_table(csv_path)
     id_col = detect_id_column(df)
 
     met_cols = [c for c in df.columns if c.startswith("Met_")]

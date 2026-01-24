@@ -31,7 +31,6 @@ Compare-view columns (with graceful fallbacks):
 from __future__ import annotations
 
 import argparse
-import csv
 import html
 import sys
 from pathlib import Path
@@ -77,30 +76,23 @@ def parse_smiles_file(path: str) -> List[Tuple[str, str]]:
     return items
 
 
+# Keep SMILES column selection consistent across the toolkit.
+from molprop_toolkit.core.columns import (
+    detect_best_smiles_column as _detect_best_smiles_column,
+    detect_id_column as _detect_id_column,
+)
+from molprop_toolkit.core.io import read_table
+
+
 def detect_id_column(fieldnames: List[str]) -> str:
-    for c in ["Compound_ID", "ID", "Name", "Compound", "Molecule"]:
-        if c in fieldnames:
-            return c
-    return fieldnames[0]
+    return _detect_id_column(fieldnames)
 
 
 def detect_best_smiles_column(fieldnames: List[str]) -> str:
-    smiles_priority = [
-        "Calc_Canonical_SMILES",
-        "Calc_Base_SMILES",
-        "Canonical_SMILES",
-        "Input_Canonical_SMILES",
-        "SMILES",
-    ]
-    for c in smiles_priority:
-        if c in fieldnames:
-            return c
-
-    for c in fieldnames:
-        if "smiles" in c.lower():
-            return c
-
-    raise SystemExit("Could not detect a SMILES column")
+    c = _detect_best_smiles_column(fieldnames)
+    if not c:
+        raise SystemExit("Could not detect a SMILES column")
+    return c
 
 
 def detect_compare_smiles_columns(fieldnames: List[str]) -> Dict[str, Optional[str]]:
@@ -133,13 +125,17 @@ def detect_compare_smiles_columns(fieldnames: List[str]) -> Dict[str, Optional[s
     return cols
 
 
-def read_csv_rows(path: str) -> Tuple[List[Dict[str, str]], List[str]]:
-    with open(path, "r", encoding="utf-8") as f:
-        r = csv.DictReader(f)
-        if not r.fieldnames:
-            raise SystemExit("Empty CSV")
-        rows = [row for row in r]
-    return rows, list(r.fieldnames)
+def read_table_rows(path: str) -> Tuple[List[Dict[str, str]], List[str]]:
+    """Read a results table (CSV/TSV/Parquet) and return (rows, fieldnames).
+
+    For sketching we keep everything as strings.
+    """
+
+    df = read_table(path)
+    if df is None or df.shape[1] == 0:
+        raise SystemExit("Empty table")
+    df2 = df.fillna("").astype(str)
+    return df2.to_dict(orient="records"), list(df2.columns)
 
 
 def write_html_index_single(
@@ -326,7 +322,7 @@ def main() -> None:
     fieldnames: Optional[List[str]] = None
 
     if in_path.suffix.lower() == ".csv":
-        csv_rows, fieldnames = read_csv_rows(str(in_path))
+        csv_rows, fieldnames = read_table_rows(str(in_path))
         assert fieldnames is not None
         id_col = detect_id_column(fieldnames)
 

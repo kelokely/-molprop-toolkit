@@ -23,6 +23,7 @@ rdkit = ["rdkit-pypi>=2022.9.5"]
 dimorphite = ["dimorphite-dl>=1.3.2"]
 report = ["matplotlib>=3.7"]
 retro = ["aizynthfinder>=4.4.1"]
+parquet = ["pyarrow>=14"]
 dev = ["pytest>=7.4", "ruff>=0.1.9"]
 
 [project.scripts]
@@ -37,6 +38,7 @@ molprop-sketch = "molprop_toolkit.cli:sketch"
 molprop-picklists = "molprop_toolkit.cli:picklists"
 molprop-series = "molprop_toolkit.cli:series"
 molprop-retro = "molprop_toolkit.cli:retro"
+molprop-featurize = "molprop_toolkit.cli:featurize"
 
 [tool.setuptools]
 include-package-data = true
@@ -69,4 +71,3 @@ exclude = [
 [tool.ruff.lint]
 # Start conservatively: only fail CI on clear bugs (undefined names, etc.).
 select = ["F"]
-
