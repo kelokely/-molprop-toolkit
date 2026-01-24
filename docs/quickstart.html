@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quickstart • MolProp Toolkit</title>
+    <meta name="description" content="Quickstart guide for MolProp Toolkit: install, run calculators, generate reports and picklists." />
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Quickstart</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="./">Home</a>
+          <a href="tools/">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases/latest/download/molprop-toolkit_latest.zip">Download</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:36px; line-height:1.15">Quickstart: from SMILES to report in minutes</h1>
+          <p class="muted" style="max-width: 74ch">
+            This guide runs the full “happy path” on the included sample file (<code>examples/example.smi</code>). It produces a
+            wide results table, then creates a shareable report bundle and HTML picklists.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>1) Install (recommended: conda)</h3>
+            <p class="muted">This is the most reliable public setup for RDKit-based calculators.</p>
+            <pre><code>git clone https://github.com/kelokely/-molprop-toolkit.git
+cd -molprop-toolkit
+
+conda env create -f environment.yml
+conda activate molprop-toolkit
+
+pip install -e .[dev]</code></pre>
+          </div>
+          <div class="card">
+            <h3>2) Generate a results table (v5)</h3>
+            <p class="muted">The v5 calculator includes solubility/permeability/PK heuristics and supports optional 3D descriptors.</p>
+            <pre><code>molprop-calc-v5 examples/example.smi -o results.csv
+
+# sanity check: list analysis categories present
+molprop-analyze results.csv --list</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>3) Build a report bundle (Markdown + HTML)</h3>
+            <p class="muted">Creates a timestamped folder under <code>reports/</code> with report and plots.</p>
+            <pre><code>molprop-report results.csv</code></pre>
+            <p class="muted" style="margin-top:10px">Look for an output path like <code>reports/results_report_YYYYMMDD_HHMMSS/report.html</code>.</p>
+          </div>
+          <div class="card">
+            <h3>4) Generate picklists (CSV + HTML)</h3>
+            <p class="muted">Picklists are operational “decision lists” derived from filters and sorts.</p>
+            <pre><code># built-in picklists
+molprop-picklists results.csv --html
+
+# list built-ins
+molprop-picklists results.csv --list-builtins</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Next steps</h2>
+          <div class="grid-3">
+            <a class="card link-card" href="tools/molprop-calc-v5.html">
+              <h3>Calculator options</h3>
+              <p class="muted">3D mode, ionization/protomers, stereo/tautomer handling, output columns.</p>
+            </a>
+            <a class="card link-card" href="https://github.com/kelokely/-molprop-toolkit/blob/main/docs/columns_schema.md" target="_blank" rel="noreferrer">
+              <h3>Columns reference</h3>
+              <p class="muted">Schema-driven definitions for every column.</p>
+            </a>
+            <a class="card link-card" href="https://github.com/kelokely/-molprop-toolkit/blob/main/docs/feature_families.md" target="_blank" rel="noreferrer">
+              <h3>Feature families</h3>
+              <p class="muted">Prefix-based cheat sheet: <code>Tox_*</code>, <code>Met_*</code>, <code>Dev_*</code>, etc.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common gotchas (public installs)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              If the calculators fail to import RDKit, confirm you activated the conda environment before running the CLI.
+              If you only want to analyze an existing CSV, you can skip RDKit entirely and run <code>molprop-analyze</code>,
+              <code>molprop-report</code>, and <code>molprop-picklists</code> as long as your CSV contains the expected columns.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Quickstart • <a style="color:var(--muted)" href="./">Home</a></div>
+        </div>
+        <div class="footer-links">
+          <a href="tools/">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases">Releases</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

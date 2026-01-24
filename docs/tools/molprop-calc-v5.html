@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-calc-v5 • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-calc-v5 (MolProp Toolkit)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-calc-v5</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-calc-v5</code></h1>
+          <p class="muted" style="max-width:82ch">
+            Extended calculator that includes everything in v4 plus solubility, permeability, PK heuristics, lead metrics,
+            and optional conformer-based 3D shape descriptors (<code>3D_*</code>). It also emits developability indices (<code>Dev_*</code>).
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <pre><code>molprop-calc-v5 input.smi -o results.csv
+
+# equivalent (script form)
+python calculators/mpo_v5.py input.smi -o results.csv</code></pre>
+          </div>
+          <div class="card">
+            <h3>Optional 3D mode</h3>
+            <p class="muted">Adds <code>3D_*</code> columns using RDKit ETKDG conformers (treat as qualitative ranking features).</p>
+            <pre><code>molprop-calc-v5 input.smi -o results.csv --3d --3d-num-confs 10 --3d-minimize mmff</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common options</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">Run <code>molprop-calc-v5 --help</code> for the complete list. Common knobs:</p>
+            <pre><code># pH / ionization
+molprop-calc-v5 input.smi -o results.csv --ph 7.4 --ionization heuristic
+
+# protomer enumeration (optional dependency)
+pip install dimorphite_dl
+molprop-calc-v5 input.smi -o results.csv --ionization dimorphite --ph 7.4
+
+# compute descriptors on the selected protomer
+molprop-calc-v5 input.smi -o results.csv --ionization dimorphite --ph 7.4 --calc-on-protomer
+
+# stereo and tautomer handling
+molprop-calc-v5 input.smi -o results.csv --stereo-mode enumerate --stereo-max 32
+molprop-calc-v5 input.smi -o results.csv --tautomer-mode enumerate</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Downstream usage</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Category summaries</h3>
+              <pre><code>molprop-analyze results.csv --list
+molprop-analyze results.csv --category developability
+molprop-analyze results.csv --category cns_mpo</code></pre>
+            </div>
+            <div class="card">
+              <h3>Report bundle</h3>
+              <pre><code>molprop-report results.csv</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-calc-v5</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

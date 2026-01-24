@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-calc-v4 • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-calc-v4 (MolProp Toolkit)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-calc-v4</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-calc-v4</code></h1>
+          <p class="muted" style="max-width:80ch">
+            Baseline calculator that turns a SMILES list into a wide, analysis-ready CSV with core physicochemical properties,
+            CNS MPO, oral filters, Ro5/Ro3, med‑chem flags, toxicity alerts, metabolism soft spots, hERG/CYP heuristics, QED,
+            SA/complexity, and developability indices.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <pre><code>molprop-calc-v4 input.smi -o results.csv
+
+# equivalent (script form)
+python calculators/mpo_v4.py input.smi -o results.csv</code></pre>
+          </div>
+          <div class="card">
+            <h3>What it outputs</h3>
+            <p class="muted" style="margin:0">
+              A single CSV where each row is a compound and columns include both numeric descriptors (e.g., MolWt/LogP/TPSA)
+              and interpretable flags/classes (e.g., CNS_MPO_Class, RO5_Violations, Tox_Risk, hERG_Risk, Dev_Score).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common options</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              The most authoritative reference is <code>molprop-calc-v4 --help</code>. Common workflow knobs include pH/ionization,
+              stereo handling, tautomer handling, and output filling.
+            </p>
+            <pre><code># choose pH and ionization mode (heuristic or none)
+molprop-calc-v4 input.smi -o results.csv --ph 7.4 --ionization heuristic
+molprop-calc-v4 input.smi -o results.csv --ionization none
+
+# stereochemistry handling
+molprop-calc-v4 input.smi -o results.csv --stereo-mode keep
+molprop-calc-v4 input.smi -o results.csv --stereo-mode strip
+molprop-calc-v4 input.smi -o results.csv --stereo-mode enumerate --stereo-max 32
+
+# missing values
+touch results.csv
+molprop-calc-v4 input.smi -o results.csv --fill-missing 0</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-calc-v4</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

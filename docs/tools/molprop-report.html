@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-report • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-report (MolProp Toolkit)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-report</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-report</code></h1>
+          <p class="muted" style="max-width:80ch">
+            Builds a shareable report bundle from a results CSV. The report includes category summaries and plots and writes both
+            Markdown and HTML output into a timestamped directory under <code>reports/</code>.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <pre><code>molprop-report results.csv</code></pre>
+          </div>
+          <div class="card">
+            <h3>What you get</h3>
+            <p class="muted" style="margin:0">
+              A folder like <code>reports/&lt;stem&gt;_report_YYYYMMDD_HHMMSS/</code> containing <code>report.md</code>, <code>report.html</code>,
+              and a <code>plots/</code> subfolder.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Tip</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              If you want a clean, portable artifact for collaborators, send the entire report directory (or zip it). The HTML
+              report is intended to be readable without a Python environment.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-report</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

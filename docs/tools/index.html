@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tools • MolProp Toolkit</title>
+    <meta name="description" content="CLI tool reference for MolProp Toolkit." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tools</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases/latest/download/molprop-toolkit_latest.zip">Download</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:36px; line-height:1.15">CLI tool reference</h1>
+          <p class="muted" style="max-width: 78ch">
+            Each page below documents a single CLI command with common options and examples. For the authoritative, always-up-to-date
+            help, run <code>&lt;command&gt; --help</code>.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Calculators</h2>
+          <div class="grid-2">
+            <a class="card link-card" href="molprop-calc-v4.html">
+              <h3>molprop-calc-v4</h3>
+              <p class="muted">Baseline medchem property table from SMILES (CNS MPO, alerts, oral filters, etc.).</p>
+            </a>
+            <a class="card link-card" href="molprop-calc-v5.html">
+              <h3>molprop-calc-v5</h3>
+              <p class="muted">Extended table with solubility/permeability/PK + optional 3D shape descriptors.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Analysis & reporting</h2>
+          <div class="grid-2">
+            <a class="card link-card" href="molprop-analyze.html">
+              <h3>molprop-analyze</h3>
+              <p class="muted">Master analyzer: list categories, preview a category, or generate a text report.</p>
+            </a>
+            <a class="card link-card" href="molprop-report.html">
+              <h3>molprop-report</h3>
+              <p class="muted">Builds a Markdown + HTML report bundle with plots.</p>
+            </a>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px">
+            <a class="card link-card" href="molprop-sketch.html">
+              <h3>molprop-sketch</h3>
+              <p class="muted">2D structure depictions from a results CSV, with optional HTML index.</p>
+            </a>
+            <a class="card link-card" href="molprop-series.html">
+              <h3>molprop-series</h3>
+              <p class="muted">Series analytics: Murcko scaffolds + similarity clustering.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Operational triage</h2>
+          <div class="grid-2">
+            <a class="card link-card" href="molprop-picklists.html">
+              <h3>molprop-picklists</h3>
+              <p class="muted">Generate decision picklists (CSV and optional HTML) from filters/sorts.</p>
+            </a>
+            <a class="card link-card" href="validate-schema.html">
+              <h3>validate schema (utility)</h3>
+              <p class="muted">Validate that a results CSV matches the toolkit schema and required categories.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tools index</div>
+        </div>
+        <div class="footer-links">
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases">Releases</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

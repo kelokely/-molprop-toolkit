@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-picklists • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-picklists (MolProp Toolkit)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-picklists</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-picklists</code></h1>
+          <p class="muted" style="max-width:82ch">
+            Generates operational decision picklists from a results CSV using filters/sorts. Outputs one CSV per picklist and
+            can optionally produce an HTML index and per-picklist pages. Built-in picklists provide sensible defaults, and you
+            can supply a JSON/YAML config to define project-specific rules.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>List built-in picklists</h3>
+            <pre><code>molprop-picklists results.csv --list-builtins</code></pre>
+          </div>
+          <div class="card">
+            <h3>Run picklists (HTML + CSV)</h3>
+            <pre><code>molprop-picklists results.csv --html</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Custom picklists via config</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">Start from the example config:</p>
+            <pre><code>cp examples/picklists.example.json my_picklists.json
+
+molprop-picklists results.csv --config my_picklists.json --html</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Embed structure images (optional)</h2>
+          <div class="card">
+            <pre><code># generate structure assets
+molprop-sketch results.csv --outdir sketches_compare --compare --html
+
+# build picklists with embedded structure thumbnails
+molprop-picklists results.csv --html --sketch-dir sketches_compare --structure-views calc --structure-formats svg</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-picklists</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

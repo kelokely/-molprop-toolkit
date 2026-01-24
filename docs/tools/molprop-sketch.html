@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-sketch • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-sketch (MolProp Toolkit)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-sketch</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-sketch</code></h1>
+          <p class="muted" style="max-width:80ch">
+            Generates 2D structure depictions (SVG/PNG) from a results CSV and can write a simple HTML index for browsing.
+            This is designed to work directly on calculator outputs and prefers the best available SMILES column (often
+            <code>Calc_Canonical_SMILES</code>).
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <pre><code>molprop-sketch results.csv --outdir sketches --html</code></pre>
+          </div>
+          <div class="card">
+            <h3>Compare views</h3>
+            <p class="muted">When available, can render multiple “views” (input/prepared/calc/protomer) for side-by-side inspection.</p>
+            <pre><code>molprop-sketch results.csv --outdir sketches_compare --compare --html</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Tip: use with picklists</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              The picklist generator can optionally copy/embed sketch assets into its HTML output, producing a portable triage site.
+            </p>
+            <pre><code># first generate sketches
+molprop-sketch results.csv --outdir sketches_compare --compare --html
+
+# then embed into picklists HTML
+molprop-picklists results.csv --html --sketch-dir sketches_compare --structure-views calc --structure-formats svg</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-sketch</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

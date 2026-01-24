@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-analyze • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-analyze (MolProp Toolkit)." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-analyze</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-analyze</code></h1>
+          <p class="muted" style="max-width:80ch">
+            Registry-driven master analyzer for a results CSV. It lists available categories based on columns present, and can
+            print a narrative description + summary + preview table for a single category.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>List categories detected in a CSV</h3>
+            <pre><code>molprop-analyze results.csv --list</code></pre>
+          </div>
+          <div class="card">
+            <h3>Analyze one category</h3>
+            <pre><code>molprop-analyze results.csv --category cns_mpo
+molprop-analyze results.csv --category oral_bioavailability
+molprop-analyze results.csv --category developability</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Generate a text report (all categories found)</h2>
+          <div class="card">
+            <pre><code># prints a combined report to stdout
+molprop-analyze results.csv --report
+
+# save to file
+molprop-analyze results.csv --report -o report.txt</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Notes</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              The master analyzer discovers columns using the shared category registry. If a category has no columns present in
+              your dataset, it will be listed but show 0 columns available. This makes it safe to run on partial outputs.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-analyze</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
