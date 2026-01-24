@@ -85,6 +85,25 @@ molprop-picklists results.csv --list-builtins</code></pre>
 
       <section class="section">
         <div class="container">
+          <h2>Optional: retrosynthesis planning (offline)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              If you install AiZynthFinder and download its public model/stock bundle, you can generate retrosynthesis routes and
+              browse them as an HTML site.
+            </p>
+            <pre><code>pip install -e .[retro]
+
+# download AiZynthFinder public data + config
+download_public_data aizynth_data
+
+# run retrosynthesis on your results table
+molprop-retro results.csv --config aizynth_data/config.yml --top-routes 5 --nproc 4</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
           <h2>Next steps</h2>
           <div class="grid-3">
             <a class="card link-card" href="tools/molprop-calc-v5.html">

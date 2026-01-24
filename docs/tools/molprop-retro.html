@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>molprop-retro • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Offline retrosynthesis (AiZynthFinder) wrapper for MolProp Toolkit." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolProp Toolkit</span>
+            <span class="brand-tag">Tool: molprop-retro</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-retro</code></h1>
+          <p class="muted" style="max-width:84ch">
+            Offline retrosynthesis planning wrapper based on <a style="color:var(--brand); text-decoration:none" href="https://molecularai.github.io/aizynthfinder/" target="_blank" rel="noreferrer">AiZynthFinder</a>.
+            This command delegates planning to AiZynthFinder’s <code>aizynthcli</code> and then post-processes the results into a
+            summary CSV/JSON plus a lightweight HTML browsing site with optional route images.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Install dependencies</h3>
+            <p class="muted">AiZynthFinder is intentionally an optional dependency. Install it when you want retrosynthesis:</p>
+            <pre><code># inside your conda env
+pip install -e .[retro]
+
+# or install AiZynthFinder directly
+pip install aizynthfinder[all]</code></pre>
+          </div>
+          <div class="card">
+            <h3>Download models + stock and create a config</h3>
+            <p class="muted">AiZynthFinder provides a helper that downloads public data and writes a usable config file.</p>
+            <pre><code>download_public_data aizynth_data
+
+# this creates aizynth_data/config.yml</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Run retrosynthesis on a results CSV</h2>
+          <div class="card">
+            <pre><code>molprop-retro results.csv --config aizynth_data/config.yml --top-routes 5 --nproc 4
+
+# If your CSV uses non-standard columns
+molprop-retro results.csv --config aizynth_data/config.yml --smiles-col SMILES --id-col Compound_ID</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              Outputs a directory under <code>retrosynthesis/</code> containing <code>routes_summary.csv</code>, <code>routes_summary.json</code>,
+              <code>index.html</code>, per-target pages, and optional route PNGs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Run retrosynthesis on a SMILES list</h2>
+          <div class="card">
+            <pre><code>molprop-retro targets.smi --config aizynth_data/config.yml</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              The input can be a single-column SMILES file or a two-column name/SMILES file.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Notes</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              Retrosynthesis quality depends heavily on the chosen policy model and stock definition. The public download is a
+              good starting point, but real project use typically requires a curated purchasables stock and tuned settings.
+              MolProp Toolkit treats retrosynthesis outputs as a prioritization signal (route count, step count, precursors in stock),
+              not as a guarantee of synthetic feasibility.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolProp Toolkit</div>
+          <div class="muted">Tool reference • <code>molprop-retro</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+

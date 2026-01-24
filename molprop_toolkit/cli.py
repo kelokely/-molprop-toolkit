@@ -53,3 +53,9 @@ def series() -> None:
 
     main()
 
+
+def retro() -> None:
+    from tools.retrosynthesis import main
+
+    main()
+

@@ -22,6 +22,7 @@ dependencies = [
 rdkit = ["rdkit-pypi>=2022.9.5"]
 dimorphite = ["dimorphite-dl>=1.3.2"]
 report = ["matplotlib>=3.7"]
+retro = ["aizynthfinder>=4.4.1"]
 dev = ["pytest>=7.4", "ruff>=0.1.9"]
 
 [project.scripts]
@@ -35,6 +36,7 @@ molprop-report = "molprop_toolkit.cli:report"
 molprop-sketch = "molprop_toolkit.cli:sketch"
 molprop-picklists = "molprop_toolkit.cli:picklists"
 molprop-series = "molprop_toolkit.cli:series"
+molprop-retro = "molprop_toolkit.cli:retro"
 
 [tool.setuptools]
 include-package-data = true

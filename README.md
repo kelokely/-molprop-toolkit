@@ -44,7 +44,7 @@ pip install -e .
 pip install -e ".[dev]"
 ```
 
-This exposes console commands like `molprop-calc-v5`, `molprop-analyze`, `molprop-report`, `molprop-sketch`, `molprop-series`, and `molprop-picklists`.
+This exposes console commands like `molprop-calc-v5`, `molprop-analyze`, `molprop-report`, `molprop-sketch`, `molprop-series`, `molprop-picklists`, and `molprop-retro`.
 
 If you plan to run the calculator scripts, you must also install RDKit in your environment. On conda, the typical approach is installing from conda-forge. If you already have a results CSV from another pipeline, you can skip RDKit entirely and use only the analyzers.
 
