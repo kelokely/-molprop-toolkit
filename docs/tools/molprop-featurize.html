@@ -47,13 +47,14 @@
       <section class="section">
         <div class="container grid-2">
           <div class="card">
-            <h3>Typical usage (from a MolProp CSV)</h3>
-            <p class="muted">Uses <code>Canonical_SMILES</code> by default when present (standardized parent structure).</p>
-            <pre><code># 1) make a MolProp table
-molprop-calc-v5 input.smi -o results.csv
+            <h3>Typical usage (from a MolProp table)</h3>
+            <p class="muted">Auto-selects the structure-of-record SMILES and prefers <code>Calc_Canonical_SMILES</code> when present.</p>
+            <pre><code># 1) make a MolProp table (CSV or Parquet)
+molprop-calc-v5 input.smi -o results.parquet
 
 # 2) build a feature pack
-molprop-featurize results.csv -o features/results_features</code></pre>
+molprop-featurize results.parquet -o features/results_features</code></pre>
+            <p class="muted" style="margin-top:10px">Parquet requires <code>pyarrow</code>. Install via <code>pip install "molprop-toolkit[parquet]"</code> (or <code>pip install pyarrow</code>).</p>
           </div>
           <div class="card">
             <h3>SMILES input mode</h3>
@@ -71,13 +72,15 @@ molprop-featurize results.csv -o features/results_features</code></pre>
               <h3>Model-friendly (sparse) outputs</h3>
               <p class="muted" style="margin:0 0 12px">
                 The main artifact is a CSR sparse matrix saved as NPZ. This is suitable for scikit-learn and gradient boosting.
-                Numeric descriptor columns from the input CSV are exported separately so you can scale/impute them explicitly.
+                Numeric descriptor columns from the input table are exported separately so you can scale/impute them explicitly.
               </p>
               <pre><code>X_sparse_counts_csr.npz        # CSR: data/indices/indptr/shape
 X_numeric.npy                 # optional dense numeric block
 X_numeric_columns.json        # column names for X_numeric
-ids.csv                       # row_index → Compound_ID + Canonical_SMILES
-features_metadata.json        # full reproducibility spec</code></pre>
+ids.csv                       # row_index → Compound_ID + SMILES (always)
+ids.parquet                   # optional (when --id-map-format parquet|both)
+features_spec.json            # optional frozen vocab/block spec (for train/test stability)
+features_metadata.json        # run metadata (includes selected SMILES column)</code></pre>
             </div>
             <div class="card">
               <h3>SAR / interpretability outputs</h3>
@@ -86,6 +89,7 @@ features_metadata.json        # full reproducibility spec</code></pre>
                 plus fragment summary columns.
               </p>
               <pre><code>features_interpretable.csv    # FG_* + Env_* + fragment summaries
+features_interpretable.parquet# optional (when --interpretable-format parquet|both)
 fragments_brics.json          # BRICS vocabulary + frequencies
 fragments_recap.json          # RECAP vocabulary + frequencies</code></pre>
             </div>
@@ -127,23 +131,27 @@ Frag_RECAP  (presence features)</code></pre>
               Run <code>molprop-featurize --help</code> for the full list. Common knobs include structure column choice, fragment method,
               fingerprint sizes, numeric column selection, and which deep-learning exports to write.
             </p>
-            <pre><code># choose which SMILES column from results.csv to featurize
-molprop-featurize results.csv --smiles-col Canonical_SMILES -o features/out
+            <pre><code># choose which SMILES column from results.parquet to featurize
+molprop-featurize results.parquet --smiles-col Canonical_SMILES -o features/out
 
 # fragments (BRICS, RECAP, both, or none)
-molprop-featurize results.csv --fragments both --max-frags-per-mol 128 -o features/out
+molprop-featurize results.parquet --fragments both --max-frags-per-mol 128 -o features/out
 
 # fingerprint dimensions
-molprop-featurize results.csv --morgan-nbits 4096 --ap-nbits 2048 --torsion-nbits 2048 -o features/out
+molprop-featurize results.parquet --morgan-nbits 4096 --ap-nbits 2048 --torsion-nbits 2048 -o features/out
 
 # deep learning exports
-molprop-featurize results.csv --dl all --dl-fp-nbits 2048 --dl-fp-format packed -o features/out
+molprop-featurize results.parquet --dl all --dl-fp-nbits 2048 --dl-fp-format packed -o features/out
 
 # numeric block selection
-molprop-featurize results.csv --numeric-cols MolWt,LogP,TPSA,CNS_MPO -o features/out
+molprop-featurize results.parquet --numeric-cols MolWt,LogP,TPSA,CNS_MPO -o features/out
 
 # disable the interpretable summary CSV
-molprop-featurize results.csv --no-interpretable -o features/out</code></pre>
+molprop-featurize results.parquet --no-interpretable -o features/out
+
+# freeze vocab + blocks for train/test consistency
+molprop-featurize train.parquet -o features/train_features
+molprop-featurize test.parquet --spec features/train_features/features_spec.json -o features/test_features</code></pre>
           </div>
         </div>
       </section>

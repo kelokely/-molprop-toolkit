@@ -59,3 +59,9 @@ def retro() -> None:
 
     main()
 
+
+def featurize() -> None:
+    from tools.featurize import main
+
+    main()
+
