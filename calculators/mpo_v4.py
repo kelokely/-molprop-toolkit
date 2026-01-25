@@ -36,15 +36,12 @@ from typing import Dict, List, Optional, Tuple
 # Optional: Parquet output support for results tables.
 try:  # package context
     from molprop_toolkit.core.io import write_table
-<<<<<<< HEAD
     from molprop_toolkit.core.metadata import write_run_metadata
 except Exception:  # script-only context
     write_table = None  # type: ignore
     write_run_metadata = None  # type: ignore
-=======
 except Exception:  # script-only context
     write_table = None  # type: ignore
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
 
 from rdkit import Chem
 from rdkit.Chem import Crippen, Descriptors, QED, rdMolDescriptors
@@ -785,14 +782,11 @@ def write_csv(rows: List[Dict[str, object]], out_path: str, fill_missing: Option
 
 
 def write_output(rows: List[Dict[str, object]], out_path: str, fill_missing: Optional[float]) -> None:
-<<<<<<< HEAD
     """Write results to CSV (default) or Parquet (when out_path ends with .parquet/.pq).
 
     Task 3: metadata sidecar is written by main() after output is successfully created.
     """
-=======
     """Write results to CSV (default) or Parquet (when out_path ends with .parquet/.pq)."""
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
 
     ext = Path(out_path).suffix.lower()
     if ext in (".parquet", ".pq"):
@@ -947,7 +941,6 @@ def main() -> None:
         rows.append(props)
 
     write_output(rows, out_path, args.fill_missing)
-<<<<<<< HEAD
 
     # Task 3: provenance metadata next to the output table.
     if write_run_metadata is not None:
@@ -975,8 +968,6 @@ def main() -> None:
         except Exception as e:
             print(f"[molprop-calc-v4] warning: failed to write metadata sidecar: {e}", file=sys.stderr)
 
-=======
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
     print(f"Saved: {out_path} (compounds={len(rows)}, columns={len(rows[0])})")
 
 

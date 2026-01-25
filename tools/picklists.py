@@ -32,11 +32,8 @@ from typing import Dict, List, Optional
 # Allow running directly without installing the package.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-<<<<<<< HEAD
 from molprop_toolkit.core import detect_id_column, read_table, write_run_metadata
-=======
 from molprop_toolkit.core import detect_id_column, read_table
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
 from molprop_toolkit.picklists.builtins import BUILTIN_PICKLISTS
 from molprop_toolkit.picklists.engine import (
     PicklistDefinition,

@@ -20,11 +20,8 @@ import pandas as pd
 # Allow running directly without installing.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-<<<<<<< HEAD
 from molprop_toolkit.core import detect_id_column, read_table, write_run_metadata, write_table
-=======
 from molprop_toolkit.core import detect_id_column, read_table
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
 
 from analyzers.analyzer_clustering import analyze_clustering
 from analyzers.analyzer_scaffolds import analyze_scaffolds
@@ -100,11 +97,8 @@ def main() -> None:
         top_images=top_images,
     )
 
-<<<<<<< HEAD
     # Build enriched table by merging on Compound_ID
-=======
     # Build enriched CSV by merging on Compound_ID
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
     df = read_table(args.input)
     id_col = detect_id_column(df)
 
@@ -121,7 +115,6 @@ def main() -> None:
     out_table = outdir / out_name
     write_table(df_enriched, str(out_table))
 
-<<<<<<< HEAD
     # Task 3: sidecar metadata for the enriched table.
     try:
         # pick best smiles col (or user override) to record what series analytics used.
@@ -156,8 +149,6 @@ def main() -> None:
     except Exception:
         pass
 
-=======
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
     # Series-level reproducibility metadata (ties scaffold + cluster artifacts together)
     series_meta = {
         "tool": "molprop-series",
@@ -184,11 +175,8 @@ def main() -> None:
         },
         "artifacts": {
             "outdir": str(outdir.resolve()),
-<<<<<<< HEAD
             "enriched_csv": str(out_table.resolve()),
-=======
             "enriched_csv": str(out_csv.resolve()),
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
             "scaffolds_dir": str(scaf_dir.resolve()),
             "clusters_dir": str(clus_dir.resolve()),
             "scaffold_assignments": str((scaf_dir / "scaffold_assignments.csv").resolve()),
@@ -200,11 +188,8 @@ def main() -> None:
     }
     (outdir / "series_metadata.json").write_text(json.dumps(series_meta, indent=2) + "\n", encoding="utf-8")
 
-<<<<<<< HEAD
     print(f"\nEnriched table written to: {out_table}")
-=======
     print(f"\nEnriched CSV written to: {out_csv}")
->>>>>>> 5d70153 (Core: prefer Calc_Canonical_SMILES + add Parquet table IO)
     print(f"Series metadata written to: {outdir / 'series_metadata.json'}")
     print("Tip: run reports/analyzers on the enriched CSV to include series columns.")
 
