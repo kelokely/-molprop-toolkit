@@ -33,7 +33,6 @@ from typing import Dict, List, Optional
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from molprop_toolkit.core import detect_id_column, read_table, write_run_metadata
-from molprop_toolkit.core import detect_id_column, read_table
 from molprop_toolkit.picklists.builtins import BUILTIN_PICKLISTS
 from molprop_toolkit.picklists.engine import (
     PicklistDefinition,

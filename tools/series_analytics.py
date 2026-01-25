@@ -21,7 +21,6 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from molprop_toolkit.core import detect_id_column, read_table, write_run_metadata, write_table
-from molprop_toolkit.core import detect_id_column, read_table
 
 from analyzers.analyzer_clustering import analyze_clustering
 from analyzers.analyzer_scaffolds import analyze_scaffolds
@@ -176,7 +175,6 @@ def main() -> None:
         "artifacts": {
             "outdir": str(outdir.resolve()),
             "enriched_csv": str(out_table.resolve()),
-            "enriched_csv": str(out_csv.resolve()),
             "scaffolds_dir": str(scaf_dir.resolve()),
             "clusters_dir": str(clus_dir.resolve()),
             "scaffold_assignments": str((scaf_dir / "scaffold_assignments.csv").resolve()),
@@ -188,8 +186,7 @@ def main() -> None:
     }
     (outdir / "series_metadata.json").write_text(json.dumps(series_meta, indent=2) + "\n", encoding="utf-8")
 
-    print(f"\nEnriched table written to: {out_table}")
-    print(f"\nEnriched CSV written to: {out_csv}")
+    print(f"\nEnriched table written to: {out_table}"))
     print(f"Series metadata written to: {outdir / 'series_metadata.json'}")
     print("Tip: run reports/analyzers on the enriched CSV to include series columns.")
 
