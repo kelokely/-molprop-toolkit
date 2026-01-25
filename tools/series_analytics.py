@@ -97,6 +97,7 @@ def main() -> None:
     )
 
     # Build enriched table by merging on Compound_ID
+    # Build enriched CSV by merging on Compound_ID
     df = read_table(args.input)
     id_col = detect_id_column(df)
 

@@ -40,6 +40,8 @@ try:  # package context
 except Exception:  # script-only context
     write_table = None  # type: ignore
     write_run_metadata = None  # type: ignore
+except Exception:  # script-only context
+    write_table = None  # type: ignore
 
 from rdkit import Chem
 from rdkit.Chem import Crippen, Descriptors, QED, rdMolDescriptors
@@ -784,6 +786,7 @@ def write_output(rows: List[Dict[str, object]], out_path: str, fill_missing: Opt
 
     Task 3: metadata sidecar is written by main() after output is successfully created.
     """
+    """Write results to CSV (default) or Parquet (when out_path ends with .parquet/.pq)."""
 
     ext = Path(out_path).suffix.lower()
     if ext in (".parquet", ".pq"):
