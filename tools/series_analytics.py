@@ -186,7 +186,7 @@ def main() -> None:
     }
     (outdir / "series_metadata.json").write_text(json.dumps(series_meta, indent=2) + "\n", encoding="utf-8")
 
-    print(f"\nEnriched table written to: {out_table}"))
+    print(f"\nEnriched table written to: {out_table}")
     print(f"Series metadata written to: {outdir / 'series_metadata.json'}")
     print("Tip: run reports/analyzers on the enriched CSV to include series columns.")
 
