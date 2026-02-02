@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>molprop-picklists • Tools • MolProp Toolkit</title>
-    <meta name="description" content="Reference for molprop-picklists (MolProp Toolkit)." />
+    <title>molprop-similarity • Tools • MolProp Toolkit</title>
+    <meta name="description" content="Reference for molprop-similarity (MolProp Toolkit)." />
     <link rel="stylesheet" href="../assets/style.css" />
     <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
   </head>
@@ -16,7 +16,7 @@
           <img class="brand-logo" src="../assets/logo.svg" alt="MolProp Toolkit logo" />
           <span class="brand-text">
             <span class="brand-name">MolProp Toolkit</span>
-            <span class="brand-tag">Tool: molprop-picklists</span>
+            <span class="brand-tag">Tool: molprop-similarity</span>
           </span>
         </a>
         <nav class="nav">
@@ -31,11 +31,10 @@
     <main>
       <section class="hero" style="padding-top:34px">
         <div class="container">
-          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-picklists</code></h1>
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15"><code>molprop-similarity</code></h1>
           <p class="muted" style="max-width:82ch">
-            Generates operational decision picklists from a results CSV using filters/sorts. Outputs one CSV per picklist and
-            can optionally produce an HTML index and per-picklist pages. Built-in picklists provide sensible defaults, and you
-            can supply a JSON/YAML config to define project-specific rules.
+            Fingerprint-based similarity search against a SMILES file or a MolProp results table (CSV/Parquet), plus optional
+            pairwise matrices, diversity picking, and simple similarity clustering.
           </p>
 
           <div class="tool-tabs" aria-label="Tools">
@@ -46,8 +45,8 @@
             <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
             <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
             <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
-            <a class="tool-tab is-active" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
-            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab is-active" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
             <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
             <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
             <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
@@ -58,37 +57,44 @@
       <section class="section">
         <div class="container grid-2">
           <div class="card">
-            <h3>List built-in picklists</h3>
-            <pre><code>molprop-picklists results.csv --list-builtins</code></pre>
+            <h3>Typical usage</h3>
+            <pre><code># Search library for hits similar to a query
+molprop-similarity "CCO" library.smi --top 25 -o hits.csv
+
+# Use a MolProp results table (auto-detects Calc_Canonical_SMILES when present)
+molprop-similarity "CCO" results.parquet --top 25 -o hits.csv</code></pre>
           </div>
           <div class="card">
-            <h3>Run picklists (HTML + CSV)</h3>
-            <pre><code>molprop-picklists results.csv --html</code></pre>
+            <h3>Common modes</h3>
+            <pre><code># Pairwise similarity matrix (small sets)
+molprop-similarity --pairwise library.smi -o matrix.csv
+
+# Diversity picking (MaxMin)
+molprop-similarity --diversity library.smi --pick 100 -o diverse.csv
+
+# Leader-follower clustering
+molprop-similarity --cluster library.smi --threshold 0.7 -o clusters.csv</code></pre>
           </div>
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <h2>Custom picklists via config</h2>
+        <div class="container grid-2">
           <div class="card">
-            <p class="muted" style="margin:0 0 12px">Start from the example config:</p>
-            <pre><code>cp examples/picklists.example.json my_picklists.json
+            <h3>Fingerprint & metric</h3>
+            <pre><code># Default: Morgan + Tanimoto
+molprop-similarity "c1ccccc1" library.csv --threshold 0.7 --top 20
 
-molprop-picklists results.csv --config my_picklists.json --html</code></pre>
+# Alternatives
+molprop-similarity "c1ccccc1" library.csv --fp maccs --metric dice --top 50</code></pre>
           </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container">
-          <h2>Embed structure images (optional)</h2>
           <div class="card">
-            <pre><code># generate structure assets
-molprop-sketch results.csv --outdir sketches_compare --compare --html
-
-# build picklists with embedded structure thumbnails
-molprop-picklists results.csv --html --sketch-dir sketches_compare --structure-views calc --structure-formats svg</code></pre>
+            <h3>Tip</h3>
+            <p class="muted" style="margin:0">
+              On MolProp tables, the tool follows the toolkit “structure-of-record” rule and will prefer
+              <code>Calc_Canonical_SMILES</code> → <code>Calc_Base_SMILES</code> → <code>Canonical_SMILES</code> → <code>SMILES</code>.
+              Override with <code>--smiles-col</code> when you need a different representation.
+            </p>
           </div>
         </div>
       </section>
@@ -99,7 +105,7 @@ molprop-picklists results.csv --html --sketch-dir sketches_compare --structure-v
         <div>
           <div class="footer-title">MolProp Toolkit</div>
           <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
-          <div class="muted">Tool reference • <code>molprop-picklists</code></div>
+          <div class="muted">Tool reference • <code>molprop-similarity</code></div>
         </div>
         <div class="footer-links">
           <a href="./">Tools index</a>

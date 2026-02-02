@@ -23,7 +23,7 @@
           <a href="../">Home</a>
           <a href="../quickstart.html">Quickstart</a>
           <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://github.com/kelokely/-molprop-toolkit/releases/latest/download/molprop-toolkit_latest.zip">Download</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases/latest" target="_blank" rel="noreferrer">Download</a>
         </nav>
       </div>
     </header>
@@ -36,6 +36,21 @@
             Each page below documents a single CLI command with common options and examples. For the authoritative, always-up-to-date
             help, run <code>&lt;command&gt; --help</code>.
           </p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc-v4</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc-v5</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
         </div>
       </section>
 
@@ -108,6 +123,20 @@
               <h3>molprop-retro</h3>
               <p class="muted">Offline retrosynthesis wrapper using AiZynthFinder (summary CSV/JSON + HTML route browser).</p>
             </a>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px">
+            <a class="card link-card" href="molprop-similarity.html">
+              <h3>molprop-similarity</h3>
+              <p class="muted">Fingerprint similarity search, pairwise matrices, diversity picking, and simple clustering.</p>
+            </a>
+            <div class="card">
+              <h3>Tip</h3>
+              <p class="muted" style="margin:0">
+                For MolProp results tables, similarity defaults to the toolkit structure-of-record SMILES and will prefer
+                <code>Calc_Canonical_SMILES</code> when present.
+              </p>
+            </div>
           </div>
 
           <div class="grid-2" style="margin-top:16px">

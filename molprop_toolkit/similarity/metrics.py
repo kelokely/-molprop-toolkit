@@ -313,45 +313,64 @@ def get_similarity_function(metric: str):
     return functions[metric]
 
 
+def _is_rdkit_bitvect(fp: object) -> bool:
+    """Heuristic check for RDKit ExplicitBitVect-like objects."""
+    if isinstance(fp, np.ndarray):
+        return False
+    return hasattr(fp, "GetNumBits") and hasattr(fp, "GetOnBits")
+
+
 def bulk_similarity(query_fp, target_fps, metric: str = "tanimoto") -> np.ndarray:
+    """Calculate similarity between a query and multiple targets.
+
+    Returns an array aligned with target_fps (invalid targets get NaN).
+
+    Notes
+    -----
+    If RDKit is available and the fingerprints are RDKit bit vectors, this
+    will use RDKit's optimized bulk similarity routines for common metrics.
+    See: https://www.rdkit.org/docs/source/rdkit.DataStructs.cDataStructs.html
     """
-    Calculate similarity between a query and multiple targets.
-    
-    Parameters
-    ----------
-    query_fp : BitVect or ndarray
-        Query fingerprint
-    target_fps : list
-        List of target fingerprints
-    metric : str
-        Similarity metric to use
-        
-    Returns
-    -------
-    ndarray
-        Array of similarity values
-    """
+
     sim_func = get_similarity_function(metric)
-    
-    # Use RDKit bulk calculation if available and applicable
-    if (HAS_RDKIT and metric == "tanimoto" and 
-        not isinstance(query_fp, np.ndarray) and
-        all(not isinstance(fp, np.ndarray) for fp in target_fps if fp is not None)):
-        
-        similarities = []
-        for fp in target_fps:
+
+    # Fast path: RDKit bulk similarity for bit vectors.
+    if HAS_RDKIT and _is_rdkit_bitvect(query_fp) and all(
+        (fp is None) or _is_rdkit_bitvect(fp) for fp in target_fps
+    ):
+        # Map None entries to NaN while keeping output aligned.
+        idx_map: list[int] = []
+        fps_clean = []
+        for i, fp in enumerate(target_fps):
             if fp is None:
-                similarities.append(np.nan)
-            else:
-                similarities.append(DataStructs.TanimotoSimilarity(query_fp, fp))
-        return np.array(similarities)
-    
-    # General implementation
+                continue
+            idx_map.append(i)
+            fps_clean.append(fp)
+
+        out = np.full(len(target_fps), np.nan, dtype=float)
+        if not fps_clean:
+            return out
+
+        if metric == "tanimoto":
+            sims = DataStructs.BulkTanimotoSimilarity(query_fp, fps_clean)
+        elif metric == "dice":
+            sims = DataStructs.BulkDiceSimilarity(query_fp, fps_clean)
+        elif metric == "cosine":
+            sims = DataStructs.BulkCosineSimilarity(query_fp, fps_clean)
+        else:
+            sims = None
+
+        if sims is not None:
+            for i, sim in zip(idx_map, sims):
+                out[i] = float(sim)
+            return out
+
+    # General (portable) implementation
     similarities = []
     for fp in target_fps:
         if fp is None:
             similarities.append(np.nan)
         else:
             similarities.append(sim_func(query_fp, fp))
-    
-    return np.array(similarities)
+
+    return np.asarray(similarities, dtype=float)

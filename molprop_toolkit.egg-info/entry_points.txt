@@ -1,8 +1,11 @@
 [console_scripts]
-molprop-analyze = molprop_toolkit.cli:analyze
-molprop-calc-v4 = molprop_toolkit.cli:calc_v4
-molprop-calc-v5 = molprop_toolkit.cli:calc_v5
-molprop-picklists = molprop_toolkit.cli:picklists
-molprop-report = molprop_toolkit.cli:report
-molprop-series = molprop_toolkit.cli:series
-molprop-sketch = molprop_toolkit.cli:sketch
+molprop-analyze = analyzers.analyzer_master:main
+molprop-calc-v4 = calculators.mpo_v4:main
+molprop-calc-v5 = calculators.mpo_v5:main
+molprop-featurize = tools.featurize:main
+molprop-picklists = tools.picklists:main
+molprop-report = tools.build_report:main
+molprop-retro = tools.retrosynthesis:main
+molprop-series = tools.series_analytics:main
+molprop-similarity = molprop_toolkit.tools.similarity_cli:main
+molprop-sketch = tools.sketch_structures:main

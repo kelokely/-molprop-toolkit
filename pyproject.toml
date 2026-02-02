@@ -62,28 +62,28 @@ all = [
 
 [project.scripts]
 # Calculators
-molprop-calc-v4 = "molprop_toolkit.calculators.calc_v4:main"
-molprop-calc-v5 = "molprop_toolkit.calculators.calc_v5:main"
+molprop-calc-v4 = "calculators.mpo_v4:main"
+molprop-calc-v5 = "calculators.mpo_v5:main"
 
 # Analyzers
-molprop-analyze = "molprop_toolkit.analyzers.analyze:main"
+molprop-analyze = "analyzers.analyzer_master:main"
 
 # Reporting & Output
-molprop-report = "molprop_toolkit.tools.report:main"
-molprop-sketch = "molprop_toolkit.tools.sketch:main"
-molprop-picklists = "molprop_toolkit.tools.picklists:main"
+molprop-report = "tools.build_report:main"
+molprop-sketch = "tools.sketch_structures:main"
+molprop-picklists = "tools.picklists:main"
 
 # Series Analytics
-molprop-series = "molprop_toolkit.tools.series:main"
+molprop-series = "tools.series_analytics:main"
 
-# Similarity Search (NEW)
+# Similarity Search
 molprop-similarity = "molprop_toolkit.tools.similarity_cli:main"
 
 # Feature Engineering
-molprop-featurize = "molprop_toolkit.tools.featurize:main"
+molprop-featurize = "tools.featurize:main"
 
 # Retrosynthesis
-molprop-retro = "molprop_toolkit.tools.retro:main"
+molprop-retro = "tools.retrosynthesis:main"
 
 [project.urls]
 Homepage = "https://kelokely.github.io/-molprop-toolkit/"
@@ -92,10 +92,11 @@ Documentation = "https://kelokely.github.io/-molprop-toolkit/"
 Issues = "https://github.com/kelokely/-molprop-toolkit/issues"
 
 [tool.setuptools]
-packages = ["molprop_toolkit", "molprop_toolkit.similarity", "molprop_toolkit.calculators", "molprop_toolkit.analyzers", "molprop_toolkit.tools"]
+package-dir = {"" = "."}
 
-[tool.setuptools.package-dir]
-molprop_toolkit = "molprop_toolkit"
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["molprop_toolkit*", "calculators*", "analyzers*", "tools*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

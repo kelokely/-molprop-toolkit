@@ -103,6 +103,54 @@ code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liber
 ul{ margin: 10px 0 0 18px; color: var(--muted); }
 li{ margin: 7px 0; }
 
+/* Tool navigation tabs (colored pills) */
+.tool-tabs{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.tool-tab{
+  --accent: var(--brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(22,35,74,.55);
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 650;
+  font-size: 13px;
+  line-height: 1;
+  transition: border-color .15s ease, background .15s ease, color .15s ease, transform .15s ease;
+}
+.tool-tab:hover{
+  color: var(--text);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.tool-tab.is-active{
+  color: var(--text);
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(22,35,74,.55));
+}
+
+/* Per-tool accent colors */
+.tool-tab[data-tool="molprop-calc-v4"]{ --accent:#38bdf8; }
+.tool-tab[data-tool="molprop-calc-v5"]{ --accent:#22c55e; }
+.tool-tab[data-tool="ligand-prep"]{ --accent:#a78bfa; }
+.tool-tab[data-tool="molprop-analyze"]{ --accent:#fbbf24; }
+.tool-tab[data-tool="molprop-report"]{ --accent:#fb7185; }
+.tool-tab[data-tool="molprop-sketch"]{ --accent:#60a5fa; }
+.tool-tab[data-tool="molprop-series"]{ --accent:#2dd4bf; }
+.tool-tab[data-tool="molprop-picklists"]{ --accent:#f97316; }
+.tool-tab[data-tool="molprop-similarity"]{ --accent:#ef4444; }
+.tool-tab[data-tool="molprop-featurize"]{ --accent:#84cc16; }
+.tool-tab[data-tool="molprop-retro"]{ --accent:#c084fc; }
+.tool-tab[data-tool="validate-schema"]{ --accent:#94a3b8; }
+
 /* Simple CSS-only tabs (radio-button tabs) */
 .tabs{
   margin-top: 12px;

@@ -91,15 +91,20 @@ class TestFingerprints:
         assert fp is None
     
     def test_get_fingerprint_custom_params(self):
-        """Test custom fingerprint parameters."""
-        fp1 = get_fingerprint("CCO", fp_type="morgan", radius=2, nBits=1024)
-        fp2 = get_fingerprint("CCO", fp_type="morgan", radius=3, nBits=1024)
-        
+        """Test custom fingerprint parameters.
+
+        Use a structure where radius affects the neighborhood environment.
+        Very small molecules (e.g., ethanol) may yield identical fingerprints
+        for different radii.
+        """
+        smi = "CCOc1ccccc1"  # phenetole
+        fp1 = get_fingerprint(smi, fp_type="morgan", radius=2, nBits=1024)
+        fp2 = get_fingerprint(smi, fp_type="morgan", radius=3, nBits=1024)
+
         assert fp1.GetNumBits() == 1024
         assert fp2.GetNumBits() == 1024
         # Different radius should give different fingerprints
-        assert fp1.GetNumOnBits() != fp2.GetNumOnBits() or \
-               list(fp1.GetOnBits()) != list(fp2.GetOnBits())
+        assert list(fp1.GetOnBits()) != list(fp2.GetOnBits())
     
     def test_get_fingerprint_bulk(self):
         """Test bulk fingerprint generation."""

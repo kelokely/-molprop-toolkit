@@ -26,11 +26,21 @@ except ImportError:
 FINGERPRINT_TYPES = {
     "morgan": {
         "description": "Morgan circular fingerprint (ECFP-like)",
-        "default_params": {"radius": 2, "nBits": 2048, "useFeatures": False},
+        "default_params": {
+            "radius": 2,
+            "nBits": 2048,
+            "useFeatures": False,
+            "useChirality": False,
+        },
     },
     "morgan_feat": {
         "description": "Morgan fingerprint with pharmacophoric features (FCFP-like)",
-        "default_params": {"radius": 2, "nBits": 2048, "useFeatures": True},
+        "default_params": {
+            "radius": 2,
+            "nBits": 2048,
+            "useFeatures": True,
+            "useChirality": False,
+        },
     },
     "maccs": {
         "description": "MACCS 166-bit structural keys",
@@ -85,7 +95,10 @@ def _mol_from_input(mol_input: Union[str, "Chem.Mol"]) -> Optional["Chem.Mol"]:
     if isinstance(mol_input, Chem.Mol):
         return mol_input
     if isinstance(mol_input, str):
-        mol = Chem.MolFromSmiles(mol_input)
+        s = mol_input.strip()
+        if not s:
+            return None
+        mol = Chem.MolFromSmiles(s)
         return mol
     return None
 
@@ -141,20 +154,13 @@ def get_fingerprint(
     # Generate fingerprint based on type
     fp = None
     
-    if fp_type == "morgan":
+    if fp_type in ("morgan", "morgan_feat"):
         fp = AllChem.GetMorganFingerprintAsBitVect(
             mol,
-            radius=params.get("radius", 2),
-            nBits=params.get("nBits", 2048),
-            useFeatures=False,
-        )
-    
-    elif fp_type == "morgan_feat":
-        fp = AllChem.GetMorganFingerprintAsBitVect(
-            mol,
-            radius=params.get("radius", 2),
-            nBits=params.get("nBits", 2048),
-            useFeatures=True,
+            radius=int(params.get("radius", 2)),
+            nBits=int(params.get("nBits", 2048)),
+            useFeatures=bool(params.get("useFeatures", fp_type == "morgan_feat")),
+            useChirality=bool(params.get("useChirality", False)),
         )
     
     elif fp_type == "maccs":

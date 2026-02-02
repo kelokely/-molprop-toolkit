@@ -1,104 +1,43 @@
-# MolProp Toolkit - Similarity Search Feature
+# MolProp Toolkit — Similarity Search
 
-This directory contains the new similarity search module for MolProp Toolkit.
+`molprop-similarity` is now integrated into the MolProp Toolkit package (no manual copying of scripts required).
 
-## Files to Add to Your Repository
+## What’s included
 
-```
-molprop_toolkit/
-├── similarity/
-│   ├── __init__.py          # Module exports
-│   ├── fingerprints.py      # Fingerprint generation
-│   ├── metrics.py           # Similarity metrics
-│   └── search.py            # Search functions
-└── tools/
-    └── similarity_cli.py    # CLI entry point
+- Python module: `molprop_toolkit/similarity/`
+  - fingerprint generation (`fingerprints.py`)
+  - similarity metrics (`metrics.py`)
+  - similarity search / pairwise / diversity pick / clustering (`search.py`)
 
-tools/
-└── molprop_similarity.py    # Full CLI implementation
+- CLI entry point: `molprop-similarity`
+  - implemented in `molprop_toolkit/tools/similarity_cli.py`
+  - registered in `pyproject.toml` under `[project.scripts]`
 
-tests/
-└── test_similarity.py       # Comprehensive tests
+- Docs: `docs/tools/molprop-similarity.html` (short tool page)
 
-docs/tools/
-└── similarity.md            # Documentation
-
-examples/
-└── similarity_example.smi   # Example compounds
-```
-
-## Integration Steps
-
-### 1. Copy the similarity module
+## Install (recommended)
 
 ```bash
-# From this directory, copy to your repo
-cp -r molprop_toolkit/similarity /path/to/your/repo/molprop_toolkit/
-cp molprop_toolkit/tools/similarity_cli.py /path/to/your/repo/molprop_toolkit/tools/
-cp tools/molprop_similarity.py /path/to/your/repo/tools/
+conda env create -f environment.yml
+conda activate molprop-toolkit
+pip install -e ".[dev,parallel]"
 ```
 
-### 2. Update pyproject.toml
-
-Add this entry to `[project.scripts]`:
-
-```toml
-molprop-similarity = "molprop_toolkit.tools.similarity_cli:main"
-```
-
-Add similarity to packages in `[tool.setuptools]`:
-
-```toml
-packages = ["molprop_toolkit", "molprop_toolkit.similarity", ...]
-```
-
-Add optional dependencies:
-
-```toml
-[project.optional-dependencies]
-parallel = [
-    "joblib>=1.2.0",
-    "tqdm>=4.64.0",
-]
-```
-
-### 3. Reinstall the package
+RDKit is required for similarity search:
 
 ```bash
-pip install -e '.[dev,parallel]'
+conda install -c conda-forge rdkit
 ```
 
-### 4. Run tests
-
-```bash
-pytest tests/test_similarity.py -v
-```
-
-### 5. Verify CLI
+## Quick usage
 
 ```bash
 molprop-similarity --help
 molprop-similarity --list-fps
-molprop-similarity "CCO" examples/similarity_example.smi --top 5
-```
+molprop-similarity --list-metrics
 
-## Quick Usage Examples
-
-```bash
-# Basic similarity search
-molprop-similarity "c1ccccc1O" library.smi -o phenol_analogs.csv
-
-# Search with threshold
-molprop-similarity "c1ccccc1O" library.smi --threshold 0.6 --top 20
-
-# Different fingerprint
-molprop-similarity "c1ccccc1O" library.smi --fp maccs
-
-# HTML report
-molprop-similarity "c1ccccc1O" library.smi --top 50 -o results.csv --html
-
-# Batch search
-molprop-similarity queries.smi library.smi --batch -o results/
+# Basic search
+molprop-similarity "CCO" library.smi --top 25 -o hits.csv
 
 # Diversity picking
 molprop-similarity --diversity library.smi --pick 100 -o diverse.csv
@@ -107,33 +46,8 @@ molprop-similarity --diversity library.smi --pick 100 -o diverse.csv
 molprop-similarity --cluster library.smi --threshold 0.7 -o clusters.csv
 ```
 
-## Python API
+## Notes
 
-```python
-from molprop_toolkit.similarity import (
-    similarity_search,
-    diversity_pick,
-    get_fingerprint,
-    tanimoto_similarity,
-)
+Older experimental scripts that lived under the top-level `tools/` folder have been removed to avoid drift. The supported CLI is
+`molprop_toolkit/tools/similarity_cli.py` via the `molprop-similarity` console script.
 
-# Search
-results = similarity_search("CCO", "library.smi", threshold=0.7)
-df = results.to_dataframe()
-
-# Fingerprints
-fp = get_fingerprint("CCO", fp_type="morgan")
-```
-
-## Features
-
-- **7 fingerprint types**: Morgan, MACCS, RDKit, AtomPair, Torsion, Pattern, Morgan+Features
-- **9 similarity metrics**: Tanimoto, Dice, Cosine, Sokal, Russel, Kulczynski, McConnaughey, Asymmetric, Braun-Blanquet
-- **Multiple modes**: Single query, batch, pairwise matrix, diversity picking, clustering
-- **Flexible input**: SMILES files, CSV, Parquet, DataFrames, lists
-- **Parallel processing**: Optional joblib support for large libraries
-- **HTML reports**: Browseable output for results
-
-## Version
-
-This feature is designed for MolProp Toolkit v0.6.0.

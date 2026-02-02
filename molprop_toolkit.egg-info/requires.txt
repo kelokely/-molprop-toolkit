@@ -1,15 +1,21 @@
-pandas>=1.5
-numpy>=1.23
+pandas>=1.5.0
+numpy>=1.21.0
+
+[all]
+pyarrow>=10.0.0
+joblib>=1.2.0
+tqdm>=4.64.0
 
 [dev]
-pytest>=7.4
-ruff>=0.1.9
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+ruff>=0.1.0
+mypy>=1.0.0
 
-[dimorphite]
-dimorphite-dl>=1.3.2
+[parallel]
+joblib>=1.2.0
+tqdm>=4.64.0
 
-[rdkit]
-rdkit-pypi>=2022.9.5
-
-[report]
-matplotlib>=3.7
+[parquet]
+pyarrow>=10.0.0

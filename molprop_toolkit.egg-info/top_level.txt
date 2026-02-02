@@ -1,5 +1,4 @@
 analyzers
 calculators
 molprop_toolkit
-tests
 tools

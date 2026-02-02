@@ -78,7 +78,7 @@ def similarity_search(
     smiles_col: str = "SMILES",
     id_col: Optional[str] = "Compound_ID",
     query_id: Optional[str] = None,
-    include_query: bool = False,
+    include_query: bool = True,
     fp_params: Optional[Dict] = None,
     n_jobs: int = 1,
     show_progress: bool = False,
@@ -603,23 +603,35 @@ def _load_library(
             # Assume SMILES file
             df = _load_smiles_file(path)
     
-    # Extract SMILES column
-    if smiles_col in df.columns:
+    # Extract SMILES column.
+    # If the caller specifies --smiles-col, prefer that, but still fall back
+    # to the toolkit's "structure-of-record" priority chain.
+    if smiles_col and smiles_col in df.columns:
         smiles_list = df[smiles_col].tolist()
-    elif "Canonical_SMILES" in df.columns:
-        smiles_list = df["Canonical_SMILES"].tolist()
-    elif "smiles" in df.columns:
-        smiles_list = df["smiles"].tolist()
     else:
-        # Try first column that looks like SMILES
-        for col in df.columns:
-            if df[col].dtype == object:
-                sample = str(df[col].iloc[0])
-                if any(c in sample for c in "CNOcnoPSFClBrI()=#"):
-                    smiles_list = df[col].tolist()
-                    break
+        # MolProp structure-of-record priority (matches Quickstart docs)
+        priority = [
+            "Calc_Canonical_SMILES",
+            "Calc_Base_SMILES",
+            "Canonical_SMILES",
+            "Input_Canonical_SMILES",
+            "SMILES",
+            "smiles",
+        ]
+        for col in priority:
+            if col in df.columns:
+                smiles_list = df[col].tolist()
+                break
         else:
-            raise ValueError(f"Could not find SMILES column in data")
+            # Try first column that looks like SMILES
+            for col in df.columns:
+                if df[col].dtype == object:
+                    sample = str(df[col].iloc[0])
+                    if any(c in sample for c in "CNOcnoPSFClBrI()=#"):
+                        smiles_list = df[col].tolist()
+                        break
+            else:
+                raise ValueError("Could not find SMILES column in data")
     
     # Extract ID column
     id_list = None
