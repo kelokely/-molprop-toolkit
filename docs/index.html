@@ -79,14 +79,14 @@
           <div class="grid-2">
             <div class="card">
               <h3>Recommended: conda (RDKit‑friendly)</h3>
-              <pre><code>conda env create -f environment.yml
+              <pre><code>git clone https://github.com/kelokely/-molprop-toolkit.git molprop-toolkit
+cd molprop-toolkit
+
+conda env create -f environment.yml
 conda activate molprop-toolkit
 
-# editable install with console scripts
-pip install -e .[dev]
-
-# Parquet support (recommended)
-pip install -e .[parquet]</code></pre>
+# editable install with console scripts + Parquet support
+pip install -e ".[dev,parquet]"</code></pre>
             </div>
 
             <div class="card">

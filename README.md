@@ -19,8 +19,8 @@ If you only want to evaluate the repository quickly, run the example file shippe
 conda env create -f environment.yml
 conda activate molprop-toolkit
 
-# 2) Install console scripts
-pip install -e '.[dev]'
+# 2) Install console scripts + Parquet support
+pip install -e ".[dev,parquet]"
 
 # 3) Calculate a results table
 molprop-calc-v5 examples/example.smi -o results.csv
