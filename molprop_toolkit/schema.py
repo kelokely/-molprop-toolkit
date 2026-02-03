@@ -29,7 +29,9 @@ def load_schema(schema_path: Optional[str | Path] = None) -> Dict[str, Any]:
 
     # Bundled resource
     try:
-        txt = (resources.files("molprop_toolkit.resources") / "schema.json").read_text(encoding="utf-8")
+        txt = (resources.files("molprop_toolkit.resources") / "schema.json").read_text(
+            encoding="utf-8"
+        )
         return json.loads(txt)
     except Exception:
         pass
@@ -37,4 +39,3 @@ def load_schema(schema_path: Optional[str | Path] = None) -> Dict[str, Any]:
     # Source checkout fallback
     p2 = Path(__file__).resolve().parents[1] / "docs" / "schema.json"
     return json.loads(p2.read_text(encoding="utf-8"))
-

@@ -48,7 +48,9 @@ def _bond_features(bond: Any) -> List[float]:
     return [single, double, triple, aromatic, conj, ring]
 
 
-def graphs_from_smiles_list(smiles: List[str], spec: GraphSpec) -> Dict[str, np.ndarray]:
+def graphs_from_smiles_list(
+    smiles: List[str], spec: GraphSpec
+) -> Dict[str, np.ndarray]:
     try:
         from rdkit import Chem  # type: ignore
     except Exception as e:  # pragma: no cover
@@ -112,4 +114,3 @@ def graphs_from_smiles_list(smiles: List[str], spec: GraphSpec) -> Dict[str, np.
         "mol_atom_ptr": np.asarray(mol_atom_ptr, dtype=np.int64),
         "mol_edge_ptr": np.asarray(mol_edge_ptr, dtype=np.int64),
     }
-

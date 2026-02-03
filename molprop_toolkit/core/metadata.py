@@ -115,10 +115,15 @@ def write_run_metadata(
             "name": in_p.name,
             "sha256": sha256_file(in_p),
             "size_bytes": int(in_p.stat().st_size) if in_p.exists() else None,
-            "mtime": datetime.fromtimestamp(in_p.stat().st_mtime).isoformat(timespec="seconds") if in_p.exists() else None,
+            "mtime": (
+                datetime.fromtimestamp(in_p.stat().st_mtime).isoformat(
+                    timespec="seconds"
+                )
+                if in_p.exists()
+                else None
+            ),
         }
 
     sidecar = metadata_sidecar_path(out_p)
     sidecar.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return sidecar
-

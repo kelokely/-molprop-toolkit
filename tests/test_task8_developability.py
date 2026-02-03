@@ -19,4 +19,3 @@ def test_schema_has_dev_columns() -> None:
         "Dev_Pfizer_3_75_Pass",
     ]:
         assert c in cols
-

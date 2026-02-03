@@ -30,7 +30,9 @@ class StructureAssetSpec:
     formats: Sequence[str] = ("svg",)
 
 
-def _candidate_structure_files(cid: str, views: Sequence[str], formats: Sequence[str]) -> List[str]:
+def _candidate_structure_files(
+    cid: str, views: Sequence[str], formats: Sequence[str]
+) -> List[str]:
     base = sanitize_filename(cid)
     cands: List[str] = []
 
@@ -118,7 +120,11 @@ def write_picklist_html(
     cols = list(df.columns)
 
     # Add a structure column if we have any assets.
-    add_struct = any(structure_map.get(str(cid)) for cid in df[id_col].astype(str).tolist()) if id_col in df.columns else False
+    add_struct = (
+        any(structure_map.get(str(cid)) for cid in df[id_col].astype(str).tolist())
+        if id_col in df.columns
+        else False
+    )
 
     headers = ["Structure"] + cols if add_struct else cols
     ths = "".join(f"<th>{_html.escape(h)}</th>" for h in headers)
@@ -132,7 +138,9 @@ def write_picklist_html(
             rels = structure_map.get(cid, [])
             imgs = []
             for rel in rels[:3]:
-                imgs.append(f"<div><img src='{_html.escape(rel)}' alt='{_html.escape(cid)}'/></div>")
+                imgs.append(
+                    f"<div><img src='{_html.escape(rel)}' alt='{_html.escape(cid)}'/></div>"
+                )
             tds.append(f"<td class='imgcell'>{''.join(imgs) if imgs else ''}</td>")
 
         for c in cols:
@@ -212,5 +220,3 @@ def write_index_html(
 """
 
     outpath.write_text(doc, encoding="utf-8")
-
-

@@ -12,4 +12,3 @@ from .io import detect_table_format, read_csv, read_table, write_csv, write_tabl
 from .metadata import metadata_sidecar_path, sha256_file, write_run_metadata
 from .printing import print_banner, print_section
 from .registry import CATEGORY_SPECS, CategorySpec
-

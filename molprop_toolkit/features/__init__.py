@@ -6,4 +6,3 @@ RDKit is imported lazily inside functions so the broader toolkit can be installe
 """
 
 from __future__ import annotations
-

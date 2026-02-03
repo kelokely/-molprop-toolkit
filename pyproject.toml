@@ -114,18 +114,21 @@ include = '\.pyi?$'
 [tool.ruff]
 line-length = 88
 target-version = "py39"
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
+extend-exclude = [
+    "analyzers",
+    "calculators",
+    "tools",
 ]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4"]
 ignore = [
     "E501",  # line too long (handled by black)
     "B008",  # do not perform function calls in argument defaults
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/test_similarity.py" = ["E402"]
 
 [tool.mypy]
 python_version = "3.9"

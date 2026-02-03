@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from typing import Optional, Sequence, Union
 
-
 ID_CANDIDATES: Sequence[str] = (
     "Compound_ID",
     "compound_id",
@@ -37,7 +36,7 @@ def _as_columns(df_or_columns: Union[Sequence[str], object]) -> list[str]:
     # Avoid importing pandas here; accept anything with a .columns attribute.
     cols = None
     if hasattr(df_or_columns, "columns"):
-        cols = getattr(df_or_columns, "columns")
+        cols = df_or_columns.columns
     else:
         cols = df_or_columns
 
@@ -74,4 +73,3 @@ def detect_best_smiles_column(
         if "smiles" in c.lower():
             return c
     return None
-

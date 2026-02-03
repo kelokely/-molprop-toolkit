@@ -10,13 +10,14 @@ Supports multiple fingerprint types commonly used in medicinal chemistry:
 - Pattern (SMARTS-based substructure)
 """
 
-from typing import Optional, List, Dict, Any, Union
+from typing import List, Optional, Union
+
 import numpy as np
 
 try:
-    from rdkit import Chem
+    from rdkit import Chem, DataStructs
     from rdkit.Chem import AllChem, MACCSkeys, rdMolDescriptors
-    from rdkit import DataStructs
+
     HAS_RDKIT = True
 except ImportError:
     HAS_RDKIT = False
@@ -77,19 +78,19 @@ def _check_rdkit():
 def _mol_from_input(mol_input: Union[str, "Chem.Mol"]) -> Optional["Chem.Mol"]:
     """
     Convert input to RDKit Mol object.
-    
+
     Parameters
     ----------
     mol_input : str or Mol
         SMILES string or RDKit Mol object
-        
+
     Returns
     -------
     Mol or None
         RDKit Mol object, or None if conversion fails
     """
     _check_rdkit()
-    
+
     if mol_input is None:
         return None
     if isinstance(mol_input, Chem.Mol):
@@ -107,53 +108,53 @@ def get_fingerprint(
     mol_input: Union[str, "Chem.Mol"],
     fp_type: str = "morgan",
     as_numpy: bool = False,
-    **kwargs
+    **kwargs,
 ) -> Optional[Union["DataStructs.ExplicitBitVect", np.ndarray]]:
     """
     Generate a molecular fingerprint.
-    
+
     Parameters
     ----------
     mol_input : str or Mol
         SMILES string or RDKit Mol object
     fp_type : str
-        Fingerprint type. One of: morgan, morgan_feat, maccs, rdkit, 
+        Fingerprint type. One of: morgan, morgan_feat, maccs, rdkit,
         atompair, torsion, pattern
     as_numpy : bool
         If True, return as numpy array instead of RDKit BitVect
     **kwargs
         Override default fingerprint parameters
-        
+
     Returns
     -------
     BitVect or ndarray or None
         Fingerprint object, or None if molecule is invalid
-        
+
     Examples
     --------
     >>> fp = get_fingerprint("CCO", fp_type="morgan", radius=2)
     >>> fp_array = get_fingerprint("CCO", fp_type="maccs", as_numpy=True)
     """
     _check_rdkit()
-    
+
     mol = _mol_from_input(mol_input)
     if mol is None:
         return None
-    
+
     fp_type = fp_type.lower()
     if fp_type not in FINGERPRINT_TYPES:
         raise ValueError(
             f"Unknown fingerprint type: {fp_type}. "
             f"Available: {list(FINGERPRINT_TYPES.keys())}"
         )
-    
+
     # Merge default params with user overrides
     params = FINGERPRINT_TYPES[fp_type]["default_params"].copy()
     params.update(kwargs)
-    
+
     # Generate fingerprint based on type
     fp = None
-    
+
     if fp_type in ("morgan", "morgan_feat"):
         fp = AllChem.GetMorganFingerprintAsBitVect(
             mol,
@@ -162,10 +163,10 @@ def get_fingerprint(
             useFeatures=bool(params.get("useFeatures", fp_type == "morgan_feat")),
             useChirality=bool(params.get("useChirality", False)),
         )
-    
+
     elif fp_type == "maccs":
         fp = MACCSkeys.GenMACCSKeys(mol)
-    
+
     elif fp_type == "rdkit":
         fp = Chem.RDKFingerprint(
             mol,
@@ -173,33 +174,33 @@ def get_fingerprint(
             maxPath=params.get("maxPath", 7),
             fpSize=params.get("fpSize", 2048),
         )
-    
+
     elif fp_type == "atompair":
         fp = rdMolDescriptors.GetHashedAtomPairFingerprintAsBitVect(
             mol,
             nBits=params.get("nBits", 2048),
         )
-    
+
     elif fp_type == "torsion":
         fp = rdMolDescriptors.GetHashedTopologicalTorsionFingerprintAsBitVect(
             mol,
             nBits=params.get("nBits", 2048),
         )
-    
+
     elif fp_type == "pattern":
         fp = Chem.PatternFingerprint(
             mol,
             fpSize=params.get("fpSize", 2048),
         )
-    
+
     if fp is None:
         return None
-    
+
     if as_numpy:
         arr = np.zeros((fp.GetNumBits(),), dtype=np.int8)
         DataStructs.ConvertToNumpyArray(fp, arr)
         return arr
-    
+
     return fp
 
 
@@ -209,11 +210,11 @@ def get_fingerprint_bulk(
     as_numpy: bool = False,
     n_jobs: int = 1,
     show_progress: bool = False,
-    **kwargs
+    **kwargs,
 ) -> List[Optional[Union["DataStructs.ExplicitBitVect", np.ndarray]]]:
     """
     Generate fingerprints for multiple molecules.
-    
+
     Parameters
     ----------
     mol_inputs : list
@@ -228,38 +229,42 @@ def get_fingerprint_bulk(
         Show progress bar (requires tqdm)
     **kwargs
         Override default fingerprint parameters
-        
+
     Returns
     -------
     list
         List of fingerprints (None for invalid molecules)
     """
     _check_rdkit()
-    
+
     if n_jobs != 1:
         try:
             from joblib import Parallel, delayed
+
             use_parallel = True
         except ImportError:
             use_parallel = False
             if n_jobs != 1:
                 import warnings
+
                 warnings.warn(
                     "joblib not installed, falling back to serial processing. "
-                    "Install with: pip install joblib"
+                    "Install with: pip install joblib",
+                    stacklevel=2,
                 )
     else:
         use_parallel = False
-    
+
     # Setup progress bar if requested
     iterator = mol_inputs
     if show_progress:
         try:
             from tqdm import tqdm
+
             iterator = tqdm(mol_inputs, desc="Generating fingerprints")
         except ImportError:
             pass
-    
+
     if use_parallel and n_jobs != 1:
         fps = Parallel(n_jobs=n_jobs)(
             delayed(get_fingerprint)(mol, fp_type, as_numpy, **kwargs)
@@ -267,7 +272,7 @@ def get_fingerprint_bulk(
         )
     else:
         fps = [get_fingerprint(mol, fp_type, as_numpy, **kwargs) for mol in iterator]
-    
+
     return fps
 
 

@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-
 # A small, pragmatic functional-group panel. Keys are stable and always returned.
 SMARTS = {
     "FG_Amide": "C(=O)N",
@@ -44,11 +43,11 @@ def compute_functional_group_features(mol: Any) -> Dict[str, float]:
     """
 
     # Base output with zeros (ensures stable key set).
-    out: Dict[str, float] = {k: 0.0 for k in SMARTS.keys()}
+    out: Dict[str, float] = dict.fromkeys(SMARTS.keys(), 0.0)
 
     try:
-        from rdkit.Chem import Descriptors, Lipinski, rdMolDescriptors  # type: ignore
         from rdkit import Chem  # type: ignore
+        from rdkit.Chem import Descriptors, Lipinski, rdMolDescriptors  # type: ignore
 
         # Compile patterns once per call (simple; could be cached later).
         patterns = {k: Chem.MolFromSmarts(v) for k, v in SMARTS.items()}
@@ -83,4 +82,3 @@ def compute_functional_group_features(mol: Any) -> Dict[str, float]:
         out["Env_HBA"] = 0.0
 
     return out
-

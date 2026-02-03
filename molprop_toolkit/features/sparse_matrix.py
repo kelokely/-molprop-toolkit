@@ -22,7 +22,10 @@ class CSRBuilder:
 
     def add_row(self, feats: Dict[int, float]) -> None:
         # Sort columns for deterministic output.
-        items = sorted(((int(k), float(v)) for k, v in feats.items() if float(v) != 0.0), key=lambda x: x[0])
+        items = sorted(
+            ((int(k), float(v)) for k, v in feats.items() if float(v) != 0.0),
+            key=lambda x: x[0],
+        )
         for k, v in items:
             if k < 0 or k >= int(self.n_cols):
                 continue
@@ -38,6 +41,12 @@ class CSRBuilder:
         return data, indices, indptr, shape
 
 
-def save_csr_npz(path: str, *, data: np.ndarray, indices: np.ndarray, indptr: np.ndarray, shape: np.ndarray) -> None:
+def save_csr_npz(
+    path: str,
+    *,
+    data: np.ndarray,
+    indices: np.ndarray,
+    indptr: np.ndarray,
+    shape: np.ndarray,
+) -> None:
     np.savez_compressed(path, data=data, indices=indices, indptr=indptr, shape=shape)
-

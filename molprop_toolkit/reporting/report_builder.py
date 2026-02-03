@@ -55,7 +55,9 @@ def _slug(s: str) -> str:
 
 def _is_numeric(series: pd.Series) -> bool:
     # Treat bool-like columns as categorical for reporting purposes.
-    return pd.api.types.is_numeric_dtype(series) and not pd.api.types.is_bool_dtype(series)
+    return pd.api.types.is_numeric_dtype(series) and not pd.api.types.is_bool_dtype(
+        series
+    )
 
 
 def _safe_value(v: object) -> str:
@@ -143,7 +145,9 @@ class ReportBuilder:
                 present.append(k)
         return present
 
-    def _key_series(self, spec: CategorySpec, available_cols: Sequence[str]) -> Tuple[Optional[str], Optional[pd.Series]]:
+    def _key_series(
+        self, spec: CategorySpec, available_cols: Sequence[str]
+    ) -> Tuple[Optional[str], Optional[pd.Series]]:
         key = spec.key_column
         if key and key in self.df.columns:
             return key, self.df[key]
@@ -160,7 +164,9 @@ class ReportBuilder:
 
         return None, None
 
-    def _summarize_key(self, key: str, s: pd.Series) -> Tuple[str, List[Tuple[str, str]]]:
+    def _summarize_key(
+        self, key: str, s: pd.Series
+    ) -> Tuple[str, List[Tuple[str, str]]]:
         # Returns (kind, summary_items)
         if _is_numeric(s):
             vals = pd.to_numeric(s, errors="coerce").dropna()
@@ -182,7 +188,9 @@ class ReportBuilder:
 
     def _plot_numeric_hist(self, title: str, s: pd.Series, outpath: Path) -> None:
         if plt is None:
-            raise RuntimeError("matplotlib is not available; disable plots or install matplotlib")
+            raise RuntimeError(
+                "matplotlib is not available; disable plots or install matplotlib"
+            )
 
         vals = pd.to_numeric(s, errors="coerce").dropna()
         if len(vals) == 0:
@@ -193,8 +201,20 @@ class ReportBuilder:
         ax.hist(vals, bins=30, color="#2E86C1", alpha=0.85, edgecolor="white")
         mean = float(vals.mean())
         med = float(vals.median())
-        ax.axvline(mean, color="#C0392B", linestyle="--", linewidth=1.5, label=f"mean={mean:.3g}")
-        ax.axvline(med, color="#27AE60", linestyle=":", linewidth=1.5, label=f"median={med:.3g}")
+        ax.axvline(
+            mean,
+            color="#C0392B",
+            linestyle="--",
+            linewidth=1.5,
+            label=f"mean={mean:.3g}",
+        )
+        ax.axvline(
+            med,
+            color="#27AE60",
+            linestyle=":",
+            linewidth=1.5,
+            label=f"median={med:.3g}",
+        )
         ax.set_title(title)
         ax.set_xlabel("value")
         ax.set_ylabel("count")
@@ -206,7 +226,9 @@ class ReportBuilder:
 
     def _plot_categorical_bar(self, title: str, s: pd.Series, outpath: Path) -> None:
         if plt is None:
-            raise RuntimeError("matplotlib is not available; disable plots or install matplotlib")
+            raise RuntimeError(
+                "matplotlib is not available; disable plots or install matplotlib"
+            )
 
         vc = s.fillna("(missing)").astype(str).value_counts(dropna=False).head(12)
         if len(vc) == 0:
@@ -224,7 +246,9 @@ class ReportBuilder:
         fig.savefig(outpath)
         plt.close(fig)
 
-    def _top_table(self, key: str, s: pd.Series, available_cols: Sequence[str]) -> Tuple[List[str], List[List[object]]]:
+    def _top_table(
+        self, key: str, s: pd.Series, available_cols: Sequence[str]
+    ) -> Tuple[List[str], List[List[object]]]:
         base_cols = [self.id_col]
         if key not in base_cols:
             base_cols.append(key)
@@ -246,7 +270,9 @@ class ReportBuilder:
             df2[key] = df2[key].fillna("(missing)").astype(str)
             top_class = df2[key].value_counts().index[0] if len(df2) else "(missing)"
             df2 = df2.sort_values(by=[key, self.id_col])
-            df2 = pd.concat([df2[df2[key] == top_class], df2[df2[key] != top_class]], axis=0)
+            df2 = pd.concat(
+                [df2[df2[key] == top_class], df2[df2[key] != top_class]], axis=0
+            )
 
         df2 = df2.head(self.top_n)
         headers = list(df2.columns)
@@ -291,9 +317,13 @@ class ReportBuilder:
                 plot_path = plots_dir / plot_name
                 try:
                     if kind == "numeric":
-                        self._plot_numeric_hist(f"{spec.name}: {key}", series, plot_path)
+                        self._plot_numeric_hist(
+                            f"{spec.name}: {key}", series, plot_path
+                        )
                     else:
-                        self._plot_categorical_bar(f"{spec.name}: {key}", series, plot_path)
+                        self._plot_categorical_bar(
+                            f"{spec.name}: {key}", series, plot_path
+                        )
                     plot_rel = f"plots/{plot_name}"
                 except Exception as e:
                     plot_rel = None
@@ -324,9 +354,13 @@ class ReportBuilder:
 
             h = []
             h.append(f"<section class='category' id='{_html_escape(cat_key)}'>")
-            h.append(f"<h2>{_html_escape(spec.name)} <code>{_html_escape(cat_key)}</code></h2>")
+            h.append(
+                f"<h2>{_html_escape(spec.name)} <code>{_html_escape(cat_key)}</code></h2>"
+            )
             h.append(f"<p class='desc'>{_html_escape(spec.description.strip())}</p>")
-            h.append(f"<p><strong>Key metric:</strong> <code>{_html_escape(key)}</code></p>")
+            h.append(
+                f"<p><strong>Key metric:</strong> <code>{_html_escape(key)}</code></p>"
+            )
             h.append(_html_table(["metric", "value"], summary_items))
             if plot_rel:
                 h.append(
@@ -334,7 +368,9 @@ class ReportBuilder:
                 )
             h.append("<h3>Top compounds (preview)</h3>")
             h.append(_html_table(top_headers, top_rows))
-            h.append(f"<p class='meta'>Available columns in dataset for this category: {len(cols)}</p>")
+            h.append(
+                f"<p class='meta'>Available columns in dataset for this category: {len(cols)}</p>"
+            )
             h.append("</section>")
             cat_blocks_html.append("\n".join(h))
 
@@ -342,7 +378,11 @@ class ReportBuilder:
         sim_blocks_md: List[str] = []
         sim_blocks_html: List[str] = []
 
-        sim_numeric_cols = [c for c in self.df.columns if str(c).startswith("Sim_") and _is_numeric(self.df[c])]
+        sim_numeric_cols = [
+            c
+            for c in self.df.columns
+            if str(c).startswith("Sim_") and _is_numeric(self.df[c])
+        ]
         if sim_numeric_cols:
             md = []
             md.append("## Similarity to reference set")
@@ -358,7 +398,7 @@ class ReportBuilder:
             h.append("<h2>Similarity to reference set</h2>")
             h.append(
                 "<p class='desc'>This section summarizes similarity-to-reference columns present in the dataset (columns starting with <code>Sim_</code>). "
-                "These are typically produced by <code>molprop-report --fp ... --sim-ref-*</code> or <code>molprop-picklists --fp ... --sim-ref-*</code>." 
+                "These are typically produced by <code>molprop-report --fp ... --sim-ref-*</code> or <code>molprop-picklists --fp ... --sim-ref-*</code>."
                 "</p>"
             )
 
@@ -377,7 +417,10 @@ class ReportBuilder:
                         summary_items.append(("plot_error", str(e)))
 
                 # Top-N by similarity
-                df_top = self.df[[self.id_col, c] + ([f"{c}_BestRef"] if f"{c}_BestRef" in self.df.columns else [])].copy()
+                df_top = self.df[
+                    [self.id_col, c]
+                    + ([f"{c}_BestRef"] if f"{c}_BestRef" in self.df.columns else [])
+                ].copy()
                 df_top[c] = pd.to_numeric(df_top[c], errors="coerce")
                 df_top = df_top.sort_values(by=c, ascending=False).head(self.top_n)
                 headers = list(df_top.columns)
@@ -414,7 +457,11 @@ class ReportBuilder:
         for cat_key in present:
             spec = CATEGORY_SPECS[cat_key]
             cols = self.category_columns(spec)
-            key = spec.key_column if (spec.key_column and spec.key_column in self.df.columns) else ""
+            key = (
+                spec.key_column
+                if (spec.key_column and spec.key_column in self.df.columns)
+                else ""
+            )
             overview_rows.append([cat_key, spec.name, key, len(cols)])
 
         md_overview = _markdown_table(
@@ -445,7 +492,11 @@ class ReportBuilder:
                 "\n\n".join(sim_blocks_md) if sim_blocks_md else "",
                 "---",
                 "",
-                "\n\n".join(cat_blocks_md) if cat_blocks_md else "(No categories detected in dataset)",
+                (
+                    "\n\n".join(cat_blocks_md)
+                    if cat_blocks_md
+                    else "(No categories detected in dataset)"
+                ),
                 "",
             ]
         )
@@ -490,6 +541,9 @@ class ReportBuilder:
         if write_html:
             html_path.write_text(html_doc, encoding="utf-8")
 
-        return ReportArtifacts(outdir=outdir_p, markdown_path=md_path, html_path=html_path, plots_dir=plots_dir)
-
-
+        return ReportArtifacts(
+            outdir=outdir_p,
+            markdown_path=md_path,
+            html_path=html_path,
+            plots_dir=plots_dir,
+        )

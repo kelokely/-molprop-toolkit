@@ -12,7 +12,6 @@ from typing import Dict
 
 from .engine import FilterRule, PicklistDefinition, SortRule
 
-
 BUILTIN_PICKLISTS: Dict[str, PicklistDefinition] = {
     "top_cns_followup": PicklistDefinition(
         key="top_cns_followup",
@@ -42,7 +41,9 @@ BUILTIN_PICKLISTS: Dict[str, PicklistDefinition] = {
             FilterRule("Bioavail_Score", ">=", 3, missing="warn_skip"),
             FilterRule("RO5_Violations", "<=", 1, missing="warn_skip"),
             FilterRule("CYP_Total_Inhibition", "<=", 1, missing="warn_skip"),
-            FilterRule("CYP_MBI_Risk", "notin", [True, "True", "Yes", "Y"], missing="warn_skip"),
+            FilterRule(
+                "CYP_MBI_Risk", "notin", [True, "True", "Yes", "Y"], missing="warn_skip"
+            ),
             FilterRule("Tox_Risk", "notin", ["High"], missing="warn_skip"),
         ),
         sort=(
@@ -64,7 +65,9 @@ BUILTIN_PICKLISTS: Dict[str, PicklistDefinition] = {
             FilterRule("Tox_Risk", "in", ["High"], missing="warn_skip"),
             FilterRule("hERG_Risk", "in", ["High"], missing="warn_skip"),
             FilterRule("CYP_Total_Inhibition", ">=", 3, missing="warn_skip"),
-            FilterRule("CYP_MBI_Risk", "in", [True, "True", "Yes", "Y"], missing="warn_skip"),
+            FilterRule(
+                "CYP_MBI_Risk", "in", [True, "True", "Yes", "Y"], missing="warn_skip"
+            ),
             FilterRule("MedChem_Alerts", ">=", 2, missing="warn_skip"),
             FilterRule("RO5_Violations", ">=", 2, missing="warn_skip"),
             FilterRule("Sol_Consensus_LogS", "<=", -5, missing="warn_skip"),
@@ -74,8 +77,13 @@ BUILTIN_PICKLISTS: Dict[str, PicklistDefinition] = {
             SortRule("MedChem_Alerts", ascending=False),
         ),
         limit=0,
-        include_categories=("toxicity", "herg", "cyp", "medchem_flags", "rule_of_5", "solubility"),
+        include_categories=(
+            "toxicity",
+            "herg",
+            "cyp",
+            "medchem_flags",
+            "rule_of_5",
+            "solubility",
+        ),
     ),
 }
-
-

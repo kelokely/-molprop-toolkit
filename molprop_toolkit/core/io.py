@@ -17,7 +17,6 @@ from typing import Any, Literal, Optional
 
 import pandas as pd
 
-
 TableFormat = Literal["csv", "tsv", "parquet"]
 
 
@@ -67,7 +66,9 @@ def read_table(path: str, *, fmt: Optional[str] = None, **kwargs: Any) -> pd.Dat
     return pd.read_csv(path, **kwargs)
 
 
-def write_table(df: pd.DataFrame, path: str, *, fmt: Optional[str] = None, **kwargs: Any) -> None:
+def write_table(
+    df: pd.DataFrame, path: str, *, fmt: Optional[str] = None, **kwargs: Any
+) -> None:
     """Write a table (CSV/TSV/Parquet), creating parent directories."""
 
     Path(path).parent.mkdir(parents=True, exist_ok=True)
@@ -93,10 +94,10 @@ def write_table(df: pd.DataFrame, path: str, *, fmt: Optional[str] = None, **kwa
 
 # Backwards-compatible wrappers (older tools import these names)
 
+
 def read_csv(path: str, **kwargs: Any) -> pd.DataFrame:
     return read_table(path, fmt="csv", **kwargs)
 
 
 def write_csv(df: pd.DataFrame, path: str) -> None:
     return write_table(df, path, fmt="csv")
-

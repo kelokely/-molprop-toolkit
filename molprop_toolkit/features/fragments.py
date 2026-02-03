@@ -50,9 +50,10 @@ def fragment_inventory(mol: Any, spec: FragmentSpec) -> Dict[str, List[str]]:
             # RecapDecompose returns a tree; children keys are SMILES.
             tree = Recap.RecapDecompose(mol)
             if tree is not None:
-                out["RECAP"] = sorted(list(tree.GetAllChildren().keys()))[: int(spec.max_per_mol)]
+                out["RECAP"] = sorted(tree.GetAllChildren().keys())[
+                    : int(spec.max_per_mol)
+                ]
         except Exception:
             out["RECAP"] = []
 
     return out
-

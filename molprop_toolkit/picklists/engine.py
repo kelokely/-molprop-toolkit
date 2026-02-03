@@ -12,17 +12,15 @@ The engine is intentionally conservative:
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Sequence, Tuple
-
-import json
 
 import pandas as pd
 
 from molprop_toolkit.core import detect_id_column, read_table
 from molprop_toolkit.core.registry import CATEGORY_SPECS
-
 
 FilterOp = Literal[
     "==",
@@ -204,7 +202,11 @@ def select_output_columns(
         if cat not in CATEGORY_SPECS:
             continue
         spec = CATEGORY_SPECS[cat]
-        if spec.key_column and spec.key_column in df.columns and spec.key_column not in cols:
+        if (
+            spec.key_column
+            and spec.key_column in df.columns
+            and spec.key_column not in cols
+        ):
             cols.append(spec.key_column)
 
         for c in registry_category_columns(df, cat):
@@ -363,7 +365,12 @@ def load_picklist_config(path: str | Path) -> List[PicklistDefinition]:
         sort_in = it.get("sort", []) or []
         sort: List[SortRule] = []
         for s in sort_in:
-            sort.append(SortRule(column=str(s.get("column")), ascending=bool(s.get("ascending", False))))
+            sort.append(
+                SortRule(
+                    column=str(s.get("column")),
+                    ascending=bool(s.get("ascending", False)),
+                )
+            )
 
         defs.append(
             PicklistDefinition(
@@ -380,5 +387,3 @@ def load_picklist_config(path: str | Path) -> List[PicklistDefinition]:
         )
 
     return defs
-
-

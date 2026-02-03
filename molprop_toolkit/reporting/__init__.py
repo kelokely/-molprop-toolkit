@@ -11,4 +11,3 @@ category knowledge into the report builder.
 from __future__ import annotations
 
 from .report_builder import ReportArtifacts, ReportBuilder
-

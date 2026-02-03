@@ -8,4 +8,3 @@ The original scripts remain runnable directly (for example, `python analyzers/an
 """
 
 from __future__ import annotations
-

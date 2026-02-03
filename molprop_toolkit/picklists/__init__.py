@@ -12,5 +12,9 @@ The picklist engine is designed to work without RDKit; it only depends on pandas
 from __future__ import annotations
 
 from .builtins import BUILTIN_PICKLISTS
-from .engine import PicklistDefinition, PicklistResult, build_picklists, load_picklist_config
-
+from .engine import (
+    PicklistDefinition,
+    PicklistResult,
+    build_picklists,
+    load_picklist_config,
+)

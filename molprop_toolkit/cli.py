@@ -64,4 +64,3 @@ def featurize() -> None:
     from tools.featurize import main
 
     main()
-

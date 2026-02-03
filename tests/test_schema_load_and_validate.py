@@ -31,4 +31,3 @@ def test_validate_csv_schema_cli_smoke() -> None:
     res = subprocess.run(cmd, capture_output=True, text=True)
     assert res.returncode == 0, res.stdout + "\n" + res.stderr
     assert "Result: PASS" in res.stdout
-

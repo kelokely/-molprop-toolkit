@@ -39,7 +39,9 @@ def _fold_counts(counts: Dict[int, int], nbits: int) -> Dict[int, int]:
     return out
 
 
-def compute_default_sparse_blocks(mol: Any, cfg: MLFPConfig) -> Dict[str, Dict[int, int]]:
+def compute_default_sparse_blocks(
+    mol: Any, cfg: MLFPConfig
+) -> Dict[str, Dict[int, int]]:
     """Return sparse hashed-count blocks for a molecule.
 
     Output is a dict with keys: Morgan, AtomPair, Torsion.
@@ -57,27 +59,42 @@ def compute_default_sparse_blocks(mol: Any, cfg: MLFPConfig) -> Dict[str, Dict[i
         )
         morgan_counts = morgan_raw.GetNonzeroElements()  # type: ignore[attr-defined]
 
-        ap_raw = rdMolDescriptors.GetHashedAtomPairFingerprint(mol, nBits=int(cfg.atom_pair_nbits))
+        ap_raw = rdMolDescriptors.GetHashedAtomPairFingerprint(
+            mol, nBits=int(cfg.atom_pair_nbits)
+        )
         ap_counts = ap_raw.GetNonzeroElements()  # type: ignore[attr-defined]
 
-        tor_raw = rdMolDescriptors.GetHashedTopologicalTorsionFingerprint(mol, nBits=int(cfg.torsion_nbits))
+        tor_raw = rdMolDescriptors.GetHashedTopologicalTorsionFingerprint(
+            mol, nBits=int(cfg.torsion_nbits)
+        )
         tor_counts = tor_raw.GetNonzeroElements()  # type: ignore[attr-defined]
 
         return {
-            "Morgan": _fold_counts({int(k): int(v) for k, v in morgan_counts.items()}, int(cfg.morgan_nbits)),
-            "AtomPair": _fold_counts({int(k): int(v) for k, v in ap_counts.items()}, int(cfg.atom_pair_nbits)),
-            "Torsion": _fold_counts({int(k): int(v) for k, v in tor_counts.items()}, int(cfg.torsion_nbits)),
+            "Morgan": _fold_counts(
+                {int(k): int(v) for k, v in morgan_counts.items()},
+                int(cfg.morgan_nbits),
+            ),
+            "AtomPair": _fold_counts(
+                {int(k): int(v) for k, v in ap_counts.items()}, int(cfg.atom_pair_nbits)
+            ),
+            "Torsion": _fold_counts(
+                {int(k): int(v) for k, v in tor_counts.items()}, int(cfg.torsion_nbits)
+            ),
         }
     except Exception:
         return {"Morgan": {}, "AtomPair": {}, "Torsion": {}}
 
 
-def morgan_bitvect(mol: Any, *, radius: int, nbits: int, use_chirality: bool = True) -> Any:
+def morgan_bitvect(
+    mol: Any, *, radius: int, nbits: int, use_chirality: bool = True
+) -> Any:
     """Return an RDKit ExplicitBitVect (Morgan)."""
 
     from rdkit.Chem import AllChem  # type: ignore
 
-    return AllChem.GetMorganFingerprintAsBitVect(mol, int(radius), nBits=int(nbits), useChirality=bool(use_chirality))
+    return AllChem.GetMorganFingerprintAsBitVect(
+        mol, int(radius), nBits=int(nbits), useChirality=bool(use_chirality)
+    )
 
 
 def pack_bitvect(bitvect: Any) -> bytes:
@@ -90,4 +107,3 @@ def pack_bitvect(bitvect: Any) -> bytes:
     DataStructs.ConvertToNumpyArray(bitvect, arr)
     packed = np.packbits(arr)
     return packed.tobytes()
-

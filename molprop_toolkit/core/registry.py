@@ -479,4 +479,3 @@ settings and should be treated as qualitative ranking features.
 
 def list_categories() -> List[str]:
     return list(CATEGORY_SPECS.keys())
-

@@ -13,4 +13,3 @@ def print_section(title: str, width: int = 80, char: str = "-") -> None:
     print(char * width)
     print(title)
     print(char * width)
-

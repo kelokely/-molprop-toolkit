@@ -13,4 +13,3 @@ def test_detect_id_column_prefers_compound_id() -> None:
 def test_detect_best_smiles_column_priority() -> None:
     cols = ["SMILES", "Canonical_SMILES", "Calc_Canonical_SMILES"]
     assert detect_best_smiles_column(cols) == "Calc_Canonical_SMILES"
-
