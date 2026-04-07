@@ -45,12 +45,6 @@ Compatibility aliases remain available, but `molscope` is now the simplest entry
 A compact command summary is also available in [docs/commands.md](docs/commands.md).
 Scientific grounding and release-gate pages are published in [docs/docs/methods.html](docs/docs/methods.html), [docs/docs/validation.html](docs/docs/validation.html), [docs/docs/benchmarks.html](docs/docs/benchmarks.html), and [docs/docs/uncertainty.html](docs/docs/uncertainty.html).
 
-If you want to validate the second-level campaign workflows on a richer example than the single-file quickstart, the synthetic Campaign Alpha pack lives under `examples/campaign_alpha/` and can be built end to end with:
-
-```bash
-python examples/build_campaign_alpha_demo.py
-```
-
 ## Repository layout
 
 The calculators live in `calculators/` and produce a wide results CSV from an input SMILES file. The analyzers live in `analyzers/` and read a results CSV to print category summaries and optionally export smaller category CSVs. The “packaging” tools that generate shareable artifacts live in `tools/` (report bundles, picklists, structure sketches, series analytics, and retrosynthesis wrappers). The `docs/` folder contains schema and narrative documentation, and it is also used to publish the GitHub Pages site at https://kelokely.github.io/-molprop-toolkit/.
@@ -209,8 +203,8 @@ When you want a single handoff bundle for a project review, point `molscope port
 molscope report results.csv --outdir reports/demo
 molscope picklists results.csv --outdir picklists/demo --html
 molscope learnings --picklists-dir picklists/demo -o learnings/demo
-molscope dashboard --learnings-dir learnings/demo -o dashboard/campaign_alpha
-molscope portal --report-dir reports/demo --picklists-dir picklists/demo --learnings-dir learnings/demo --dashboard-dir dashboard/campaign_alpha -o portal/demo
+molscope dashboard --learnings-dir learnings/demo -o dashboard/demo
+molscope portal --report-dir reports/demo --picklists-dir picklists/demo --learnings-dir learnings/demo --dashboard-dir dashboard/demo -o portal/demo
 ```
 
 `molscope learnings` turns compare, SAR, MMP, and decision outputs into reusable project lessons (`learning_cards.csv`, `summary.md`, `index.html`) so teams can capture what changed, what worked, and what should be tested next. `molscope dashboard` then accumulates those learnings bundles across rounds into a persistent registry (`snapshot_registry.csv`, `knowledge_registry.csv`, `recurring_lessons.csv`, `index.html`). `molscope portal` can include both the current learnings bundle and the cross-round dashboard so teams get one entry point instead of a pile of folders.

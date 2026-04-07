@@ -96,7 +96,7 @@ def test_dashboard_cli_persists_campaign_memory_across_snapshots(tmp_path) -> No
             "-o",
             str(outdir),
             "--title",
-            "Campaign Alpha Dashboard",
+            "Campaign Dashboard",
         ]
     )
     main(
@@ -106,7 +106,7 @@ def test_dashboard_cli_persists_campaign_memory_across_snapshots(tmp_path) -> No
             "-o",
             str(outdir),
             "--title",
-            "Campaign Alpha Dashboard",
+            "Campaign Dashboard",
         ]
     )
 
@@ -126,7 +126,6 @@ def test_dashboard_cli_persists_campaign_memory_across_snapshots(tmp_path) -> No
     assert "Lead_LLE balance improved" in set(registry["title"])
     assert recurring.loc[recurring["title"] == "Lead_LLE balance improved", "snapshot_count"].iat[0] == 2
     assert set(active["snapshot_id"]) == {"round5"}
-    assert "Campaign Alpha Dashboard" in html
+    assert "Campaign Dashboard" in html
     assert "snapshots/round5/index.html" in html
     assert metadata["tool"] == "molscope-dashboard"
-

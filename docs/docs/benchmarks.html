@@ -54,15 +54,13 @@
 
       <section class="section">
         <div class="container prose">
-          <h2>Campaign Alpha validation pack</h2>
-          <p>The first benchmark bundle for the newer campaign workflows lives in <code>examples/campaign_alpha/</code>. It is synthetic, but it is structured to exercise the compare and decision-support workflows on something richer than the single-file quickstart.</p>
+          <h2>Campaign workflow benchmark recipe</h2>
+          <p>The campaign-level workflow checks are meant to run on a local paired-round dataset rather than a bundled public pack. The goal is to exercise integration, comparison, decision outputs, and handoff artifacts on data you are comfortable sharing inside your team.</p>
           <div class="grid-2">
             <div class="card">
               <h3>What it runs</h3>
-              <pre><code>python examples/build_campaign_alpha_demo.py
-
-# under the hood:
-molscope integrate
+              <pre><code>molscope integrate reference_round.csv assays_reference.csv -o reference_round_integrated.csv
+molscope integrate candidate_round.csv assays_candidate.csv -o candidate_round_integrated.csv
 molscope compare
 molscope report
 molscope picklists --html
@@ -85,7 +83,7 @@ molscope portal</code></pre>
           <table>
             <thead>
               <tr>
-                <th>Observed signal in the pack</th>
+                <th>Observed signal in your paired-round run</th>
                 <th>Expected artifact behavior</th>
               </tr>
             </thead>

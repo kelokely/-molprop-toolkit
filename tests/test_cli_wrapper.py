@@ -103,7 +103,7 @@ def test_molscope_dashboard_dispatches_subcommand(monkeypatch) -> None:
             "--learnings-dir",
             "learnings/round5",
             "-o",
-            "dashboard/campaign_alpha",
+            "dashboard/demo",
         ]
     )
 
@@ -112,7 +112,7 @@ def test_molscope_dashboard_dispatches_subcommand(monkeypatch) -> None:
         "--learnings-dir",
         "learnings/round5",
         "-o",
-        "dashboard/campaign_alpha",
+        "dashboard/demo",
     ]
 
 

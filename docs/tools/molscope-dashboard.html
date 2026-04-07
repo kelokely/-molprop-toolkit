@@ -78,12 +78,12 @@
           <div class="card">
             <h3>Typical usage</h3>
             <pre><code>molscope dashboard \
-  --learnings-dir learnings/round4 \
-  -o dashboard/campaign_alpha
+  --learnings-dir learnings/reference \
+  -o dashboard/demo
 
 molscope dashboard \
-  --learnings-dir learnings/round5 \
-  -o dashboard/campaign_alpha</code></pre>
+  --learnings-dir learnings/candidate \
+  -o dashboard/demo</code></pre>
           </div>
           <div class="card">
             <h3>What you get</h3>
@@ -113,11 +113,11 @@ molscope dashboard \
           <h2>Use it with portal</h2>
           <div class="card">
             <pre><code>molscope portal \
-  --report-dir reports/round5 \
-  --picklists-dir picklists/round5 \
-  --learnings-dir learnings/round5 \
-  --dashboard-dir dashboard/campaign_alpha \
-  -o portal/round5</code></pre>
+  --report-dir reports/demo \
+  --picklists-dir picklists/demo \
+  --learnings-dir learnings/demo \
+  --dashboard-dir dashboard/demo \
+  -o portal/demo</code></pre>
             <p class="muted" style="margin:12px 0 0">
               Pair the current-round portal with the persistent dashboard when you want one shareable workspace that shows
               both the latest evidence and the longer-term campaign memory behind it.

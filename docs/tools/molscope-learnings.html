@@ -79,11 +79,11 @@
           <div class="card">
             <h3>Typical usage</h3>
             <pre><code>molscope learnings \
-  --compare-dir round5_vs_round4 \
-  --sar-dir campaign_sar \
-  --mmp-dir campaign_mmp \
-  --picklists-dir picklists/round5 \
-  -o learnings/round5</code></pre>
+  --compare-dir compare/demo \
+  --sar-dir sar/demo \
+  --mmp-dir mmp/demo \
+  --picklists-dir picklists/demo \
+  -o learnings/demo</code></pre>
           </div>
           <div class="card">
             <h3>What you get</h3>
@@ -113,16 +113,16 @@
           <h2>Use it with dashboard and portal</h2>
           <div class="card">
             <pre><code>molscope dashboard \
-  --learnings-dir learnings/round5 \
-  -o dashboard/campaign_alpha
+  --learnings-dir learnings/demo \
+  -o dashboard/demo
 
 molscope portal \
-  --report-dir reports/round5 \
-  --picklists-dir picklists/round5 \
-  --compare-dir round5_vs_round4 \
-  --learnings-dir learnings/round5 \
-  --dashboard-dir dashboard/campaign_alpha \
-  -o portal/round5</code></pre>
+  --report-dir reports/demo \
+  --picklists-dir picklists/demo \
+  --compare-dir compare/demo \
+  --learnings-dir learnings/demo \
+  --dashboard-dir dashboard/demo \
+  -o portal/demo</code></pre>
             <p class="muted" style="margin:12px 0 0">
               The learnings bundle becomes especially useful when folded into a persistent dashboard and then linked from the
               campaign portal, because that gives project teams a short path from raw evidence to remembered lessons.

@@ -4,7 +4,6 @@ __pycache__/
 *.pyd
 *.csv
 !tests/data/*.csv
-!examples/campaign_alpha/*.csv
 *.tsv
 *.xlsx
 *.parquet
