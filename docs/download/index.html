@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Download • MolScope Toolkit</title>
+    <meta name="description" content="Download and install options for MolScope Toolkit." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Download and install</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+          <a href="../docs/">Docs</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit/releases" target="_blank" rel="noreferrer">Releases</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Download</div>
+            <h1>Choose the install path that matches your workflow.</h1>
+            <p>MolScope is distributed through GitHub releases and source checkout. Start here to pick the install path that fits your setup.</p>
+            <div class="cta-row">
+              <a class="btn primary" href="https://github.com/kelokely/-molprop-toolkit/releases/latest" target="_blank" rel="noreferrer">Latest release</a>
+              <a class="btn" href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">Browse repository</a>
+              <a class="btn" href="../quickstart.html">Quickstart</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container doc-grid">
+          <div class="card">
+            <h3>Recommended: source checkout + conda</h3>
+            <pre><code>git clone https://github.com/kelokely/-molprop-toolkit.git molprop-toolkit
+cd molprop-toolkit
+conda env create -f environment.yml
+conda activate molprop-toolkit
+pip install -e ".[dev,parquet]"</code></pre>
+          </div>
+          <div class="card">
+            <h3>When this is the right choice</h3>
+            <ul>
+              <li>You want RDKit-backed calculator features.</li>
+              <li>You want editable installs and the full CLI surface.</li>
+              <li>You plan to use reports, picklists, similarity, series, or retro from the same environment.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Release downloads</h3>
+            <p class="muted">Use releases when you want tagged snapshots or packaged archives for sharing and archival.</p>
+            <a class="btn" href="https://github.com/kelokely/-molprop-toolkit/releases" target="_blank" rel="noreferrer">Open releases</a>
+          </div>
+          <div class="card">
+            <h3>GitHub releases and notes</h3>
+            <p class="muted">Release artifacts and release notes are published on GitHub, and the links above take you straight there.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Download and install guidance for the current distribution model.</div>
+        </div>
+        <div class="footer-links">
+          <a href="../">Home</a>
+          <a href="../examples/">Examples</a>
+          <a href="../docs/">Docs hub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

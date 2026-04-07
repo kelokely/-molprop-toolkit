@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Representation Policy • MolScope Toolkit</title>
+    <meta name="description" content="Structure-of-record and representation policy for MolScope Toolkit." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Representation policy</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Structure of record</div>
+            <h1>Representation policy is part of the method, not bookkeeping</h1>
+            <p>Salts, tautomers, stereochemistry, and protomer choices can change similarity, clustering, 3D descriptors, and human interpretation. MolScope makes those choices explicit so teams can compare runs without pretending the representation step never happened.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a class="is-active" href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Meaning</th>
+                <th>Why it exists</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Input_Canonical_SMILES</code></td>
+                <td>Canonicalized form of the exact input structure.</td>
+                <td>Preserves what the user actually supplied, before toolkit policy choices change the working form.</td>
+              </tr>
+              <tr>
+                <td><code>Canonical_SMILES</code></td>
+                <td>Standardized parent used for the main results table.</td>
+                <td>Gives the project one default structure-of-record view for comparison and downstream outputs.</td>
+              </tr>
+              <tr>
+                <td><code>Calc_Base_SMILES</code></td>
+                <td>Base parent before ionization/protomer logic.</td>
+                <td>Keeps the neutralized or de-salted baseline visible when ionization features are later applied.</td>
+              </tr>
+              <tr>
+                <td><code>Calc_Canonical_SMILES</code></td>
+                <td>Working structure used for the calculator run.</td>
+                <td>Makes the exact representation behind the results reproducible, especially when pH, ionization, or prep presets differ.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container note-grid">
+          <div class="card">
+            <h3>Salt and solvate stripping</h3>
+            <p class="muted">A supplied salt form may be the right experimental record, but the stripped parent is usually the right structure for similarity, clustering, and most descriptor comparisons. MolScope keeps both stories visible.</p>
+          </div>
+          <div class="card">
+            <h3>Tautomer handling</h3>
+            <p class="muted">Two tautomeric forms can move hydrogen-bonding and aromaticity features enough to change risk flags or nearest-neighbor relationships. Use prep audit mode when tautomer choice is part of the chemistry question.</p>
+          </div>
+          <div class="card">
+            <h3>Stereochemistry</h3>
+            <p class="muted">Undefined stereocenters are not a neutral detail. They change uniqueness, depictions, and any interpretation that depends on 3D or conformer-derived fields.</p>
+          </div>
+          <div class="card">
+            <h3>Protomers near assay pH</h3>
+            <p class="muted">Heuristic ionization and protomer handling help normalize ranking, but they are still coarse policy choices rather than rigorous microstate modeling.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>When to use each prep preset</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3><code>triage</code></h3>
+              <p class="muted">Use for fast project-wide ranking when you want one pragmatic parent form and an auditable but lightweight structure policy.</p>
+            </div>
+            <div class="card">
+              <h3><code>audit</code></h3>
+              <p class="muted">Use when ambiguity itself is important and the team wants to inspect how salts, tautomers, stereochemistry, or protonation may change downstream conclusions.</p>
+            </div>
+            <div class="card">
+              <h3><code>3d</code></h3>
+              <p class="muted">Use when conformer generation or 3D-sensitive outputs will be used downstream and the working protomer/stereo choice needs to be explicit.</p>
+            </div>
+            <div class="card">
+              <h3><code>external</code></h3>
+              <p class="muted">Use when the project has already made a representation choice upstream and MolScope should preserve rather than reinterpret that decision.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Representation policy for salts, tautomers, stereochemistry, and protomers.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="../tools/ligand-prep.html">Prep tool</a>
+          <a href="columns.html">Columns</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

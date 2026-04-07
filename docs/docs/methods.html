@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Methods • MolScope Toolkit</title>
+    <meta name="description" content="Method cards for MolScope scientific blocks and workflow layers." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Methods</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Scientific basis</div>
+            <h1>Method cards for the main science blocks</h1>
+            <p>MolScope combines deterministic structure handling, descriptor calculations, rule-style heuristics, measured-data joins, and campaign-derived summaries. These cards explain what each layer does and where its use boundary should stop.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a class="is-active" href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <div class="callout">
+            <strong>Named precedents surfaced in MolScope:</strong> CNS MPO, Lipinski Rule of 5, Rule of 3, Pfizer 3/75, GSK 4/400, golden-triangle-style developability checks, and AiZynthFinder-based route planning. MolScope uses those as pragmatic triage frameworks, not as absolute truth claims.
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container method-grid">
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status stable">Stable</span>
+              <span class="badge-evidence utility">Representation policy</span>
+              <span class="badge-evidence calculated">Deterministic transforms</span>
+            </div>
+            <h3>Structure preparation and traceability</h3>
+            <div class="definition-list">
+              <div><strong>What it computes</strong> Standardized parent representations, tautomer/protomer handling, stereo audit fields, and structure-of-record columns such as <code>Input_Canonical_SMILES</code>, <code>Canonical_SMILES</code>, <code>Calc_Base_SMILES</code>, and <code>Calc_Canonical_SMILES</code>.</div>
+              <div><strong>Scientific basis</strong> Reproducible structure standardization and explicit representation tracking so downstream similarity, clustering, and descriptors operate on an understood molecular form.</div>
+              <div><strong>Known limitations</strong> Tautomer or protomer selection is still a policy choice. It does not guarantee biological relevance or capture the full solution ensemble.</div>
+              <div><strong>Recommended use boundary</strong> Use it to make representation decisions explicit and comparable across runs, especially before 3D or series workflows.</div>
+            </div>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status stable">Stable</span>
+              <span class="badge-evidence calculated">Calculated descriptors</span>
+              <span class="badge-evidence heuristic">Rule-style filters</span>
+            </div>
+            <h3>Descriptors, CNS MPO, and drug-likeness frameworks</h3>
+            <div class="definition-list">
+              <div><strong>What it computes</strong> 2D descriptors, CNS MPO, oral and fragment-style filters, QED, and lead metrics used for ranking and triage.</div>
+              <div><strong>Scientific basis</strong> Established descriptor families plus literature-inspired desirability and rule frameworks such as CNS MPO, Rule of 5, Rule of 3, and related med-chem filter sets.</div>
+              <div><strong>Known limitations</strong> These are balancing signals, not direct predictors of potency, efficacy, or human PK.</div>
+              <div><strong>Recommended use boundary</strong> Compare analog families, identify drift, and communicate property balance. Do not read a single score as a decision on its own.</div>
+            </div>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status stable">Stable</span>
+              <span class="badge-evidence heuristic">Liability heuristics</span>
+              <span class="badge-evidence calculated">Descriptor context</span>
+            </div>
+            <h3>Alerts, metabolism, hERG, CYP, and med-chem flags</h3>
+            <div class="definition-list">
+              <div><strong>What it computes</strong> Rule-style alerts, motif flags, burden summaries, and qualitative classes for known liability families.</div>
+              <div><strong>Scientific basis</strong> Recurring medicinal chemistry liability patterns, motif catalogs, and property contexts that often correlate with later experimental trouble.</div>
+              <div><strong>Known limitations</strong> Alert burden is not a calibrated probability of failure. False positives and project-specific exceptions are expected.</div>
+              <div><strong>Recommended use boundary</strong> Use these signals to choose counterscreens, orthogonal assays, and targeted de-risking chemistry rather than as hard gates.</div>
+            </div>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status stable">Stable</span>
+              <span class="badge-evidence heuristic">Exposure heuristics</span>
+              <span class="badge-evidence calculated">Composite scores</span>
+            </div>
+            <h3>Solubility, permeability, PK, and developability composites</h3>
+            <div class="definition-list">
+              <div><strong>What it computes</strong> Solubility and permeability heuristics, PK-facing classifications, and <code>Dev_*</code> developability burden outputs.</div>
+              <div><strong>Scientific basis</strong> Descriptor combinations and pragmatic composite logic informed by familiar med-chem filters such as Pfizer 3/75, GSK 4/400, and golden-triangle-style reasoning.</div>
+              <div><strong>Known limitations</strong> These outputs are coarse proxies for experiment planning. They are not replacements for measured ADME, PK, or formulation work.</div>
+              <div><strong>Recommended use boundary</strong> Use them to prioritize what to test next and to explain why a series may need a broader redesign rather than small potency-first tweaks.</div>
+            </div>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status preview">Preview</span>
+              <span class="badge-evidence measured">Measured data</span>
+              <span class="badge-evidence campaign">Campaign-derived summaries</span>
+            </div>
+            <h3>Assay integration, compare, SAR, MMP, learnings, and dashboard</h3>
+            <div class="definition-list">
+              <div><strong>What it computes</strong> Measured-data joins, round-over-round deltas, scaffold-centric summaries, matched-pair transforms, reusable learnings, and persistent campaign dashboards.</div>
+              <div><strong>Scientific basis</strong> Straightforward table joins, explicit provenance tracking, scaffold grouping, transform extraction, and campaign-derived aggregation rather than black-box prediction.</div>
+              <div><strong>Known limitations</strong> These outputs are only as reliable as identifier joins, series context, and the amount of measured evidence available in the table.</div>
+              <div><strong>Recommended use boundary</strong> Use them to compare rounds, preserve project memory, and summarize what the campaign learned. Treat sparse or heuristic-only lessons as tentative.</div>
+            </div>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status preview">Preview</span>
+              <span class="badge-evidence utility">Optional dependency</span>
+              <span class="badge-evidence campaign">Route prioritization</span>
+            </div>
+            <h3>Retrosynthesis reranking</h3>
+            <div class="definition-list">
+              <div><strong>What it computes</strong> Reranked route summaries and retro-enriched tables using AiZynthFinder outputs plus MolScope policies such as balanced, stock-first, score-first, and shortest.</div>
+              <div><strong>Scientific basis</strong> Optional AiZynthFinder route generation followed by transparent post-processing over route score, precursor stock coverage, and step count.</div>
+              <div><strong>Known limitations</strong> Route scores and stock availability are planning aids, not guarantees of synthetic feasibility, cost, or execution speed.</div>
+              <div><strong>Recommended use boundary</strong> Use reranking as one factor in “make next” prioritization, especially when several compounds look otherwise similar on property balance.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Method cards for the main science and workflow layers.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="validation.html">Validation</a>
+          <a href="uncertainty.html">Uncertainty</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

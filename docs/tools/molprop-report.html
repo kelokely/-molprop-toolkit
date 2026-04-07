@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Report Builder • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Report builder reference for MolScope Toolkit, including the molscope report workflow and legacy molprop-report alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: report builder</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Report builder</h1>
+          <p class="muted" style="max-width:80ch">
+            Builds a shareable report bundle from a results CSV. The report includes category summaries and plots and writes both
+            Markdown and HTML output into a timestamped directory under <code>reports/</code>.
+          </p>
+          <p class="muted" style="max-width:80ch">
+            Command: <code>molscope report</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence measured">Measured</span>
+            <span class="badge-evidence campaign">Campaign</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab is-active" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <pre><code>molscope report results.csv</code></pre>
+          </div>
+          <div class="card">
+            <h3>What you get</h3>
+            <p class="muted" style="margin:0">
+              A folder like <code>reports/&lt;stem&gt;_report_YYYYMMDD_HHMMSS/</code> containing <code>report.md</code>, <code>report.html</code>,
+              and a <code>plots/</code> subfolder.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Stage-aware framing</h2>
+          <div class="card">
+            <pre><code>molscope report results.csv --stage lead-optimization
+molscope report retrosynthesis/demo/retro_enriched.csv --stage backup-series</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              Stage presets add a campaign-aware summary near the top of the report and highlight the columns most relevant
+              to that decision context. The current presets are <code>hit-expansion</code>, <code>lead-optimization</code>,
+              <code>backup-series</code>, and <code>liability-de-risking</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Decision products</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              Reports now include a decision-products section that summarizes operational queues such as
+              <code>make_next</code>, <code>test_next</code>, <code>de_risk_next</code>, <code>hold</code>, and
+              <code>backup_series</code>. The section also separates measured priority evidence from calculated or
+              heuristic signals so teams can see how much of the recommendation is grounded in real data, then adds
+              experiment prompts describing the current hypothesis, the minimal next test set, and the narrowest analog
+              set worth making before the next round.
+            </p>
+            <div class="credibility-strip">
+              <span class="badge-evidence measured">Measured priority evidence</span>
+              <span class="badge-evidence heuristic">Heuristic support</span>
+              <span class="badge-evidence campaign">Campaign context</span>
+            </div>
+            <p class="tool-context-note">
+              Read these layers separately. The report is strongest when measured support, heuristic direction, and round context point the same way.
+              See <a href="../docs/uncertainty.html">Uncertainty</a> for how confidence should change when those layers disagree.
+            </p>
+            <pre><code>molscope report campaign_integrated.csv --stage lead-optimization</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Tip</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              If you want a clean, portable artifact for collaborators, send the entire report directory (or zip it). The HTML
+              report is intended to be readable without a Python environment.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope report</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

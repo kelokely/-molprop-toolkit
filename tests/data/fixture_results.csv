@@ -1,0 +1,5 @@
+Compound_ID,SMILES,CNS_MPO,CNS_MPO_Class,MolWt,LogP,TPSA,QED,SA_Score,SA_Class
+CMPD_001,CCO,4.2,Good,46.07,-0.1,20.2,0.55,2.1,Easy
+CMPD_002,c1ccccc1,3.8,Moderate,78.11,2.1,0.0,0.42,2.5,Easy
+CMPD_003,CC(=O)Oc1ccccc1C(=O)O,5.3,Excellent,180.16,1.31,63.6,0.55,1.58,Easy
+

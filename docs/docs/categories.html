@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Category Guide • MolScope Toolkit</title>
+    <meta name="description" content="Narrative guide to MolScope analysis categories and how they support medicinal-chemistry decisions." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Category guide</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/molprop-analyze.html">Analyze</a>
+          <a href="../tools/molprop-report.html">Report</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Interpretation</div>
+            <h1>How to read the major analysis categories</h1>
+            <p>MolScope categories are designed to support early decision-making rather than replace assays. The main question is always the same: what should this signal change about the next experiment or design round?</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a class="is-active" href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container prose">
+          <div class="grid-2">
+            <div class="card">
+              <h3>In vitro-relevant modules</h3>
+              <p>Use these first for assay planning and early liability review.</p>
+              <ul>
+                <li>Med-chem flags and toxicity alerts for artifact and reactivity risk.</li>
+                <li>Metabolism, CYP burden, and hERG heuristics for counterscreen planning.</li>
+                <li>Solubility and permeability signals for absorption and developability triage.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>In vivo-relevant modules</h3>
+              <p>Use these when deciding which series deserve deeper PK and efficacy work.</p>
+              <ul>
+                <li>PK heuristics for exposure headwinds.</li>
+                <li>Oral filter families for route feasibility.</li>
+                <li>Developability burden for multi-factor prioritization.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>CNS MPO and oral filters</h3>
+            <p>CNS MPO is best used as a balancing signal across lipophilicity, polarity, size, hydrogen-bonding, and basicity. Oral filters are not pass-fail truths; they are compact ways to ask whether the project is drifting into a property region that will demand more formulation or higher doses.</p>
+          </div>
+
+          <div class="card">
+            <h3>Alerts and liability heuristics</h3>
+            <p>Med-chem, toxicity, hERG, CYP, and metabolism outputs are best read as “investigate next” prompts. They identify chemotypes and property combinations that repeatedly create trouble later, so the output should push teams toward orthogonal assays, counterscreens, or targeted chemistry changes.</p>
+          </div>
+
+          <div class="card">
+            <h3>Solubility, permeability, PK, and developability</h3>
+            <p>These sections help answer whether a compound is merely interesting on paper or plausibly practical enough to advance. They are strongest when used comparatively within a series or against a project’s current leads, not as stand-alone claims about absolute in vivo behavior.</p>
+          </div>
+
+          <div class="card">
+            <h3>Series and shape context</h3>
+            <p>Scaffold, cluster, and optional 3D-shape outputs become much more useful once a project is comparing analog families rather than single compounds. Use them to understand whether a liability is local to one chemotype or persistent across the campaign.</p>
+          </div>
+
+          <div class="callout">
+            <strong>Operational rule:</strong> if a category changes what you would synthesize, test, or deprioritize next, it is doing its job. If it only produces columns and no action, the report or picklist should do more interpretive work.
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Narrative category interpretation for medicinal-chemistry review.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="../tools/molprop-analyze.html">Analyze</a>
+          <a href="../tools/molprop-report.html">Report</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

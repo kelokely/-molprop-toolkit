@@ -1,0 +1,7 @@
+include README.md LICENSE requirements.txt
+recursive-include docs *.json *.md
+recursive-include calculators/data *.pkl.gz
+recursive-include molprop_toolkit/resources *.json
+recursive-include examples *
+recursive-include tests/data *.csv
+

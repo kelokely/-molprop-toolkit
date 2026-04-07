@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ligand preparation • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Ligand preparation guidance for MolScope Toolkit: recommended standardization sequence and options for tautomer/stereo/protomer/3D handling." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Command: molscope prep</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Ligand preparation</h1>
+          <p class="muted" style="max-width:92ch">
+            <code>molscope prep</code> turns the documented preparation presets into a real workflow step. “Preparation” in MolScope Toolkit is not a single toggle; it is a reproducible sequence that turns an input SMILES into
+            a standardized parent structure, then optionally resolves tautomer/stereo ambiguity and optionally chooses a protomer
+            at a defined pH before any conformer-based 3D work. The calculators write traceable SMILES columns at each stage so
+            downstream tools can be explicit about which representation they are using.
+          </p>
+          <p class="muted" style="max-width:92ch">
+            The command writes a prep-focused output table plus a summary JSON sidecar. Use it when you want to lock a structure-of-record
+            policy before running the full calculator or sharing a preparation audit with collaborators.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence utility">Representation</span>
+            <span class="badge-evidence calculated">Structure handling</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab is-active" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>What “fully prepared” means (for further calculation)</h2>
+          <div class="card">
+            <pre><code>molscope prep input.smi -o prepared.csv --preset triage</code></pre>
+            <p class="muted" style="margin:0 0 12px">
+              A “fully prepared ligand” means you have made and documented the structural decisions that materially change computed
+              properties: parent fragment selection (salt stripping), charge normalization, tautomer choice, stereochemistry choice,
+              and (if relevant) protonation state at a specified pH. For purely 2D triage descriptors, the default preparation chain
+              is usually sufficient. For any workflow that relies on 3D geometry (3D descriptors, USR/USRCAT similarity, docking,
+              shape screening), stereochemistry and protonation state should be treated as first-class choices rather than left as
+              unspecified.
+            </p>
+            <p class="muted" style="margin:0">
+              In the results CSV, the key traceability columns are <code>Input_Canonical_SMILES</code>, <code>Canonical_SMILES</code>,
+              <code>Calc_Base_SMILES</code>, and <code>Calc_Canonical_SMILES</code>. If you are unsure which to use downstream, prefer
+              <code>Calc_Canonical_SMILES</code>, because it reflects the exact structure used to compute descriptors.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Recommended preparation sequences</h2>
+          <p class="muted" style="max-width: 92ch">
+            Pick one sequence and use it consistently across a project. Switching preparation policy midstream will change clusters,
+            risk flags, and any model training data you derive from the table.
+          </p>
+
+          <div class="tabs">
+            <input type="radio" name="prep" id="prep-standard" checked />
+            <input type="radio" name="prep" id="prep-audit" />
+            <input type="radio" name="prep" id="prep-3d" />
+            <input type="radio" name="prep" id="prep-minimal" />
+
+            <div class="tab-labels">
+              <label for="prep-standard">Standard (2D triage)</label>
+              <label for="prep-audit">Audit ambiguity</label>
+              <label for="prep-3d">3D-ready</label>
+              <label for="prep-minimal">Minimal / external prep</label>
+            </div>
+
+            <div class="tab-panels">
+              <div class="tab-panel tab-standard">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    Use this for the majority of early triage. It produces a standardized parent structure and uses a single canonical
+                    tautomer while leaving stereochemistry as supplied. Ionization is represented as pH-aware features (Ion_* columns)
+                    without changing the structure used for 2D descriptors.
+                  </p>
+                  <p class="muted" style="margin:0 0 12px">
+                    The internal chain is RDKit MolStandardize <code>Cleanup → FragmentParent → Uncharger → Reionizer → Canonicalize tautomer</code>,
+                    followed by stereochemistry assignment for auditing. The standardized parent is written to <code>Canonical_SMILES</code>.
+                  </p>
+                  <pre><code>molscope prep input.smi -o prepared.csv --preset triage</code></pre>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-audit">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    Use this when your inputs are messy or when you want to surface ambiguity explicitly. The calculator enumerates
+                    plausible tautomers and unresolved stereochemistry (bounded by max limits), selects a representative, and records
+                    the enumerated options in <code>Tautomer_*</code> and <code>Stereo_*</code> columns.
+                  </p>
+                  <pre><code>molscope prep input.smi -o prepared_audit.csv --preset audit</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    This mode is about traceability, not about “correct chemistry.” RDKit enumeration is rule-based, and the selected
+                    representative is a reproducible choice, not a guarantee of biological relevance.
+                  </p>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-3d">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    Use this when you will compute conformer-based 3D descriptors (<code>--3d</code>), or when you will cluster with 3D
+                    fingerprints (USR/USRCAT) in <code>molprop-series</code>, or when you plan docking. In these workflows, protonation state
+                    and stereochemistry materially change geometry, so decide them before generating conformers.
+                  </p>
+                  <p class="muted" style="margin:0 0 12px">
+                    A practical reproducible pattern is to enumerate protomers in a defined pH window, select one protomer, compute
+                    descriptors on that protomer (<code>--calc-on-protomer</code>), and then generate 3D conformers with a recorded seed.
+                  </p>
+                  <pre><code># optional dependency
+pip install dimorphite_dl
+
+molscope prep input.smi -o prepared_3d.csv --preset 3d</code></pre>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-minimal">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    Use this only if you already prepared structures externally and you want MolScope Toolkit to treat the input as
+                    authoritative. It disables the internal RDKit MolStandardize preparation chain. Salt forms, alternative tautomers,
+                    and charge variants will remain, which can be appropriate for auditing, but can also fragment your clustering and
+                    inflate “diversity” artificially.
+                  </p>
+                  <pre><code>molscope prep input.smi -o prepared_external.csv --preset external</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Which SMILES should downstream tools use?</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>For series clustering / scaffolds</h3>
+              <p class="muted" style="margin:0">
+                If you generated the results CSV with MolScope Toolkit, run <code>molprop-series</code> on that CSV and let it use the
+                preferred SMILES priority automatically. It will prefer <code>Calc_Canonical_SMILES</code> (calculation structure) and fall
+                back to <code>Canonical_SMILES</code> or <code>SMILES</code> only when needed.
+              </p>
+            </div>
+            <div class="card">
+              <h3>For modeling / 3D workflows</h3>
+              <p class="muted" style="margin:0">
+                Use <code>Calc_Canonical_SMILES</code> as the “structure of record,” and retain the accompanying <code>Protomer_*</code>,
+                <code>Stereo_*</code>, and <code>Tautomer_*</code> columns for auditability. If you need a different protomer distribution or a
+                specific salt form, treat that as a separate dataset variant and document it explicitly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Command • molscope prep</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

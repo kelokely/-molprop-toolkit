@@ -1,0 +1,15 @@
+name: molprop-toolkit
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - rdkit
+  - pandas
+  - numpy
+  - matplotlib
+  - pip
+  - pip:
+      - dimorphite-dl
+      - ruff
+      - pytest
+

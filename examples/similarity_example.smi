@@ -1,0 +1,32 @@
+# Example compounds for similarity search testing
+# Format: SMILES<tab>Name
+CCO	Ethanol
+CCCO	Propanol
+CCCCO	Butanol
+CCCCCO	Pentanol
+CCCCCCO	Hexanol
+c1ccccc1	Benzene
+c1ccccc1O	Phenol
+c1ccccc1N	Aniline
+c1ccccc1C	Toluene
+c1ccc(cc1)O	para-Cresol
+c1ccc(O)c(O)c1	Catechol
+c1ccc2c(c1)cccc2	Naphthalene
+CC(=O)O	Acetic_Acid
+CC(=O)OC	Methyl_Acetate
+CC(=O)OCC	Ethyl_Acetate
+CC(=O)Oc1ccccc1C(=O)O	Aspirin
+CC(C)Cc1ccc(cc1)C(C)C(=O)O	Ibuprofen
+CN1C=NC2=C1C(=O)N(C(=O)N2C)C	Caffeine
+CC(=O)Nc1ccc(O)cc1	Paracetamol
+c1ccc2c(c1)[nH]c1ccccc12	Carbazole
+C1CCCCC1	Cyclohexane
+C1CCCC1	Cyclopentane
+C1CCC1	Cyclobutane
+CCCCCCCC	Octane
+CCCCCCCCCC	Decane
+CC(C)CC	Isopentane
+CC(C)(C)C	Neopentane
+c1cc2ccccc2cc1	Anthracene
+COc1ccccc1	Anisole
+CCOc1ccccc1	Phenetole

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Validation • MolScope Toolkit</title>
+    <meta name="description" content="Validation posture, release gates, and benchmark scope for MolScope Toolkit." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Validation</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Credibility</div>
+            <h1>What is tested today</h1>
+            <p>MolScope is strongest today as a reproducible workflow, a transparent chemistry-table standard, and a set of review-ready outputs. Many scientific signals remain intentionally heuristic, and the docs label them that way.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a class="is-active" href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <div class="callout">
+            <strong>Current validation posture:</strong> MolScope is release-gated as a working campaign workflow first. Formal calibration of heuristic endpoints is a separate and still-growing layer.
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>What is validated now</th>
+                <th>Main remaining risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Workflow contract</td>
+                <td>CLI entrypoints, schema handling, report/picklist generation, compare/portal/dashboard/learnings bundle creation, and Pages-published docs.</td>
+                <td>Regression risk when the public command surface changes faster than acceptance coverage.</td>
+              </tr>
+              <tr>
+                <td>Deterministic table handling</td>
+                <td>Schema compatibility, identifier handling, provenance columns, and campaign-table joins.</td>
+                <td>Join quality still depends on the input IDs and structure-of-record policy chosen by the project.</td>
+              </tr>
+              <tr>
+                <td>Descriptor and rule families</td>
+                <td>Stable calculation and documentation of their intended use as ranking/triage aids.</td>
+                <td>Absolute interpretation can drift if users treat heuristics as validated predictions.</td>
+              </tr>
+              <tr>
+                <td>Campaign-derived workflows</td>
+                <td>Unit and smoke coverage for compare, SAR, MMP, learnings, dashboard, and portal bundle structure.</td>
+                <td>Sparse measured data or weak series context can still generate fragile lessons.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="note-grid">
+            <div class="card">
+              <h3>Release gates</h3>
+              <p class="muted">A release should preserve the canonical quickstart path, stable schema loading, and the shareable artifact workflows users see on the public site.</p>
+            </div>
+            <div class="card">
+              <h3>Why this page matters</h3>
+              <p class="muted">MolScope is meant to be clear about both capability and confidence. This page brings the release checks, evidence boundaries, and confidence labels together in one place.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Current release-gate bundle</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Gate</th>
+                <th>What must stay true</th>
+                <th>Primary artifact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Workflow contract</td>
+                <td><code>molscope calc → analyze --list → report → picklists --html</code> succeeds from the shipped example data.</td>
+                <td>Workflow smoke tests plus shareable HTML bundles.</td>
+              </tr>
+              <tr>
+                <td>Decision outputs</td>
+                <td>Queues still emit rationale, evidence summaries, confidence, and minimal test/analog prompts.</td>
+                <td>Picklist and report unit tests.</td>
+              </tr>
+              <tr>
+                <td>Campaign comparison</td>
+                <td>Compare bundles still produce endpoint deltas, group shifts, and round-review summaries.</td>
+                <td><code>summary.json</code>, <code>round_review.json</code>, and portal-linked compare artifacts.</td>
+              </tr>
+              <tr>
+                <td>Docs credibility</td>
+                <td>Methods, validation, benchmarks, representation, and uncertainty pages stay published on the site.</td>
+                <td>Pages deploy plus docs-link checks.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            <strong>Benchmarks:</strong> Workflow and decision-support release checks are tracked here. Broader scientific calibration is tracked separately on the <a href="benchmarks.html">benchmarks page</a> so heuristic signals are not mistaken for validated predictors.
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>What MolScope does not currently claim</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>No replacement for assays</h3>
+              <p class="muted">Solubility, permeability, PK, safety, and developability outputs are supports for experiment planning. They are not substitutes for measured ADME, electrophysiology, or in vivo studies.</p>
+            </div>
+            <div class="card">
+              <h3>No universal calibration yet</h3>
+              <p class="muted">The public site does not yet ship benchmark plots that show how every heuristic family tracks against external public datasets across chemistry space.</p>
+            </div>
+            <div class="card">
+              <h3>No black-box “AI score”</h3>
+              <p class="muted">The campaign-memory and decision layers are table-driven and provenance-aware. Their value comes from transparent synthesis of evidence, not opaque prediction.</p>
+            </div>
+            <div class="card">
+              <h3>No certainty from sparse context</h3>
+              <p class="muted">Round-to-round or transform-derived lessons are only strong when the campaign has enough analog support and measured follow-up to justify them.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Benchmark roadmap</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Near term</h3>
+              <p class="muted">Publish benchmark bundles for workflow, measured-data joins, compare summaries, and decision-product outputs. The first consolidated view now lives on the <a href="benchmarks.html">benchmarks page</a>.</p>
+            </div>
+            <div class="card">
+              <h3>Later</h3>
+              <p class="muted">Add campaign-level evaluation for compare, learnings, and decision-product usefulness using example round histories and accepted follow-up outcomes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Validation posture and benchmark scope.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="methods.html">Methods</a>
+          <a href="benchmarks.html">Benchmarks</a>
+          <a href="uncertainty.html">Uncertainty</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

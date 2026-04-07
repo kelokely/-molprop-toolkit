@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campaign Search • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Campaign search reference for MolScope Toolkit, including the molscope search workflow and legacy molprop-search alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: campaign search</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Campaign search</h1>
+          <p class="muted" style="max-width:84ch">
+            Search campaign tables by exact SMILES, SMARTS substructure, or a reusable motif panel. This command is designed
+            for med-chem review tables rather than only standalone SMILES files, so the hits stay inside the MolScope workflow.
+          </p>
+          <p class="muted" style="max-width:84ch">
+            Command: <code>molscope search</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status preview">Preview</span>
+            <span class="badge-evidence calculated">Calculated</span>
+            <span class="badge-evidence utility">Utility</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab is-active" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Exact and SMARTS queries</h3>
+            <pre><code>molscope search campaign_integrated.csv -o quinoline_hits \
+  --smarts "c1nc2ccccc2cc1"
+
+molscope search campaign_integrated.csv -o exact_hits \
+  --exact-smiles "CCOc1ccc(NC(=O)N2CCOCC2)cc1"</code></pre>
+          </div>
+          <div class="card">
+            <h3>What you get</h3>
+            <p class="muted" style="margin:0">
+              A compact bundle with <code>search_results.csv</code>, <code>summary.json</code>, <code>summary.md</code>, and
+              motif hit tables when you search a reusable panel.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Motif panels</h2>
+          <div class="card">
+            <pre><code>molscope search campaign_integrated.csv -o alert_panel \
+  --motif-file motifs.tsv</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              Motif files can be simple tab- or comma-delimited name/SMARTS tables. This makes it easy to keep project-specific
+              motif panels or counterscreen motifs outside the calculator itself.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Dependency note</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              Substructure and motif searching require RDKit. Use this command when you want exact or motif-driven retrieval;
+              use <a href="molprop-similarity.html" style="color: var(--brand); text-decoration:none;"><code>molscope similarity</code></a>
+              when the task is nearest-neighbor search or diversity selection.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope search</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

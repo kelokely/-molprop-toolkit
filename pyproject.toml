@@ -1,0 +1,149 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "molprop-toolkit"
+version = "0.6.0"
+description = "Medicinal chemistry property tables, reports, and triage tools"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Elokely Lab", email = "kelokely@uwyo.edu"},
+]
+keywords = [
+    "cheminformatics",
+    "medicinal-chemistry",
+    "drug-discovery",
+    "rdkit",
+    "molecular-properties",
+    "admet",
+    "similarity-search",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "pandas>=1.5.0",
+    "numpy>=1.21.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+parquet = [
+    "pyarrow>=10.0.0",
+]
+parallel = [
+    "joblib>=1.2.0",
+    "tqdm>=4.64.0",
+]
+all = [
+    "pyarrow>=10.0.0",
+    "joblib>=1.2.0",
+    "tqdm>=4.64.0",
+]
+
+[project.scripts]
+# Unified workflow wrapper
+molscope = "molprop_toolkit.cli:main"
+molprop-prep = "molprop_toolkit.tools.prep_cli:main"
+
+# Calculators
+molprop-calc-v4 = "calculators.mpo_v4:main"
+molprop-calc-v5 = "calculators.mpo_v5:main"
+
+# Analyzers
+molprop-analyze = "analyzers.analyzer_master:main"
+
+# Reporting & Output
+molprop-report = "tools.build_report:main"
+molprop-portal = "molprop_toolkit.tools.portal_cli:main"
+molprop-learnings = "molprop_toolkit.tools.learnings_cli:main"
+molprop-dashboard = "molprop_toolkit.tools.dashboard_cli:main"
+molprop-sketch = "tools.sketch_structures:main"
+molprop-picklists = "tools.picklists:main"
+molprop-integrate = "molprop_toolkit.tools.integrate_cli:main"
+molprop-compare = "molprop_toolkit.tools.compare_cli:main"
+molprop-sar = "molprop_toolkit.tools.sar_cli:main"
+molprop-mmp = "molprop_toolkit.tools.mmp_cli:main"
+molprop-search = "molprop_toolkit.tools.search_cli:main"
+
+# Series Analytics
+molprop-series = "tools.series_analytics:main"
+
+# Similarity Search
+molprop-similarity = "molprop_toolkit.tools.similarity_cli:main"
+
+# Feature Engineering
+molprop-featurize = "tools.featurize:main"
+
+# Retrosynthesis
+molprop-retro = "tools.retrosynthesis:main"
+
+[project.urls]
+Homepage = "https://kelokely.github.io/-molprop-toolkit/"
+Repository = "https://github.com/kelokely/-molprop-toolkit"
+Documentation = "https://kelokely.github.io/-molprop-toolkit/"
+Issues = "https://github.com/kelokely/-molprop-toolkit/issues"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["molprop_toolkit*", "calculators*", "analyzers*", "tools*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+extend-exclude = [
+    "analyzers",
+    "calculators",
+    "tools",
+]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4"]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/test_similarity.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true

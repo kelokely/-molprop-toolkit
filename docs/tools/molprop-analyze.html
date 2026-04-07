@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Analyzer • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Analyzer reference for MolScope Toolkit, including the molscope analyze workflow and legacy molprop-analyze alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: analyzer</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Analyzer</h1>
+          <p class="muted" style="max-width:80ch">
+            Registry-driven master analyzer for a results CSV. It lists available categories based on columns present, and can
+            print a narrative description + summary + preview table for a single category.
+          </p>
+          <p class="muted" style="max-width:80ch">
+            Command: <code>molscope analyze</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence calculated">Calculated</span>
+            <span class="badge-evidence heuristic">Heuristic</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab is-active" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>List categories detected in a CSV</h3>
+            <pre><code>molscope analyze results.csv --list</code></pre>
+          </div>
+          <div class="card">
+            <h3>Analyze one category</h3>
+            <pre><code>molscope analyze results.csv --category cns_mpo
+molscope analyze results.csv --category oral_bioavailability
+molscope analyze results.csv --category developability</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Generate a text report (all categories found)</h2>
+          <div class="card">
+            <pre><code># prints a combined report to stdout
+molscope analyze results.csv --report
+
+# save to file
+molscope analyze results.csv --report -o report.txt</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Notes</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              The master analyzer discovers columns using the shared category registry. If a category has no columns present in
+              your dataset, it will be listed but show 0 columns available. This makes it safe to run on partial outputs.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope analyze</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

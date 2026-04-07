@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Featurization • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Featurization reference for MolScope Toolkit, including the molscope featurize workflow and legacy molprop-featurize alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: featurization</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Featurization</h1>
+          <p class="muted" style="max-width:92ch">
+            Generates ML-ready feature packs from a MolScope results table (recommended) or from a SMILES file. Designed for
+            tens-of-thousands of ligands: outputs a sparse hashed fingerprint matrix for scikit-learn / XGBoost / LightGBM, plus
+            optional deep-learning exports (packed-bit fingerprints, aligned SMILES, and graph tensors) and an interpretable
+            functional-group + fragment summary for SAR review.
+          </p>
+          <p class="muted" style="max-width:92ch">
+            Command: <code>molscope featurize</code>.
+          </p>
+          <p class="muted" style="margin-top:-6px">
+            Related: <a href="ligand-prep.html" style="color: var(--brand); text-decoration:none;">Ligand preparation guide</a>
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence calculated">Calculated</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab is-active" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage (from a MolScope table)</h3>
+            <p class="muted">Auto-selects the structure-of-record SMILES and prefers <code>Calc_Canonical_SMILES</code> when present.</p>
+            <pre><code># 1) make a MolScope table (CSV or Parquet)
+molscope calc input.smi -o results.parquet
+
+# 2) build a feature pack
+molscope featurize results.parquet -o features/results_features</code></pre>
+            <p class="muted" style="margin-top:10px">Parquet requires <code>pyarrow</code>. Install via <code>pip install "molprop-toolkit[parquet]"</code> (or <code>pip install pyarrow</code>).</p>
+          </div>
+          <div class="card">
+            <h3>SMILES input mode</h3>
+            <p class="muted">Accepts a simple SMILES file (tab, comma, or whitespace separated).</p>
+            <pre><code>molscope featurize library.smi -o features/library_features</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>What it writes (feature pack layout)</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Model-friendly (sparse) outputs</h3>
+              <p class="muted" style="margin:0 0 12px">
+                The main artifact is a CSR sparse matrix saved as NPZ. This is suitable for scikit-learn and gradient boosting.
+                Numeric descriptor columns from the input table are exported separately so you can scale/impute them explicitly.
+              </p>
+              <pre><code>X_sparse_counts_csr.npz        # CSR: data/indices/indptr/shape
+X_numeric.npy                 # optional dense numeric block
+X_numeric_columns.json        # column names for X_numeric
+ids.csv                       # row_index → Compound_ID + SMILES (always)
+ids.parquet                   # optional (when --id-map-format parquet|both)
+features_spec.json            # optional frozen vocab/block spec (for train/test stability)
+features_metadata.json        # run metadata (includes selected SMILES column)</code></pre>
+            </div>
+            <div class="card">
+              <h3>SAR / interpretability outputs</h3>
+              <p class="muted" style="margin:0 0 12px">
+                For quick SAR exploration and rule-based filtering, the tool can write a compact CSV of functional group counts/flags
+                plus fragment summary columns.
+              </p>
+              <pre><code>features_interpretable.csv    # FG_* + Env_* + fragment summaries
+features_interpretable.parquet# optional (when --interpretable-format parquet|both)
+fragments_brics.json          # BRICS vocabulary + frequencies
+fragments_recap.json          # RECAP vocabulary + frequencies</code></pre>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px">
+            <div class="card">
+              <h3>Deep learning exports</h3>
+              <p class="muted" style="margin:0 0 12px">
+                Exports are framework-agnostic and designed to avoid generating thousands of small files. Fingerprints are packed
+                to bytes by default (2048 bits → 256 bytes per molecule).
+              </p>
+              <pre><code>dl_fp_packed_uint8.npy        # packed bits (default)
+dl_smiles.csv                 # aligned SMILES (for token models)
+dl_graphs.npz                 # concatenated graph tensors (for GNNs)</code></pre>
+            </div>
+            <div class="card">
+              <h3>Feature blocks (how columns are organized)</h3>
+              <p class="muted" style="margin:0 0 12px">
+                <code>X_sparse_counts_csr.npz</code> is a concatenation of multiple blocks. The block offsets and sizes are recorded in
+                <code>features_metadata.json</code>, so you can slice or ablate feature families reproducibly.
+              </p>
+              <pre><code>FP_Morgan   (hashed counts)
+FP_AtomPair (hashed counts)
+FP_Torsion  (hashed counts)
+FG_*        (named functional-group/env features)
+Frag_BRICS  (presence features)
+Frag_RECAP  (presence features)</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common options</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              Run <code>molprop-featurize --help</code> for the full list. Common knobs include structure column choice, fragment method,
+              fingerprint sizes, numeric column selection, and which deep-learning exports to write.
+            </p>
+            <pre><code># choose which SMILES column from results.parquet to featurize
+molprop-featurize results.parquet --smiles-col Canonical_SMILES -o features/out
+
+# fragments (BRICS, RECAP, both, or none)
+molprop-featurize results.parquet --fragments both --max-frags-per-mol 128 -o features/out
+
+# fingerprint dimensions
+molprop-featurize results.parquet --morgan-nbits 4096 --ap-nbits 2048 --torsion-nbits 2048 -o features/out
+
+# deep learning exports
+molprop-featurize results.parquet --dl all --dl-fp-nbits 2048 --dl-fp-format packed -o features/out
+
+# numeric block selection
+molprop-featurize results.parquet --numeric-cols MolWt,LogP,TPSA,CNS_MPO -o features/out
+
+# disable the interpretable summary CSV
+molprop-featurize results.parquet --no-interpretable -o features/out
+
+# freeze vocab + blocks for train/test consistency
+molprop-featurize train.parquet -o features/train_features
+molprop-featurize test.parquet --spec features/train_features/features_spec.json -o features/test_features</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>How to load the sparse matrix (example)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              The NPZ contains CSR arrays. If SciPy is available, construct a <code>csr_matrix</code> directly. This is compatible with
+              scikit-learn estimators and can be passed into XGBoost/LightGBM.
+            </p>
+            <pre><code>import numpy as np
+from scipy.sparse import csr_matrix
+
+npz = np.load("features/out/X_sparse_counts_csr.npz")
+X = csr_matrix((npz["data"], npz["indices"], npz["indptr"]), shape=tuple(npz["shape"]))
+
+# Optional numeric block
+X_num = np.load("features/out/X_numeric.npy")</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope featurize</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

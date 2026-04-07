@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MolScope Toolkit</title>
+    <meta
+      name="description"
+      content="Open-source toolkit to compute medicinal chemistry property tables from SMILES and generate category-focused analysis, reports, and picklists."
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Open-source medchem property tables • reports • picklists</span>
+          </span>
+        </a>
+
+        <nav class="nav">
+          <a href="#overview">Overview</a>
+          <a href="#install">Install</a>
+          <a href="#workflow">Workflow</a>
+          <a href="tools/">Tools</a>
+          <a href="examples/">Examples</a>
+          <a href="docs/">Docs</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="container hero-grid">
+          <div class="hero-copy hero-shell">
+            <div class="eyebrow">Medicinal Chemistry Workflow</div>
+            <h1>MolScope Toolkit: from SMILES to practical medchem triage.</h1>
+            <p class="muted" style="margin:0 0 14px">
+              Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color: var(--brand); text-decoration:none;">Elokely Lab</a> • University of Wyoming School of Pharmacy
+            </p>
+            <p>
+              MolScope Toolkit turns SMILES libraries into analysis-ready property tables, then helps teams summarize liabilities,
+              build shareable reports, and prioritize compounds for the next round of chemistry or profiling.
+            </p>
+            <p>
+              MolScope is organized around one practical workflow: calculate a table, review the signals that matter,
+              generate a report, and turn the results into concrete picklists.
+            </p>
+            <div class="credibility-strip">
+              <span class="badge-status stable">Workflow contract</span>
+              <span class="badge-evidence measured">Measured data supported</span>
+              <span class="badge-evidence heuristic">Heuristic signals labeled</span>
+              <span class="badge-evidence campaign">Campaign memory enabled</span>
+            </div>
+            <p class="muted" style="margin:10px 0 0">
+              Release checks, methods, uncertainty notes, and benchmark details are collected in the
+              <a href="docs/validation.html">validation pages</a> and
+              <a href="docs/benchmarks.html">benchmarks guide</a>.
+            </p>
+
+            <div class="cta-row" id="downloads">
+              <a class="btn primary" href="download/">Download and install</a>
+              <a class="btn" href="examples/">View examples</a>
+              <a class="btn" href="tools/">Browse tools</a>
+            </div>
+
+            <div class="meta-row">
+              <a class="pill" href="#workflow">Recommended workflow</a>
+              <a class="pill" href="#preclinical">Preclinical views</a>
+              <a class="pill" href="https://github.com/kelokely/-molprop-toolkit/issues" target="_blank" rel="noreferrer">Project issues</a>
+            </div>
+          </div>
+
+          <div class="hero-art" aria-hidden="true">
+            <img src="assets/hero.svg?v=2" alt="MolScope Toolkit campaign hero artwork" />
+            <div class="hero-caption">Designed for ranking and triage; not a substitute for experiments.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="workflow">
+        <div class="container">
+          <h2>One straightforward workflow</h2>
+          <p>
+            Most teams use the toolkit the same way: create a results table, inspect categories, package the findings,
+            and turn them into experiment-ready lists.
+          </p>
+
+          <div class="grid-4">
+            <div class="card workflow-step">
+              <div class="step-number">1</div>
+              <h3>Calculate</h3>
+              <p class="muted">Start from SMILES and generate a wide medicinal chemistry results table.</p>
+              <pre><code>molscope calc library.smi -o results.parquet</code></pre>
+            </div>
+            <div class="card workflow-step">
+              <div class="step-number">2</div>
+              <h3>Analyze</h3>
+              <p class="muted">Preview the categories and inspect the liabilities or strengths that matter to the project.</p>
+              <pre><code>molscope analyze results.parquet --list</code></pre>
+            </div>
+            <div class="card workflow-step">
+              <div class="step-number">3</div>
+              <h3>Report</h3>
+              <p class="muted">Create a shareable bundle for medicinal chemistry, DMPK, and project review.</p>
+              <pre><code>molscope report results.parquet</code></pre>
+            </div>
+            <div class="card workflow-step">
+              <div class="step-number">4</div>
+              <h3>Prioritize</h3>
+              <p class="muted">Export operational picklists for follow-up assays, synthesis planning, or series review.</p>
+              <pre><code>molscope picklists results.parquet --html</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>What a decision bundle actually looks like</h2>
+          <p>
+            The generated outputs do more than list columns. They show the current stage, the evidence behind a recommendation,
+            the top operational queues, and the smallest next experiments worth running.
+          </p>
+
+          <div class="grid-2">
+            <div class="card artifact-preview">
+              <div class="artifact-window">
+                <div class="artifact-toolbar">
+                  <span>campaign portal / lead-optimization</span>
+                  <span>round 7 snapshot</span>
+                </div>
+                <div class="artifact-body">
+                  <div class="artifact-chip-row">
+                    <span class="badge-status stable">Decision products</span>
+                    <span class="badge-evidence measured">Measured potency</span>
+                    <span class="badge-evidence heuristic">Permeability heuristic</span>
+                    <span class="badge-evidence campaign">Round-over-round delta</span>
+                  </div>
+
+                  <div class="artifact-stat-grid">
+                    <div class="artifact-stat">
+                      <span>Top series</span>
+                      <strong>Scaffold 12</strong>
+                      <small>Median Measured_pIC50 7.3</small>
+                    </div>
+                    <div class="artifact-stat">
+                      <span>Main unresolved risk</span>
+                      <strong>Permeability</strong>
+                      <small>Good potency, weak transport confidence</small>
+                    </div>
+                    <div class="artifact-stat">
+                      <span>Primary queue</span>
+                      <strong>make_next</strong>
+                      <small>3 compounds selected</small>
+                    </div>
+                  </div>
+
+                  <div class="artifact-panels">
+                    <div class="artifact-panel">
+                      <h3>Decision rationale</h3>
+                      <p>
+                        Measured potency and LLE improved against the prior round, but the top analogs still cluster in a
+                        lipophilicity-heavy region that keeps permeability and hERG follow-up open.
+                      </p>
+                      <div class="artifact-list">
+                        <div class="artifact-list-item">
+                          <strong>Next assay set</strong>
+                          <small>Caco-2, microsomal stability, hERG counterscreen</small>
+                        </div>
+                        <div class="artifact-list-item">
+                          <strong>Minimal analog set</strong>
+                          <small>Two lower-logP analogs and one matched-pair rescue control</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="artifact-panel">
+                      <h3>Decision queues</h3>
+                      <div class="artifact-list">
+                        <div class="artifact-list-item">
+                          <strong>make_next</strong>
+                          <small>Best potency-normalized balance with manageable synthesis routes</small>
+                        </div>
+                        <div class="artifact-list-item">
+                          <strong>test_next</strong>
+                          <small>Most informative compounds for resolving permeability vs liability tradeoffs</small>
+                        </div>
+                        <div class="artifact-list-item">
+                          <strong>de_risk_next</strong>
+                          <small>Backup analogs chosen to challenge hERG and clearance risk directly</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="artifact-note">
+                    Representative output slice from a generated report + picklist + portal workflow, using the same field names the toolkit writes to disk.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-label">Why this matters</div>
+              <h3 style="margin:0 0 10px">Designed to survive a real project meeting</h3>
+              <p class="muted">
+                The intended audience is not just the CLI user. Reports, picklists, and the campaign portal are built so medicinal chemists,
+                DMPK scientists, and project leads can all see the same recommendation trail.
+              </p>
+              <div class="mini-list">
+                <span>Measured signals are separated from heuristic and campaign-derived evidence instead of being blended into one rank.</span>
+                <span>Queues are named by job: what to make next, what to test next, what to de-risk next, and what to hold.</span>
+                <span>Minimal assay and analog sets are surfaced so the output suggests the next discriminating experiment, not just the next score.</span>
+                <span>Round-review summaries highlight positive shifts, negative shifts, and low-coverage endpoints before a team overreads sparse campaign movement.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="install">
+        <div class="container">
+          <h2>Install</h2>
+          <p>
+            For the calculator features you’ll need RDKit. The most reliable public install path is conda‑forge (or Docker).
+            If you already have a compatible results CSV from another pipeline, you can run analyzers without RDKit.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>Recommended: conda (RDKit‑friendly)</h3>
+              <pre><code>git clone https://github.com/kelokely/-molprop-toolkit.git molprop-toolkit
+cd molprop-toolkit
+
+conda env create -f environment.yml
+conda activate molprop-toolkit
+
+# editable install with console scripts + Parquet support
+pip install -e ".[dev,parquet]"</code></pre>
+            </div>
+
+            <div class="card">
+              <h3>Recommended first run</h3>
+              <pre><code># calculator -> results table (CSV or Parquet)
+molscope calc examples/example.smi -o results.parquet
+
+# summary report (md + html)
+molscope report results.parquet
+
+# picklists
+molscope picklists results.parquet --html</code></pre>
+              <span class="code-note">Legacy <code>molprop-*</code> commands still work, but <code>molscope</code> is now the recommended top-level workflow.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="tools">
+        <div class="container">
+          <h2>Tools by job, not by internals</h2>
+          <p class="muted" style="margin-top:-6px">Full tool reference: <a href="tools/" style="color: var(--brand); text-decoration:none;">tools/</a></p>
+          <p>
+            The current release exposes several command-line tools, but the easier way to think about them is by the decision
+            they support rather than the implementation version underneath.
+          </p>
+          <p class="tool-context-note">
+            Tool pages now carry status badges and evidence-type labels. Stable commands are the ones we expect most teams to rely on every week;
+            preview and experimental workflows are newer campaign-memory layers that are still being tightened around real project usage.
+          </p>
+
+          <div class="grid-3">
+            <div class="card">
+              <h3>Core workflow</h3>
+              <p class="muted">Calculate, inspect, report, and prioritize.</p>
+              <div class="mini-list">
+                <span><code>molscope calc</code> for the recommended extended results table</span>
+                <span><code>molscope analyze</code> for category review and exports</span>
+                <span><code>molscope report</code> and <code>molscope picklists</code> for team-ready outputs, experiment prompts, and next-step queues</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Campaign memory</h3>
+              <p class="muted">Bring measured data, comparison, and shared decision bundles into the same workflow.</p>
+              <div class="credibility-strip">
+                <span class="badge-status preview">Preview workflows</span>
+                <span class="badge-status experimental">Experimental memory layers</span>
+              </div>
+              <div class="mini-list">
+                <span><a href="tools/molscope-integrate.html" style="color: var(--brand); text-decoration:none;"><code>molscope integrate</code></a> for measured assay joins and recalculated lead metrics</span>
+                <span><a href="tools/molscope-compare.html" style="color: var(--brand); text-decoration:none;"><code>molscope compare</code></a> for round-over-round and scaffold-level deltas</span>
+                <span><a href="tools/molscope-learnings.html" style="color: var(--brand); text-decoration:none;"><code>molscope learnings</code></a> for reusable lessons distilled from compare, SAR, MMP, and decision queues</span>
+                <span><a href="tools/molscope-dashboard.html" style="color: var(--brand); text-decoration:none;"><code>molscope dashboard</code></a> for a persistent dashboard and knowledge registry for following those lessons across rounds</span>
+                <span><a href="tools/molscope-sar.html" style="color: var(--brand); text-decoration:none;"><code>molscope sar</code></a> and <a href="tools/molscope-mmp.html" style="color: var(--brand); text-decoration:none;"><code>molscope mmp</code></a> for scaffold and transform review</span>
+                <span><a href="tools/molscope-portal.html" style="color: var(--brand); text-decoration:none;"><code>molscope portal</code></a> for one linked workspace spanning reports, picklists, compare, learnings, dashboard, SAR, MMP, and retro</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Series and similarity</h3>
+              <p class="muted">Compare analogs, cluster chemotypes, and support design review.</p>
+              <div class="mini-list">
+                <span><code>molscope series</code> for scaffold and cluster analytics</span>
+                <span><code>molscope similarity</code> for search, matrices, diversity, and clustering</span>
+                <span><code>molscope sketch</code> for clean depictions and browseable structure sheets</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Advanced capabilities</h3>
+              <p class="muted">Model features, structure preparation, and optional retrosynthesis.</p>
+              <div class="mini-list">
+                <span><code>molscope featurize</code> for ML-ready exports</span>
+                <span><a href="tools/ligand-prep.html" style="color: var(--brand); text-decoration:none;"><code>molscope prep</code></a> for structure-of-record decisions and prep audit tables</span>
+                <span><a href="tools/molscope-search.html" style="color: var(--brand); text-decoration:none;"><code>molscope search</code></a> for exact, SMARTS, and motif-panel lookup</span>
+                <span><code>molscope retro</code> for offline AiZynthFinder route generation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="preclinical">
+        <div class="container">
+          <h2>Preclinical profiling</h2>
+          <p>
+            MolScope Toolkit already covers many of the signals teams review before expensive experimental follow-up. The toolkit
+            organizes those outputs into two practical tracks so you can move from structure-based heuristics to experiment planning
+            without rebuilding the dataset.
+          </p>
+          <div class="credibility-strip">
+            <span class="badge-evidence heuristic">Property-based heuristics</span>
+            <span class="badge-evidence measured">Assay data can be merged back in</span>
+            <span class="badge-evidence campaign">Best used comparatively within a campaign</span>
+          </div>
+          <div class="callout" style="margin-top:16px">
+            <strong>Important:</strong> these modules are supports for experiment planning and project communication. They do not replace ADME/PK assays,
+            electrophysiology, or in vivo studies.
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>In vitro-relevant modules</h3>
+              <p class="muted">
+                Use these modules to rank compounds for assay readiness, early ADME/Tox counterscreens, and mechanism-focused
+                liability review.
+              </p>
+              <ul>
+                <li><a href="tools/molprop-calc-v5.html" style="color: var(--brand); text-decoration:none;">Solubility and permeability heuristics</a> for dissolution, absorption, and efflux triage</li>
+                <li><a href="tools/molprop-analyze.html" style="color: var(--brand); text-decoration:none;">Metabolism, CYP, and hERG analyzers</a> for soft spots, inhibition burden, and safety flags</li>
+                <li><a href="docs/categories.html" style="color: var(--brand); text-decoration:none;">Toxicity and med-chem alert narratives</a> for interpreting rule-based liabilities</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3>In vivo-relevant modules</h3>
+              <p class="muted">
+                Use these modules to summarize likely exposure headwinds and decide which series deserve fuller PK and efficacy work.
+              </p>
+              <ul>
+                <li><a href="tools/molprop-calc-v5.html" style="color: var(--brand); text-decoration:none;">PK-oriented outputs</a> covering protein binding, distribution, clearance risk, and oral exposure class</li>
+                <li><a href="tools/molprop-report.html" style="color: var(--brand); text-decoration:none;">Report generation</a> for sharing preclinical package snapshots with project teams</li>
+                <li><a href="tools/molprop-picklists.html" style="color: var(--brand); text-decoration:none;">Picklists and series analytics</a> for prioritizing compounds and scaffolds before in vivo studies</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px">
+            <a class="card link-card" href="docs/categories.html">
+              <h3>Category guide</h3>
+              <p class="muted">Narrative interpretation for preclinical-facing categories including solubility, permeability, PK, metabolism, and developability.</p>
+            </a>
+            <a class="card link-card" href="docs/feature-families.html">
+              <h3>Feature families</h3>
+              <p class="muted">Column-prefix cheat sheet for mapping toolkit outputs into in vitro and in vivo profiling workflows.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="docs">
+        <div class="container">
+          <h2>Documentation</h2>
+          <p>
+            The repo includes detailed column references, feature-family notes, and narrative descriptions of the major analysis
+            categories. Use the links below when you need the deeper reference material behind the main workflow.
+          </p>
+
+          <div class="grid-2">
+            <a class="card link-card" href="quickstart.html">
+              <h3>Quickstart</h3>
+              <p class="muted">Installation, first-run commands, and the canonical workflow.</p>
+            </a>
+            <a class="card link-card" href="docs/columns.html">
+              <h3>Columns reference</h3>
+              <p class="muted">Column conventions, traceability fields, and canonical table structure.</p>
+            </a>
+            <a class="card link-card" href="docs/commands.html">
+              <h3>Command summary</h3>
+              <p class="muted">Canonical workflow commands, calculator profiles, and legacy alias mapping.</p>
+            </a>
+            <a class="card link-card" href="docs/feature-families.html">
+              <h3>Feature families</h3>
+              <p class="muted">Prefix-based “feature-to-columns” cheat sheet.</p>
+            </a>
+            <a class="card link-card" href="docs/categories.html">
+              <h3>Category narratives</h3>
+              <p class="muted">Interpretation notes for major analysis categories.</p>
+            </a>
+            <a class="card link-card" href="docs/use-cases.html">
+              <h3>Use cases</h3>
+              <p class="muted">Routes for triage, comparison, assay integration, scaffold review, collaborator handoff, and prep-heavy workflows.</p>
+            </a>
+            <a class="card link-card" href="docs/methods.html">
+              <h3>Methods and method cards</h3>
+              <p class="muted">What each science block computes, what it is based on, and where to draw its use boundary.</p>
+            </a>
+            <a class="card link-card" href="docs/validation.html">
+              <h3>Validation and release gates</h3>
+              <p class="muted">What is workflow-tested today, what remains heuristic, and where formal calibration still needs work.</p>
+            </a>
+            <a class="card link-card" href="docs/representation-policy.html">
+              <h3>Representation policy</h3>
+              <p class="muted">Why structure-of-record choices, salts, tautomers, stereochemistry, and protomers change downstream results.</p>
+            </a>
+            <a class="card link-card" href="docs/uncertainty.html">
+              <h3>Uncertainty and confidence</h3>
+              <p class="muted">How MolScope labels measured, heuristic, calculated, and campaign-derived evidence and how confidence should be interpreted.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contribute">
+        <div class="container">
+          <h2>Contributing</h2>
+          <p>
+            Contributions are welcome. If you have an idea for a new property family, analyzer, picklist, or report section,
+            open an issue with an example CSV and a short description of the decision you want the tool to support.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href="https://github.com/kelokely/-molprop-toolkit/issues/new/choose" target="_blank" rel="noreferrer">Open an issue</a>
+            <a class="btn" href="https://github.com/kelokely/-molprop-toolkit/pulls" target="_blank" rel="noreferrer">View pull requests</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Open-source toolkit for medicinal chemistry triage outputs.</div>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="download/">Download</a>
+          <a href="docs/">Docs hub</a>
+          <a href="#workflow">Workflow</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

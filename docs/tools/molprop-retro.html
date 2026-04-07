@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retrosynthesis • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Retrosynthesis reference for MolScope Toolkit, including the molscope retro workflow and legacy molprop-retro alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: retrosynthesis</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Retrosynthesis</h1>
+          <p class="muted" style="max-width:84ch">
+            Offline retrosynthesis planning wrapper based on <a style="color:var(--brand); text-decoration:none" href="https://molecularai.github.io/aizynthfinder/" target="_blank" rel="noreferrer">AiZynthFinder</a>.
+            This command delegates planning to AiZynthFinder’s <code>aizynthcli</code> and then post-processes the results into a
+            summary CSV/JSON plus a lightweight HTML browsing site with optional route images.
+          </p>
+          <p class="muted" style="max-width:84ch">
+            Command: <code>molscope retro</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status preview">Preview</span>
+            <span class="badge-evidence campaign">Campaign</span>
+            <span class="badge-evidence utility">Optional</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab is-active" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Install dependencies</h3>
+            <p class="muted">AiZynthFinder is intentionally an optional dependency. Install it when you want retrosynthesis:</p>
+            <pre><code># inside your conda env
+pip install -e .
+
+# install AiZynthFinder separately
+pip install aizynthfinder[all]</code></pre>
+          </div>
+          <div class="card">
+            <h3>Download models + stock and create a config</h3>
+            <p class="muted">AiZynthFinder provides a helper that downloads public data and writes a usable config file.</p>
+            <pre><code>download_public_data aizynth_data
+
+# this creates aizynth_data/config.yml</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Run retrosynthesis on a results CSV</h2>
+          <div class="card">
+            <pre><code>molscope retro results.csv --config aizynth_data/config.yml --top-routes 5 --nproc 4 --rerank-policy balanced
+
+# Write a retro-enriched campaign table for downstream reports/picklists
+molscope retro results.csv --config aizynth_data/config.yml --rerank-policy stock-first --write-retro-table
+
+# If your CSV uses non-standard columns
+molscope retro results.csv --config aizynth_data/config.yml --smiles-col SMILES --id-col Compound_ID</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              Outputs a directory under <code>retrosynthesis/</code> containing <code>routes_summary.csv</code>, <code>routes_summary.json</code>,
+              <code>summary.md</code>, <code>index.html</code>, per-target pages, optional route PNGs, and optionally
+              <code>retro_enriched.csv</code> for downstream campaign workflows.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Run retrosynthesis on a SMILES list</h2>
+          <div class="card">
+            <pre><code>molprop-retro targets.smi --config aizynth_data/config.yml</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              The input can be a single-column SMILES file or a two-column name/SMILES file.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Reranking policies</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 10px">
+              MolScope now reranks route summaries so retrosynthesis can act as a practical prioritization signal, not just a raw route dump.
+            </p>
+            <ul class="muted" style="margin:0; padding-left:18px">
+              <li><code>balanced</code>: mix route score, solved status, stock coverage, and step burden.</li>
+              <li><code>score</code>: stay closest to AiZynthFinder top scores.</li>
+              <li><code>stock-first</code>: prefer compounds with higher precursor stock coverage.</li>
+              <li><code>shortest</code>: prefer shorter routes when route counts are similar.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Notes</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              Retrosynthesis quality depends heavily on the chosen policy model and stock definition. The public download is a
+              good starting point, but real project use typically requires a curated purchasables stock and tuned settings.
+              MolScope Toolkit treats retrosynthesis outputs as a prioritization signal (route score, step count, precursors in stock,
+              and rerank policy), not as a guarantee of synthetic feasibility.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope retro</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

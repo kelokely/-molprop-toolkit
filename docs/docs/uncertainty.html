@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Uncertainty and Confidence • MolScope Toolkit</title>
+    <meta name="description" content="How MolScope labels evidence and decision confidence." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Uncertainty and confidence</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Evidence hierarchy</div>
+            <h1>Confidence should track evidence quality, not interface polish</h1>
+            <p>MolScope now surfaces decision products and campaign-memory outputs. That only helps if the site makes it obvious what is measured, what is heuristic, what is calculated, and what is campaign-derived summary.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a class="is-active" href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <div class="credibility-strip">
+            <span class="badge-evidence measured">Measured</span>
+            <span class="badge-evidence calculated">Calculated</span>
+            <span class="badge-evidence heuristic">Heuristic</span>
+            <span class="badge-evidence campaign">Campaign-derived</span>
+          </div>
+          <p style="margin-top:14px">
+            These evidence types should not be treated as interchangeable. Measured data usually deserves the most weight,
+            campaign-derived summaries depend on the quality of the underlying rows, and heuristic or calculated signals are best used for ranking and question-setting.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Confidence label</th>
+                <th>Typical evidence mix</th>
+                <th>How to act on it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>High</strong></td>
+                <td>Measured potency or assay support is present, missingness is low, and the recommendation is consistent with campaign context.</td>
+                <td>Reasonable to use as a primary review signal, while still checking for project-specific exceptions.</td>
+              </tr>
+              <tr>
+                <td><strong>Medium</strong></td>
+                <td>Mixed measured and heuristic support, or good calculated support with some missing key assays.</td>
+                <td>Useful for prioritization, but should usually trigger a discriminating assay or rescue design before stronger commitment.</td>
+              </tr>
+              <tr>
+                <td><strong>Low</strong></td>
+                <td>Mostly heuristic evidence, sparse analog context, conflicting signals, or major missing measured endpoints.</td>
+                <td>Treat as a prompt for what to test next, not as a reason to over-interpret the current ranking.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container note-grid">
+          <div class="card">
+            <h3>What lowers confidence</h3>
+            <p class="muted">Missing potency, missing counterscreens, sparse series context, one-off transforms, and recommendations driven mostly by heuristics rather than measured outcomes.</p>
+          </div>
+          <div class="card">
+            <h3>What raises confidence</h3>
+            <p class="muted">Measured support, repeated analog trends, consistent round-over-round movement, and recommendations that survive multiple evidence types pointing the same way.</p>
+          </div>
+          <div class="card">
+            <h3>Tentative campaign learnings</h3>
+            <p class="muted">A learning is tentative when it comes from one transform, one series branch, or a mostly heuristic table without much measured confirmation.</p>
+          </div>
+          <div class="card">
+            <h3>Robust campaign learnings</h3>
+            <p class="muted">A learning becomes stronger when several analogs, rounds, or matched-pair contexts support the same directional conclusion and the measured outcomes agree.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Evidence hierarchy and decision-confidence framing.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="methods.html">Methods</a>
+          <a href="validation.html">Validation</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

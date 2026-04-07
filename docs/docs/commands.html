@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Command Summary • MolScope Toolkit</title>
+    <meta name="description" content="Canonical MolScope command surface, profiles, and compatibility aliases." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Command summary</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Workflow</div>
+            <h1>Canonical MolScope commands</h1>
+            <p>The public command surface is intentionally small: one workflow, a few specialist commands, and compatibility aliases for older `molprop-*` entrypoints.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a class="is-active" href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container prose">
+          <div class="grid-2">
+            <div class="card">
+              <h3>Core workflow</h3>
+              <div class="example-stack">
+                <pre><code>molscope calc library.smi -o results.parquet
+molscope analyze results.parquet --list
+molscope report results.parquet
+molscope picklists results.parquet --html</code></pre>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Bundle those outputs</h3>
+              <div class="example-stack">
+                <pre><code>molscope portal --report-dir reports/demo \
+  --picklists-dir picklists/demo \
+  --compare-dir compare/demo \
+  -o portal/demo</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin:16px 0 20px">
+            <h3>Calculator profiles</h3>
+            <ul>
+              <li><code>extended</code>: recommended default profile for full med-chem and developability triage.</li>
+              <li><code>baseline</code>: smaller med-chem-first profile for lighter runs and simpler tables.</li>
+            </ul>
+          </div>
+
+          <div class="callout" style="margin-bottom:20px">
+            <strong>Status legend:</strong> <span class="badge-status stable">Stable</span> commands anchor the public workflow today.
+            <span class="badge-status preview">Preview</span> commands are newer campaign-memory layers that are already usable but still settling.
+            <span class="badge-status experimental">Experimental</span> commands are intentionally conservative in how hard they should be leaned on.
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Purpose</th>
+                <th>Status</th>
+                <th>Evidence focus</th>
+                <th>Legacy alias</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>molscope calc</code></td><td>Create the recommended extended results table from SMILES.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence calculated">Calculated</span> <span class="badge-evidence heuristic">Heuristic</span></td><td><code>molprop-calc-v5</code></td></tr>
+              <tr><td><code>molscope prep</code></td><td>Apply an explicit structure-of-record policy before heavy calculation or sharing prep audits.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence utility">Representation</span> <span class="badge-evidence calculated">Calculated</span></td><td><code>molprop-prep</code></td></tr>
+              <tr><td><code>molscope analyze</code></td><td>Inspect categories, summarize liabilities, and export focused slices.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence calculated">Calculated</span> <span class="badge-evidence heuristic">Heuristic</span></td><td><code>molprop-analyze</code></td></tr>
+              <tr><td><code>molscope report</code></td><td>Build a shareable Markdown and HTML report bundle.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence measured">Measured</span> <span class="badge-evidence campaign">Campaign</span></td><td><code>molprop-report</code></td></tr>
+              <tr><td><code>molscope picklists</code></td><td>Generate operational decision lists and optional HTML outputs.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence measured">Measured</span> <span class="badge-evidence campaign">Campaign</span></td><td><code>molprop-picklists</code></td></tr>
+              <tr><td><code>molscope portal</code></td><td>Assemble report, compare, SAR, MMP, picklist, and retro bundles into one linked workspace.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence campaign">Campaign</span> <span class="badge-evidence measured">Measured</span></td><td><code>molprop-portal</code></td></tr>
+              <tr><td><code>molscope sketch</code></td><td>Render 2D structures and browseable sketch sheets.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence utility">Utility</span></td><td><code>molprop-sketch</code></td></tr>
+              <tr><td><code>molscope integrate</code></td><td>Merge measured assay endpoints into the canonical MolScope results table.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence measured">Measured</span> <span class="badge-evidence campaign">Campaign</span></td><td><code>molprop-integrate</code></td></tr>
+              <tr><td><code>molscope compare</code></td><td>Compare two campaign tables and summarize dataset, endpoint, and scaffold shifts.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence measured">Measured</span> <span class="badge-evidence campaign">Campaign</span></td><td><code>molprop-compare</code></td></tr>
+              <tr><td><code>molscope learnings</code></td><td>Synthesize compare, SAR, MMP, and decision outputs into reusable campaign lessons.</td><td><span class="badge-status experimental">Experimental</span></td><td><span class="badge-evidence campaign">Campaign</span> <span class="badge-evidence measured">Measured</span></td><td><code>molprop-learnings</code></td></tr>
+              <tr><td><code>molscope dashboard</code></td><td>Accumulate learnings bundles into a persistent campaign dashboard and knowledge registry.</td><td><span class="badge-status experimental">Experimental</span></td><td><span class="badge-evidence campaign">Campaign</span></td><td><code>molprop-dashboard</code></td></tr>
+              <tr><td><code>molscope sar</code></td><td>Build a scaffold-centric SAR bundle with series summaries and top compounds.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence campaign">Campaign</span> <span class="badge-evidence measured">Measured</span></td><td><code>molprop-sar</code></td></tr>
+              <tr><td><code>molscope mmp</code></td><td>Build matched-pair tables and aggregate transform summaries from a campaign table.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence campaign">Campaign</span> <span class="badge-evidence measured">Measured</span></td><td><code>molprop-mmp</code></td></tr>
+              <tr><td><code>molscope search</code></td><td>Search campaign tables by exact SMILES, SMARTS substructure, or motif panel.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence calculated">Calculated</span> <span class="badge-evidence utility">Utility</span></td><td><code>molprop-search</code></td></tr>
+              <tr><td><code>molscope series</code></td><td>Annotate scaffolds and similarity-based series clusters.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence calculated">Calculated</span> <span class="badge-evidence campaign">Campaign</span></td><td><code>molprop-series</code></td></tr>
+              <tr><td><code>molscope similarity</code></td><td>Run similarity search, matrices, diversity picking, and clustering.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence calculated">Calculated</span></td><td><code>molprop-similarity</code></td></tr>
+              <tr><td><code>molscope featurize</code></td><td>Export ML-ready feature packs and optional deep-learning assets.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence calculated">Calculated</span></td><td><code>molprop-featurize</code></td></tr>
+              <tr><td><code>molscope retro</code></td><td>Run offline retrosynthesis via AiZynthFinder and rerank route summaries.</td><td><span class="badge-status preview">Preview</span></td><td><span class="badge-evidence campaign">Campaign</span> <span class="badge-evidence utility">Optional</span></td><td><code>molprop-retro</code></td></tr>
+              <tr><td><code>molscope schema</code></td><td>Validate result tables against the published column schema.</td><td><span class="badge-status stable">Stable</span></td><td><span class="badge-evidence utility">Utility</span></td><td><code>python tools/validate_csv_schema.py</code></td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout">
+            <strong>Recommended default:</strong> lead with <code>molscope</code> in docs, examples, and training material, even when compatibility aliases still exist for older scripts.
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Command surface aligned to the public workflow.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../tools/">Tools</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

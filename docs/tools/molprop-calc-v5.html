@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Extended Calculator • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Extended calculator reference for MolScope Toolkit, including the recommended molscope calc workflow." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: extended calculator</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Extended calculator</h1>
+          <p class="muted" style="max-width:82ch">
+            Extended calculator that includes everything in v4 plus solubility, permeability, PK heuristics, lead metrics,
+            and optional conformer-based 3D shape descriptors (<code>3D_*</code>). It also emits developability indices (<code>Dev_*</code>).
+          </p>
+          <p class="muted" style="max-width:82ch">
+            Command: <code>molscope calc</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence calculated">Calculated</span>
+            <span class="badge-evidence heuristic">Heuristic</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab is-active" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <p class="muted">Output format is inferred from the filename extension: <code>.csv</code>, <code>.tsv</code>, or <code>.parquet</code>.</p>
+            <pre><code># preferred wrapper
+molscope calc input.smi -o results.csv
+
+# equivalent (script form)
+python calculators/mpo_v5.py input.smi -o results.csv</code></pre>
+          </div>
+          <div class="card">
+            <h3>Optional 3D mode</h3>
+            <p class="muted">Adds <code>3D_*</code> columns using RDKit ETKDG conformers (treat as qualitative ranking features).</p>
+            <pre><code>molscope calc input.smi -o results.csv --3d --3d-num-confs 10 --3d-minimize mmff</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Ligand preparation (recommended sequences)</h2>
+          <p class="muted" style="margin-top:-6px">See also: <a href="ligand-prep.html" style="color: var(--brand); text-decoration:none;">Ligand preparation guide</a></p>
+          <p class="muted" style="max-width: 92ch">
+            The calculators can work directly from the input SMILES, but most downstream comparisons only make sense if you
+            standardize structures consistently. In MolScope Toolkit, “preparation” is a chain of steps that produces traceable
+            SMILES columns: <code>Input_Canonical_SMILES</code> (canonicalized input), <code>Canonical_SMILES</code> (standardized parent),
+            <code>Calc_Base_SMILES</code> (post tautomer/stereo selection, pre-protomer), and <code>Calc_Canonical_SMILES</code> (the structure
+            actually used for descriptor calculation). Choose one sequence and keep it stable across a project.
+          </p>
+
+          <div class="tabs">
+            <input type="radio" name="prep" id="prep-standard" checked />
+            <input type="radio" name="prep" id="prep-audit" />
+            <input type="radio" name="prep" id="prep-3d" />
+            <input type="radio" name="prep" id="prep-minimal" />
+
+            <div class="tab-labels">
+              <label for="prep-standard">Standard (recommended)</label>
+              <label for="prep-audit">Audit / enumerate</label>
+              <label for="prep-3d">3D-ready / USRCAT</label>
+              <label for="prep-minimal">Minimal / raw</label>
+            </div>
+
+            <div class="tab-panels">
+              <div class="tab-panel tab-standard">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    This is the default “medchem triage” posture: normalize salts and common charge forms, canonicalize a single
+                    tautomer, keep stereochemistry as provided, and add pH-aware ionization features without enumerating explicit
+                    protonation states. This yields stable 2D descriptors and keeps the table interpretable.
+                  </p>
+                  <p class="muted" style="margin:0 0 12px">
+                    Internally, this follows RDKit MolStandardize <code>Cleanup → FragmentParent → Uncharger → Reionizer → Canonicalize tautomer</code>,
+                    then assigns stereochemistry for auditing. The structure used for calculation is recorded in <code>Calc_Canonical_SMILES</code>.
+                  </p>
+                  <pre><code>molscope calc input.smi -o results.csv \
+  --ph 7.4 \
+  --ionization heuristic \
+  --tautomer-mode prep-canonical \
+  --stereo-mode keep</code></pre>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-audit">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    Use this when you want explicit visibility into ambiguity. The calculator enumerates plausible tautomers and
+                    unresolved stereocenters (bounded by max limits), selects a representative, and records the enumerated sets in
+                    <code>Tautomer_*</code> and <code>Stereo_*</code> columns. This is useful when you are cleaning vendor data, merging
+                    sources, or preparing a modeling-ready table where you need to understand what was “decided” by the pipeline.
+                  </p>
+                  <pre><code>molscope calc input.smi -o results.csv \
+  --tautomer-mode enumerate --tautomer-max 64 --tautomer-topk 5 \
+  --stereo-mode enumerate --stereo-max 32 --stereo-topk 5 --stereo-select canonical</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    This still does not change the structure to a pH-selected protomer unless you enable protomer enumeration.
+                    It focuses on making tautomer/stereo assumptions explicit.
+                  </p>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-3d">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    If you will compute conformer-based 3D descriptors (<code>--3d</code>) or use 3D fingerprints for clustering
+                    (<code>--fp usr</code>/<code>--fp usrcat</code> in <code>molprop-series</code>), you should decide stereochemistry and protonation
+                    state up front. 3D geometry depends on both; leaving them ambiguous can make “the same compound” behave like a
+                    different molecule from one run or dataset to the next.
+                  </p>
+                  <p class="muted" style="margin:0 0 12px">
+                    A practical reproducible option is to enumerate protomers at a defined pH window, select one protomer, compute
+                    descriptors on that protomer, and then generate 3D conformers with an explicit seed. The chosen structure is
+                    recorded in <code>Calc_Canonical_SMILES</code>, and protomer choice is recorded in <code>Protomer_*</code> columns.
+                  </p>
+                  <pre><code># optional dependency
+pip install dimorphite_dl
+
+molscope calc input.smi -o results.csv \
+  --ph 7.4 --ionization dimorphite --calc-on-protomer \
+  --protomer-select closest-charge \
+  --tautomer-mode prep-canonical \
+  --stereo-mode keep \
+  --3d --3d-num-confs 10 --3d-minimize mmff --3d-seed 0</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    If stereo is frequently missing in your inputs and 3D features matter, pair this with <code>--stereo-mode enumerate</code>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="tab-panel tab-minimal">
+                <div class="card">
+                  <p class="muted" style="margin:0 0 12px">
+                    This mode is only recommended if you have already standardized structures elsewhere and you want the calculator
+                    to treat the input as authoritative. It disables the RDKit MolStandardize preparation step. You can still compute
+                    properties, but salt forms, charge variants, and inconsistent tautomer forms will propagate into the table.
+                  </p>
+                  <pre><code>molscope calc input.smi -o results.csv --no-prep --tautomer-mode none --ionization none</code></pre>
+                  <p class="muted" style="margin:12px 0 0">
+                    If you later run <code>molprop-series</code>, clustering will reflect whatever structural diversity is present in the
+                    raw inputs, including salts and alternate tautomers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common options</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">Run <code>molscope calc --help</code> for the complete list. Common knobs:</p>
+            <pre><code># pH / ionization
+molscope calc input.smi -o results.csv --ph 7.4 --ionization heuristic
+
+# protomer enumeration (optional dependency)
+pip install dimorphite_dl
+molscope calc input.smi -o results.csv --ionization dimorphite --ph 7.4
+
+# compute descriptors on the selected protomer
+molscope calc input.smi -o results.csv --ionization dimorphite --ph 7.4 --calc-on-protomer
+
+# stereo and tautomer handling
+molscope calc input.smi -o results.csv --stereo-mode enumerate --stereo-max 32
+molscope calc input.smi -o results.csv --tautomer-mode enumerate</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Downstream usage</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Category summaries</h3>
+              <pre><code>molprop-analyze results.csv --list
+molprop-analyze results.csv --category developability
+molprop-analyze results.csv --category cns_mpo</code></pre>
+            </div>
+            <div class="card">
+              <h3>Report bundle</h3>
+              <pre><code>molprop-report results.csv</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope calc</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

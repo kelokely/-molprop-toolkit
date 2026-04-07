@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Use Cases • MolScope Toolkit</title>
+    <meta name="description" content="Job-oriented routes through MolScope Toolkit workflows." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Use cases</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Jobs</div>
+            <h1>Start from the job, not the command list.</h1>
+            <p>MolScope is easiest to learn when you route from the chemistry task you are trying to complete. These job paths keep the public surface small while still exposing deeper campaign-memory workflows.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a class="is-active" href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container use-case-grid">
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status stable">Stable</span>
+              <span class="badge-evidence heuristic">Heuristic triage</span>
+              <span class="badge-evidence calculated">Calculated descriptors</span>
+            </div>
+            <h3>Triage a fresh library</h3>
+            <p class="muted">Best when you have SMILES, no measured data yet, and need a med-chem-first table plus immediate next-step queues.</p>
+            <div class="use-case-steps">
+              <span><code>molscope prep</code> if structure handling needs to be explicit.</span>
+              <span><code>molscope calc</code> to generate the canonical table.</span>
+              <span><code>molscope analyze</code>, <code>molscope report</code>, and <code>molscope picklists</code> to create review-ready outputs.</span>
+            </div>
+            <p class="tool-context-note">Start here for ranking, screening, and “what should we test first?” workflows.</p>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status preview">Preview</span>
+              <span class="badge-evidence measured">Measured data</span>
+              <span class="badge-evidence campaign">Campaign memory</span>
+            </div>
+            <h3>Merge assay data into the campaign table</h3>
+            <p class="muted">Best when potency, solubility, permeability, or safety panel data have arrived and the project needs one source of truth again.</p>
+            <div class="use-case-steps">
+              <span><code>molscope integrate</code> to join assay endpoints and stamp provenance.</span>
+              <span><code>molscope report --stage ...</code> to shift the story from heuristic rank to measured campaign state.</span>
+              <span><code>molscope picklists</code> to produce measured-priority queues.</span>
+            </div>
+            <p class="tool-context-note">This is the bridge from pre-assay triage to project memory.</p>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status preview">Preview</span>
+              <span class="badge-evidence measured">Measured deltas</span>
+              <span class="badge-evidence campaign">Round comparison</span>
+            </div>
+            <h3>Compare one round to the last round</h3>
+            <p class="muted">Best when the project question is about movement: which series improved, which liabilities worsened, and where the campaign is drifting.</p>
+            <div class="use-case-steps">
+              <span><code>molscope compare</code> to summarize dataset, endpoint, and scaffold shifts.</span>
+              <span><code>molscope learnings</code> to extract reusable lessons.</span>
+              <span><code>molscope dashboard</code> to persist those lessons across rounds.</span>
+            </div>
+            <p class="tool-context-note">Use this route when the unit of meaning is the campaign, not one table.</p>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status preview">Preview</span>
+              <span class="badge-evidence campaign">Series context</span>
+              <span class="badge-evidence measured">Measured metrics when present</span>
+            </div>
+            <h3>Review a scaffold split or SAR branch</h3>
+            <p class="muted">Best when multiple chemotypes or substitution branches are competing for attention and the team needs reusable SAR summaries.</p>
+            <div class="use-case-steps">
+              <span><code>molscope series</code> for scaffold and cluster context.</span>
+              <span><code>molscope sar</code> for scaffold-centric bundle outputs.</span>
+              <span><code>molscope mmp</code> when matched-pair transforms are the clearest way to summarize change.</span>
+            </div>
+            <p class="tool-context-note">Use this route to turn rows into project learnings rather than ad hoc notebook conclusions.</p>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status preview">Preview</span>
+              <span class="badge-evidence campaign">Cross-linked outputs</span>
+              <span class="badge-evidence measured">Measured + heuristic mix</span>
+            </div>
+            <h3>Build a collaborator-ready bundle</h3>
+            <p class="muted">Best when you want the campaign story to survive outside the terminal and outside the local Python environment.</p>
+            <div class="use-case-steps">
+              <span><code>molscope report</code> and <code>molscope picklists --html</code> for review-ready artifacts.</span>
+              <span><code>molscope portal</code> to assemble reports, picklists, compare, learnings, dashboard, SAR, MMP, and retro outputs into one workspace.</span>
+            </div>
+            <p class="tool-context-note">This is the most effective path for project meetings and collaborator handoff.</p>
+          </div>
+
+          <div class="card method-card">
+            <div class="credibility-strip">
+              <span class="badge-status stable">Stable</span>
+              <span class="badge-evidence utility">Workflow utility</span>
+              <span class="badge-evidence calculated">Structure handling</span>
+            </div>
+            <h3>Prepare structures for 3D-heavy work</h3>
+            <p class="muted">Best when salts, tautomers, protonation, or stereochemistry will materially change 3D descriptors, clustering, or human interpretation.</p>
+            <div class="use-case-steps">
+              <span><code>molscope prep --preset 3d</code> for representation-aware preparation.</span>
+              <span><code>molscope calc</code> with 3D output options when geometry-sensitive descriptors are needed.</span>
+              <span><code>molscope sketch</code> for portable structure review sheets.</span>
+            </div>
+            <p class="tool-context-note">Use the <a href="representation-policy.html">representation policy</a> page to decide which form should be treated as the structure of record.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Job-based routes through the command surface.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

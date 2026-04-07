@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Decision Picklists • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Decision picklist reference for MolScope Toolkit, including the molscope picklists workflow." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: decision picklists</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Decision picklists</h1>
+          <p class="muted" style="max-width:82ch">
+            Generates operational decision picklists from a results CSV using filters/sorts. Outputs one CSV per picklist and
+            can optionally produce an HTML index and per-picklist pages. Built-in picklists provide sensible defaults, and you
+            can supply a JSON/YAML config to define project-specific rules.
+          </p>
+          <p class="muted" style="max-width:82ch">
+            Command: <code>molscope picklists</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence measured">Measured</span>
+            <span class="badge-evidence campaign">Campaign</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab is-active" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>List built-in picklists</h3>
+            <pre><code>molscope picklists results.csv --list-builtins</code></pre>
+          </div>
+          <div class="card">
+            <h3>Run picklists (HTML + CSV)</h3>
+            <pre><code>molscope picklists results.csv --html</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Stage-aware defaults</h2>
+          <div class="card">
+            <pre><code>molscope picklists results.csv --stage hit-expansion --html
+molscope picklists retrosynthesis/demo/retro_enriched.csv --stage lead-optimization --html</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              When you pass <code>--stage</code> without explicit <code>--picklists</code>, MolScope chooses a stage-appropriate
+              subset of built-in picklists automatically. The current presets are <code>hit-expansion</code>,
+              <code>lead-optimization</code>, <code>backup-series</code>, and <code>liability-de-risking</code>.
+            </p>
+            <p class="muted" style="margin:12px 0 0">
+              The current decision queues are built to feel more operational than the older export-style picklists:
+              <code>make_next</code>, <code>test_next</code>, <code>de_risk_next</code>, <code>hold</code>, and
+              <code>backup_series</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Decision-ready outputs</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              Picklist outputs now carry explicit decision fields such as <code>Decision_Queue</code>,
+              <code>Decision_Rationale</code>, <code>Decision_Next_Action</code>, <code>Decision_Confidence</code>, and
+              <code>Decision_Evidence_Summary</code>. They now also include <code>Decision_Hypothesis</code>,
+              <code>Decision_Minimal_Test_Set</code>, and <code>Decision_Minimal_Analog_Set</code> so the exported CSV and
+              HTML pages suggest the smallest next experiment or chemistry move instead of stopping at ranking.
+            </p>
+            <div class="credibility-strip">
+              <span class="badge-evidence measured">Measured support</span>
+              <span class="badge-evidence heuristic">Heuristic support</span>
+              <span class="badge-evidence campaign">Campaign context</span>
+            </div>
+            <p class="tool-context-note">
+              <code>Decision_Confidence</code> should be interpreted as an evidence-quality label, not a promise. Use the
+              <a href="../docs/uncertainty.html">Uncertainty</a> page when you want to know why one queue is ready for action and another is only a test prompt.
+            </p>
+            <pre><code>molscope picklists campaign_integrated.csv --stage lead-optimization --html</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Custom picklists via config</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">Start from the example config:</p>
+            <pre><code>cp examples/picklists.example.json my_picklists.json
+
+molscope picklists results.csv --config my_picklists.json --html</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Embed structure images (optional)</h2>
+          <div class="card">
+            <pre><code># generate structure assets
+molscope sketch results.csv --outdir sketches_compare --compare --html
+
+# build picklists with embedded structure thumbnails
+molscope picklists results.csv --html --sketch-dir sketches_compare --structure-views calc --structure-formats svg</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope picklists</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

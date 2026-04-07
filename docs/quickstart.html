@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quickstart • MolScope Toolkit</title>
+    <meta name="description" content="Quickstart guide for MolScope Toolkit: install, run calculators, generate reports and picklists." />
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Quickstart</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="./">Home</a>
+          <a href="./#workflow">Workflow</a>
+          <a href="tools/">Tools</a>
+          <a href="docs/">Docs</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container hero-shell">
+          <div class="eyebrow">Examples</div>
+          <h1 style="margin:0 0 10px; font-size:36px; line-height:1.15">Quickstart: from SMILES to report in minutes</h1>
+          <p class="muted" style="max-width: 74ch">
+            This guide runs the full “happy path” on the included sample file (<code>examples/example.smi</code>). It produces a
+            wide results table, then creates a shareable report bundle and HTML picklists.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>1) Install (recommended: conda)</h3>
+            <p class="muted">This is the most reliable public setup for RDKit-based calculators.</p>
+            <pre><code>git clone https://github.com/kelokely/-molprop-toolkit.git molprop-toolkit
+cd molprop-toolkit
+
+conda env create -f environment.yml
+conda activate molprop-toolkit
+
+pip install -e ".[dev,parquet]"</code></pre>
+          </div>
+          <div class="card">
+            <h3>2) Generate a results table</h3>
+            <p class="muted">
+              The recommended public entry point today is <code>molscope calc</code>. It defaults to the extended calculator
+              profile with solubility, permeability, PK heuristics, and optional 3D descriptors.
+              Output format is inferred from the filename extension: <code>.csv</code>, <code>.tsv</code>, or <code>.parquet</code>.
+            </p>
+            <p class="muted">
+              If you want to inspect structure handling first, run <code>molscope prep examples/example.smi -o prepared.csv --preset triage</code>
+              before the calculator. That writes a prep-focused audit table plus a summary JSON sidecar.
+            </p>
+            <pre><code># CSV
+molscope calc examples/example.smi -o results.csv
+
+# Parquet (recommended for large libraries)
+molscope calc examples/example.smi -o results.parquet
+
+# sanity check: list analysis categories present
+molscope analyze results.parquet --list</code></pre>
+            <p class="muted" style="margin-top:10px">
+              Parquet requires <code>pyarrow</code>. Install via <code>pip install "molprop-toolkit[parquet]"</code> or <code>pip install pyarrow</code>.
+            </p>
+            <p class="muted" style="margin-top:10px">
+              Compatibility aliases remain available for older scripts, but this guide uses <code>molscope</code> consistently.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>3) Build a report bundle (Markdown + HTML)</h3>
+            <p class="muted">Creates a timestamped folder under <code>reports/</code> with report and plots. Accepts CSV/TSV/Parquet.</p>
+            <pre><code>molscope report results.parquet</code></pre>
+            <p class="muted" style="margin-top:10px">Look for an output path like <code>reports/results_report_YYYYMMDD_HHMMSS/report.html</code>.</p>
+          </div>
+          <div class="card">
+            <h3>4) Generate picklists (CSV + HTML)</h3>
+            <p class="muted">Picklists are operational “decision lists” derived from filters and sorts. Accepts CSV/TSV/Parquet.</p>
+            <pre><code># built-in picklists
+molscope picklists results.parquet --html
+
+# list built-ins
+molscope picklists results.parquet --list-builtins</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Optional: retrosynthesis planning (offline)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              If you install AiZynthFinder and download its public model/stock bundle, you can generate retrosynthesis routes and
+              browse them as an HTML site.
+            </p>
+            <pre><code>pip install -e .
+pip install aizynthfinder[all]
+
+# download AiZynthFinder public data + config
+download_public_data aizynth_data
+
+# run retrosynthesis on your results table
+molscope retro results.csv --config aizynth_data/config.yml --top-routes 5 --nproc 4</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Next steps</h2>
+          <div class="grid-3">
+            <a class="card link-card" href="tools/molprop-calc-v5.html">
+              <h3>Extended calculator options</h3>
+              <p class="muted">3D mode, ionization/protomers, stereo/tautomer handling, output columns.</p>
+            </a>
+            <a class="card link-card" href="tools/molprop-calc-v4.html">
+              <h3>Baseline calculator</h3>
+              <p class="muted">Use the smaller baseline table when you want a simpler medchem-focused descriptor set.</p>
+            </a>
+            <a class="card link-card" href="tools/ligand-prep.html">
+              <h3>Prep presets</h3>
+              <p class="muted">Use <code>molscope prep</code> when you want a dedicated triage, audit, 3D-ready, or external-prep workflow.</p>
+            </a>
+            <a class="card link-card" href="docs/columns.html">
+              <h3>Columns reference</h3>
+              <p class="muted">Column conventions, traceability fields, and the canonical result-table structure.</p>
+            </a>
+            <a class="card link-card" href="examples/">
+              <h3>Examples gallery</h3>
+              <p class="muted">Start from repo examples, then inspect the report, picklist, and series output patterns.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Notes: structure-of-record SMILES</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              Many tools need a single “structure-of-record” SMILES column. By default, MolScope Toolkit will prefer
+              <code>Calc_Canonical_SMILES</code> when present (the exact structure used for descriptor calculation), and will fall back
+              to <code>Calc_Base_SMILES</code> → <code>Canonical_SMILES</code> → <code>Input_Canonical_SMILES</code> → <code>SMILES</code>. You can override
+              this in individual tools with <code>--smiles-col</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common gotchas (public installs)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              If the calculators fail to import RDKit, confirm you activated the conda environment before running the CLI.
+              If you only want to analyze an existing results table, you can run <code>molscope analyze</code>, <code>molscope report</code>,
+              and <code>molscope picklists</code> as long as your file contains the expected columns (CSV/TSV/Parquet supported).
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Quickstart • <a style="color:var(--muted)" href="./">Home</a></div>
+        </div>
+        <div class="footer-links">
+          <a href="./#workflow">Workflow</a>
+          <a href="tools/">Tools</a>
+          <a href="docs/">Docs hub</a>
+          <a href="download/">Download</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

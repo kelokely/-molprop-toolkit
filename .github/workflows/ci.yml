@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          pip install rdkit
+
+      - name: Workflow contract
+        run: |
+          pytest tests/test_workflow_contract.py -q
+
+      - name: Ruff (basic)
+        run: |
+          ruff check .
+
+      - name: Pytest
+        run: |
+          pytest

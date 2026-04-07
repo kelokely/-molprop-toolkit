@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Examples • MolScope Toolkit</title>
+    <meta name="description" content="Examples and output gallery for MolScope Toolkit workflows." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Examples and output gallery</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../tools/">Tools</a>
+          <a href="../docs/">Docs</a>
+          <a href="../download/">Download</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Examples</div>
+            <h1>Start from the example data, then inspect the outputs.</h1>
+            <p>This page highlights the files and outputs most people will want to inspect first.</p>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container doc-grid">
+          <div class="card">
+            <h3>Canonical example run</h3>
+            <pre><code>molscope calc examples/example.smi -o results.parquet
+molscope analyze results.parquet --list
+molscope report results.parquet
+molscope picklists results.parquet --html</code></pre>
+            <div class="badge-row">
+              <span class="badge">Report bundle</span>
+              <span class="badge">HTML picklists</span>
+              <span class="badge">Shareable outputs</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Campaign Alpha validation pack</h3>
+            <p class="muted">Synthetic round-to-round campaign example for validating measured-data joins, compare, learnings, dashboard, and portal workflows together.</p>
+            <pre><code>python examples/build_campaign_alpha_demo.py</code></pre>
+            <div class="badge-row">
+              <span class="badge">Round review</span>
+              <span class="badge">Campaign memory</span>
+              <span class="badge">Benchmark pack</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Useful example assets in the repo</h3>
+            <ul>
+              <li><code>examples/example.smi</code> for the basic workflow demo.</li>
+              <li><code>examples/similarity_example.smi</code> for similarity and search flows.</li>
+              <li><code>examples/picklists.example.json</code> for custom operational queues.</li>
+              <li><code>examples/run_pipeline.sh</code> for a simple scripted walkthrough.</li>
+              <li><code>examples/campaign_alpha/</code> for the second-level validation bundle.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container doc-grid">
+          <div class="card">
+            <h3>Report bundle</h3>
+            <p class="muted">Best for project reviews and collaborator handoff. Generates Markdown, HTML, and plots from a single results table.</p>
+            <a class="btn" href="../tools/molprop-report.html">Report tool page</a>
+          </div>
+          <div class="card">
+            <h3>Picklist site</h3>
+            <p class="muted">Best for actionable queues such as make next, test next, or de-risk next. Optional HTML output makes the result portable.</p>
+            <a class="btn" href="../tools/molprop-picklists.html">Picklists tool page</a>
+          </div>
+          <div class="card">
+            <h3>Structure sheets</h3>
+            <p class="muted">Best for chemistry review meetings where teams want depictions and browseable structure pages rather than raw CSV rows.</p>
+            <a class="btn" href="../tools/molprop-sketch.html">Sketch tool page</a>
+          </div>
+          <div class="card">
+            <h3>Series analytics</h3>
+            <p class="muted">Best for scaffold and cluster review when a campaign has started to branch into multiple chemotypes.</p>
+            <a class="btn" href="../tools/molprop-series.html">Series tool page</a>
+          </div>
+          <div class="card">
+            <h3>Campaign portal</h3>
+            <p class="muted">Best when the project needs one linked bundle spanning report, picklists, compare, learnings, dashboard, SAR, MMP, and retro outputs.</p>
+            <a class="btn" href="../tools/molscope-portal.html">Portal tool page</a>
+          </div>
+          <div class="card">
+            <h3>Validation benchmark pack</h3>
+            <p class="muted">Best when you want to prove that the second-level campaign workflows are coherent on a realistic round4/round5 example instead of only a single table.</p>
+            <a class="btn" href="../docs/benchmarks.html">Benchmark docs</a>
+          </div>
+          <div class="card">
+            <h3>Campaign dashboard</h3>
+            <p class="muted">Best when the team wants to preserve lessons across rounds rather than rediscover them in slide decks and notebooks.</p>
+            <a class="btn" href="../tools/molscope-dashboard.html">Dashboard tool page</a>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container">
+          <div class="callout">
+            <strong>Next step:</strong> use the quickstart to reproduce the example flow locally, then use the docs hub for methods, validation, and uncertainty framing before you lean hard on the resulting signals.
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Examples and output patterns for the canonical workflow.</div>
+        </div>
+        <div class="footer-links">
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../docs/">Docs hub</a>
+          <a href="../tools/">Tools</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

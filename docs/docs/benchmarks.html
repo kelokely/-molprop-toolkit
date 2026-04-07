@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Benchmarks • MolScope Toolkit</title>
+    <meta name="description" content="Workflow benchmarks and scientific calibration notes for MolScope Toolkit." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Benchmarks</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Benchmarks</div>
+            <h1>Current benchmarks and calibration work</h1>
+            <p>This page separates the release checks already in place from the broader calibration work that is still in progress.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a class="is-active" href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Campaign Alpha validation pack</h2>
+          <p>The first benchmark bundle for the newer campaign workflows lives in <code>examples/campaign_alpha/</code>. It is synthetic, but it is structured to exercise the compare and decision-support workflows on something richer than the single-file quickstart.</p>
+          <div class="grid-2">
+            <div class="card">
+              <h3>What it runs</h3>
+              <pre><code>python examples/build_campaign_alpha_demo.py
+
+# under the hood:
+molscope integrate
+molscope compare
+molscope report
+molscope picklists --html
+molscope sar
+molscope mmp
+molscope learnings
+molscope dashboard
+molscope portal</code></pre>
+            </div>
+            <div class="card">
+              <h3>What this checks</h3>
+              <ul>
+                <li>Measured assay joins stay reusable across downstream workflows.</li>
+                <li>Compare outputs surface both improvements and regressions.</li>
+                <li>Low-coverage measured endpoints remain visible as open questions.</li>
+                <li>Learnings, dashboard, and portal can assemble one review-ready evidence trail.</li>
+              </ul>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Observed signal in the pack</th>
+                <th>Expected artifact behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Measured microsomal stability improves across shared compounds in round 5.</td>
+                <td><code>molscope compare</code> and <code>molscope learnings</code> should promote that as a positive shift.</td>
+              </tr>
+              <tr>
+                <td>Measured solubility regresses across shared compounds.</td>
+                <td>The round-review summary should keep a regression visible instead of only highlighting wins.</td>
+              </tr>
+              <tr>
+                <td><code>Measured_Caco2_AtoB</code> is only available on one shared pair.</td>
+                <td>The round-review summary should emit a low-coverage warning and an open question.</td>
+              </tr>
+              <tr>
+                <td><code>Scaffold_ID = SCF_C</code> expands from round 4 to round 5.</td>
+                <td>Group-delta outputs and learnings should flag that branch as a follow-up question, not just a count change.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <div class="callout">
+            <strong>Current benchmark baseline:</strong> workflow reliability and decision-support coherence are benchmarked more concretely than property-family calibration. That is intentional and should stay visible.
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Benchmark layer</th>
+                <th>Current status</th>
+                <th>What it proves</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Quickstart workflow</td>
+                <td><span class="badge-status stable">Stable</span></td>
+                <td>The public <code>calc → analyze → report → picklists</code> story works end to end from the shipped example input.</td>
+              </tr>
+              <tr>
+                <td>Measured-data joins</td>
+                <td><span class="badge-status stable">Stable</span></td>
+                <td>Integrated tables preserve provenance and can be reused by report, compare, and picklist workflows.</td>
+              </tr>
+              <tr>
+                <td>Compare / round review</td>
+                <td><span class="badge-status preview">Preview</span></td>
+                <td>Round-review artifacts surface positive shifts, negative shifts, low-coverage endpoints, and group expansions or contractions.</td>
+              </tr>
+              <tr>
+                <td>Decision products</td>
+                <td><span class="badge-status preview">Preview</span></td>
+                <td>Queues emit rationale, evidence mix, confidence, and minimal next-experiment prompts in a repeatable format.</td>
+              </tr>
+              <tr>
+                <td>Scientific calibration</td>
+                <td><span class="badge-status experimental">Experimental</span></td>
+                <td>The site documents method boundaries and limitations, but broader public calibration across chemistry space is still a growing layer.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <h2>Benchmark bundles to add next</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Heuristic family calibration</h3>
+              <p class="muted">Public datasets or representative internal examples showing where solubility, permeability, liability, PK, and developability heuristics help and where they mislead.</p>
+            </div>
+            <div class="card">
+              <h3>Campaign-history examples</h3>
+              <p class="muted">Example round histories for compare, learnings, dashboard, and decision-product validation so the campaign-memory layer can be tested on realistic sequence data.</p>
+            </div>
+            <div class="card">
+              <h3>Confidence-policy checks</h3>
+              <p class="muted">Demonstrations that missing measured data, sparse analog support, or conflicting signals appropriately lower decision confidence and narrow the recommended next experiment set.</p>
+            </div>
+            <div class="card">
+              <h3>Portal usability checks</h3>
+              <p class="muted">Artifact-bundle checks that verify a non-CLI stakeholder can navigate from summary claims to the linked evidence trail without opening raw CSVs.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Workflow checks and scientific calibration notes.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="status.html">Status</a>
+          <a href="validation.html">Validation</a>
+          <a href="methods.html">Methods</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

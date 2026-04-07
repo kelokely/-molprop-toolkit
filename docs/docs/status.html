@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Status • MolScope Toolkit</title>
+    <meta name="description" content="Feature maturity overview for MolScope Toolkit workflows." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Status</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/">Tools</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../examples/">Examples</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Maturity map</div>
+            <h1>Current feature status</h1>
+            <p>Use this page to check which features are stable, preview, or experimental across the homepage, tool pages, and scientific docs.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a class="is-active" href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Status</th>
+                <th>What that means now</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Prep, calc, analyze, report, picklists, schema</td>
+                <td><span class="badge-status stable">Stable</span></td>
+                <td>These commands are part of the release-gated public workflow and should work from the shipped example data without extra repo archaeology.</td>
+              </tr>
+              <tr>
+                <td>Integrate, compare, SAR, MMP, search, portal, learnings, dashboard</td>
+                <td><span class="badge-status preview">Preview</span></td>
+                <td>These workflows are implemented, tested, and documented, but still maturing around scientific validation depth and broader campaign coverage.</td>
+              </tr>
+              <tr>
+                <td>Heuristic-family calibration across chemistry space</td>
+                <td><span class="badge-status experimental">Experimental</span></td>
+                <td>The methods and uncertainty model are documented, but broader public calibration remains a growing benchmark layer rather than a finished claim.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            <strong>Reading rule:</strong> stable means release-gated and expected to support day-to-day use; preview means implemented and useful, but still an active maturation area; experimental means scientifically promising but not yet broad enough to overread.
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Feature maturity aligned with current workflow checks and calibration notes.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="validation.html">Validation</a>
+          <a href="benchmarks.html">Benchmarks</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

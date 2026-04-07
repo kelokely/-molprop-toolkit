@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Column Conventions • MolScope Toolkit</title>
+    <meta name="description" content="Column naming rules, traceability fields, and schema guidance for MolScope Toolkit tables." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Column conventions</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/validate-schema.html">Schema</a>
+          <a href="../tools/molprop-calc-v5.html">Calculator</a>
+          <a href="../quickstart.html">Quickstart</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Data contract</div>
+            <h1>How MolScope tables are organized</h1>
+            <p>The table format is designed so analyzers, reports, picklists, and future integrations can all treat the results file as the canonical dataset.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a class="is-active" href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container prose">
+          <div class="grid-2">
+            <div class="card">
+              <h3>Identifier rules</h3>
+              <p><code>Compound_ID</code> is the preferred identifier. If it is missing, most analyzers fall back to the first column, but projects should normalize to <code>Compound_ID</code> for the smoothest workflow.</p>
+            </div>
+            <div class="card">
+              <h3>Structure-of-record priority</h3>
+              <p>When downstream tools need a SMILES column, they prefer <code>Calc_Canonical_SMILES</code>, then <code>Calc_Base_SMILES</code>, then <code>Canonical_SMILES</code>, and only then raw <code>SMILES</code>.</p>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>What it records</th>
+                <th>Why it matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Preparation metadata</td><td><code>Input_Canonical_SMILES</code>, <code>Canonical_SMILES</code>, <code>Prep_*</code></td><td>Lets teams explain what standardization changed and why a structure shifted.</td></tr>
+              <tr><td>Tautomer, stereo, protomer handling</td><td><code>Tautomer_*</code>, <code>Stereo_*</code>, <code>Protomer_*</code></td><td>Preserves auditability for chemistry choices that can materially change descriptors and SAR interpretation.</td></tr>
+              <tr><td>Ionization metadata</td><td><code>Ion_Mode</code>, <code>Ion_pH</code>, <code>Ion_State</code>, <code>Ion_LogD_pH_Est</code></td><td>Keeps pH-aware reasoning visible instead of burying it inside a final score.</td></tr>
+              <tr><td>Core descriptor block</td><td><code>MolWt</code>, <code>LogP</code>, <code>TPSA</code>, <code>HBD</code>, <code>HBA</code></td><td>Front-of-table med-chem triage fields for rapid scanning.</td></tr>
+              <tr><td>Series and campaign context</td><td><code>Scaffold_*</code>, <code>Cluster_*</code>, optional measured columns</td><td>Makes the results file reusable across reports, picklists, and future assay-integration work.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout">
+            <strong>Why this matters:</strong> MolScope becomes much more useful once teams treat the output table as a standard, not just as calculator output. That makes schema validation, comparison, and assay integration much easier.
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Column naming and traceability guidance for canonical datasets.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="../tools/validate-schema.html">Schema utility</a>
+          <a href="feature-families.html">Feature families</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

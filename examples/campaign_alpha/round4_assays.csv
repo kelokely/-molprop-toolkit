@@ -1,0 +1,7 @@
+Compound_ID,pIC50,Solubility_uM,Caco2_AtoB,Microsomal_t12_min,hERG_IC50_uM
+CMPD_A1,6.4,34,,
+CMPD_A2,6.2,28,11,44,18
+CMPD_A3,5.9,14,,31,7
+CMPD_B1,6.1,41,,56,22
+CMPD_B2,5.8,22,,38,15
+CMPD_C1,5.6,18,,48,20

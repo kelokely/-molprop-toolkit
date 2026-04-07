@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Baseline Calculator • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Baseline calculator reference for MolScope Toolkit, including the molscope calc --profile baseline workflow and legacy molprop-calc-v4 alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: baseline calculator</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Baseline calculator</h1>
+          <p class="muted" style="max-width:80ch">
+            Baseline calculator that turns a SMILES list into a wide, analysis-ready CSV with core physicochemical properties,
+            CNS MPO, oral filters, Ro5/Ro3, med‑chem flags, toxicity alerts, metabolism soft spots, hERG/CYP heuristics, QED,
+            SA/complexity, and developability indices.
+          </p>
+          <p class="muted" style="max-width:80ch">
+            Command: <code>molscope calc --profile baseline</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status stable">Stable</span>
+            <span class="badge-evidence calculated">Calculated</span>
+            <span class="badge-evidence heuristic">Heuristic</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab is-active" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <p class="muted">Output format is inferred from the filename extension: <code>.csv</code>, <code>.tsv</code>, or <code>.parquet</code>.</p>
+            <pre><code># preferred wrapper
+molscope calc --profile baseline input.smi -o results.csv
+
+# legacy alias
+molprop-calc-v4 input.smi -o results.parquet
+
+# equivalent (script form)
+python calculators/mpo_v4.py input.smi -o results.csv</code></pre>
+          </div>
+          <div class="card">
+            <h3>What it outputs</h3>
+            <p class="muted" style="margin:0">
+              A single CSV where each row is a compound and columns include both numeric descriptors (e.g., MolWt/LogP/TPSA)
+              and interpretable flags/classes (e.g., CNS_MPO_Class, RO5_Violations, Tox_Risk, hERG_Risk, Dev_Score).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Ligand preparation (how the calculator standardizes structures)</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              The v4 calculator uses the same preparation chain as v5 when preparation is enabled: RDKit MolStandardize
+              cleanup, parent-fragment selection (salt stripping), optional uncharging/reionization, optional canonical tautomer
+              selection, then stereochemistry assignment for auditing. The standardized structure is recorded in
+              <code>Canonical_SMILES</code> and the calculation structure is recorded in <code>Calc_Canonical_SMILES</code>. If you need
+              an “options as sequences” view (including 3D/protomer choices), use the v5 tool page.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Common options</h2>
+          <div class="card">
+            <p class="muted" style="margin:0 0 12px">
+              The most authoritative reference is <code>molscope calc --profile baseline --help</code> (or the legacy
+              <code>molprop-calc-v4 --help</code>). Common workflow knobs include pH/ionization,
+              stereo handling, tautomer handling, and output filling.
+            </p>
+            <pre><code># choose pH and ionization mode (heuristic or none)
+molscope calc --profile baseline input.smi -o results.csv --ph 7.4 --ionization heuristic
+molscope calc --profile baseline input.smi -o results.csv --ionization none
+
+# stereochemistry handling
+molscope calc --profile baseline input.smi -o results.csv --stereo-mode keep
+molscope calc --profile baseline input.smi -o results.csv --stereo-mode strip
+molscope calc --profile baseline input.smi -o results.csv --stereo-mode enumerate --stereo-max 32
+
+# missing values
+touch results.csv
+molscope calc --profile baseline input.smi -o results.csv --fill-missing 0</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope calc --profile baseline</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feature Families • MolScope Toolkit</title>
+    <meta name="description" content="Column-family cheat sheet for MolScope Toolkit output tables." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Feature families</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="./">Docs</a>
+          <a href="../tools/molprop-calc-v5.html">Calculate</a>
+          <a href="../tools/molprop-analyze.html">Analyze</a>
+          <a href="../tools/molprop-series.html">Series</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Cheat sheet</div>
+            <h1>Feature families at a glance</h1>
+            <p>These prefix groups are the fastest way to move from raw columns to interpretation. If a table is unfamiliar, start here before diving into every individual field.</p>
+            <div class="doc-nav">
+              <a href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a class="is-active" href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container prose">
+          <table>
+            <thead>
+              <tr>
+                <th>Family</th>
+                <th>Examples</th>
+                <th>How teams usually use it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>Prep_*</code>, <code>Tautomer_*</code>, <code>Stereo_*</code>, <code>Protomer_*</code>, <code>Ion_*</code></td><td>Preparation and ionization audit fields</td><td>Explain why structure handling changed rankings or SAR interpretation.</td></tr>
+              <tr><td><code>MPO_*</code>, <code>RO5_*</code>, <code>RO3_*</code></td><td>CNS MPO and rule-style filters</td><td>Diagnose property-balance tradeoffs and oral/fragment-like fitness.</td></tr>
+              <tr><td><code>Tox_*</code>, <code>Met_*</code>, <code>hERG_*</code>, <code>CYP_*</code></td><td>Alert and liability families</td><td>Prioritize orthogonal assays, counterscreens, and chemistry de-risking.</td></tr>
+              <tr><td><code>Sol_*</code>, <code>Perm_*</code>, <code>PPB_*</code>, <code>Vd_*</code>, <code>CL_*</code>, <code>F_*</code></td><td>Exposure and PK-facing heuristics</td><td>Rank compounds for solubility, permeability, and PK risk before expensive profiling.</td></tr>
+              <tr><td><code>Lead_*</code>, <code>SA_*</code>, <code>Complexity_*</code>, <code>Dev_*</code></td><td>Optimization and operational burden signals</td><td>Check whether potency gains are coming with synthetic or developability cost.</td></tr>
+              <tr><td><code>Scaffold_*</code>, <code>Cluster_*</code>, <code>3D_*</code></td><td>Series and shape context</td><td>Compare chemotypes, identify redundancy, and inspect shape diversity across a campaign.</td></tr>
+            </tbody>
+          </table>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3>Best first use</h3>
+              <p>When you open a new results table, this page is a quick way to translate column prefixes into practical meaning.</p>
+            </div>
+            <div class="card">
+              <h3>Best follow-up</h3>
+              <p>Once you know the family, use the category guide for deeper interpretation and the tools pages for the commands that generate or consume those fields.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Prefix-based guide to reading result-table families.</div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Docs hub</a>
+          <a href="categories.html">Category guide</a>
+          <a href="../tools/molprop-calc-v5.html">Calculator</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

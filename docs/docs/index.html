@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Documentation • MolScope Toolkit</title>
+    <meta name="description" content="Native documentation hub for MolScope Toolkit, including commands, categories, feature families, and column conventions." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Documentation hub</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../tools/">Tools</a>
+          <a href="../examples/">Examples</a>
+          <a href="../download/">Download</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-shell">
+            <div class="page-kicker">Reference</div>
+            <h1>Documentation for everyday use.</h1>
+            <p>
+              Start here for the pages most people need, from install and commands through interpretation.
+            </p>
+            <div class="doc-nav">
+              <a class="is-active" href="./">Docs hub</a>
+              <a href="commands.html">Commands</a>
+              <a href="categories.html">Categories</a>
+              <a href="feature-families.html">Feature families</a>
+              <a href="columns.html">Columns</a>
+              <a href="use-cases.html">Use cases</a>
+              <a href="methods.html">Methods</a>
+              <a href="validation.html">Validation</a>
+              <a href="status.html">Status</a>
+              <a href="benchmarks.html">Benchmarks</a>
+              <a href="representation-policy.html">Representation</a>
+              <a href="uncertainty.html">Uncertainty</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container doc-grid">
+          <a class="card link-card" href="commands.html">
+            <h3>Command summary</h3>
+            <p class="muted">The canonical `molscope` workflow, calculator profiles, and compatibility aliases.</p>
+          </a>
+          <a class="card link-card" href="categories.html">
+            <h3>Category guide</h3>
+            <p class="muted">Narrative interpretation notes for preclinical-facing categories and how to act on them.</p>
+          </a>
+          <a class="card link-card" href="feature-families.html">
+            <h3>Feature families</h3>
+            <p class="muted">Prefix-based column families mapped to how med-chem teams use them during triage.</p>
+          </a>
+          <a class="card link-card" href="columns.html">
+            <h3>Column conventions</h3>
+            <p class="muted">Identifier rules, prep metadata, ionization traces, and the naming patterns behind the dataset.</p>
+          </a>
+          <a class="card link-card" href="use-cases.html">
+            <h3>Use cases</h3>
+            <p class="muted">Start from the job you are trying to do: triage a library, compare rounds, merge assays, or publish a portal bundle.</p>
+          </a>
+          <a class="card link-card" href="methods.html">
+            <h3>Methods</h3>
+            <p class="muted">Method cards for preparation, descriptors, alerts, exposure heuristics, campaign comparison, and retrosynthesis reranking.</p>
+          </a>
+          <a class="card link-card" href="validation.html">
+            <h3>Validation</h3>
+            <p class="muted">Workflow release checks, benchmark coverage, and the parts of the toolkit that are still intentionally heuristic.</p>
+          </a>
+          <a class="card link-card" href="status.html">
+            <h3>Status</h3>
+            <p class="muted">A single reference for stable, preview, and experimental labels across the site.</p>
+          </a>
+          <a class="card link-card" href="benchmarks.html">
+            <h3>Benchmarks</h3>
+            <p class="muted">Concrete release gates, benchmark bundles, and example evaluation lenses for workflow, compare, and decision-product outputs.</p>
+          </a>
+          <a class="card link-card" href="representation-policy.html">
+            <h3>Representation policy</h3>
+            <p class="muted">Why salt stripping, tautomer choice, stereochemistry, and protomer handling matter for downstream chemistry decisions.</p>
+          </a>
+          <a class="card link-card" href="uncertainty.html">
+            <h3>Uncertainty and confidence</h3>
+            <p class="muted">How measured, calculated, heuristic, and campaign-derived evidence should be weighed in reports and picklists.</p>
+          </a>
+          <a class="card link-card" href="../quickstart.html">
+            <h3>Quickstart</h3>
+            <p class="muted">Install, run the example data, and generate report and picklist outputs end to end.</p>
+          </a>
+          <a class="card link-card" href="../tools/">
+            <h3>Tool reference</h3>
+            <p class="muted">Job-oriented tool pages for calculate, integrate, compare, learnings, dashboard, SAR, MMP, search, portal, report, retro, and more.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container prose">
+          <div class="callout">
+            <strong>Recommended reading order:</strong> start with the quickstart, then the command summary, then the
+            category guide when you want interpretation help for specific risk families. Add the methods and uncertainty
+            pages once you need to decide how hard to lean on a given signal.
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <h3>For a new user</h3>
+              <p class="muted">Use the quickstart and command summary first. Those two pages cover install, the canonical workflow, and the expected shareable outputs.</p>
+            </div>
+            <div class="card">
+              <h3>For a returning project team</h3>
+              <p class="muted">Use the category guide and feature-family reference when you need to understand what a signal means and how it should affect assay or design choices.</p>
+            </div>
+            <div class="card">
+              <h3>For scientific grounding</h3>
+              <p class="muted">Use methods, representation policy, validation, and uncertainty when you want the site to show its work instead of only its workflow.</p>
+            </div>
+            <div class="card">
+              <h3>For job-based navigation</h3>
+              <p class="muted">Use the use-cases page when you know the task you are trying to complete but do not yet know which commands or artifacts fit best.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Documentation hub for medicinal chemistry triage workflows.</div>
+        </div>
+        <div class="footer-links">
+          <a href="../">Home</a>
+          <a href="../examples/">Examples</a>
+          <a href="../download/">Download</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

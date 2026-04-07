@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campaign Portal • Tools • MolScope Toolkit</title>
+    <meta name="description" content="Campaign portal reference for MolScope Toolkit, including the molscope portal workflow and legacy molprop-portal alias." />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./">
+          <img class="brand-logo" src="../assets/logo.svg" alt="MolScope Toolkit logo" />
+          <span class="brand-text">
+            <span class="brand-name">MolScope Toolkit</span>
+            <span class="brand-tag">Reference: campaign portal</span>
+          </span>
+        </a>
+        <nav class="nav">
+          <a href="../">Home</a>
+          <a href="../#workflow">Workflow</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="../#docs">Docs</a>
+          <a href="./">Tools</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:34px">
+        <div class="container">
+          <h1 style="margin:0 0 10px; font-size:34px; line-height:1.15">Campaign portal</h1>
+          <p class="muted" style="max-width:84ch">
+            Assemble previously generated report, picklist, compare, learnings, dashboard, SAR, MMP, and retrosynthesis bundles into one linked
+            workspace with a single <code>index.html</code> entry point. This is the handoff layer for project reviews,
+            collaborator shares, and static campaign snapshots.
+          </p>
+          <p class="muted" style="max-width:84ch">
+            Command: <code>molscope portal</code>.
+          </p>
+
+          <div class="credibility-strip">
+            <span class="badge-status preview">Preview</span>
+            <span class="badge-evidence campaign">Campaign</span>
+            <span class="badge-evidence measured">Measured</span>
+          </div>
+          <p class="tool-context-note">Method notes: <a href="../docs/methods.html">Methods</a> • <a href="../docs/validation.html">Validation</a> • <a href="../docs/uncertainty.html">Uncertainty</a> • <a href="../docs/representation-policy.html">Representation policy</a></p>
+
+          <div class="tool-tabs" aria-label="Tools">
+            <a class="tool-tab" data-tool="molprop-calc-v4" href="molprop-calc-v4.html">calc baseline</a>
+            <a class="tool-tab" data-tool="molprop-calc-v5" href="molprop-calc-v5.html">calc extended</a>
+            <a class="tool-tab" data-tool="ligand-prep" href="ligand-prep.html">prep</a>
+            <a class="tool-tab" data-tool="molscope-integrate" href="molscope-integrate.html">integrate</a>
+            <a class="tool-tab" data-tool="molscope-compare" href="molscope-compare.html">compare</a>
+            <a class="tool-tab" data-tool="molscope-learnings" href="molscope-learnings.html">learnings</a>
+            <a class="tool-tab" data-tool="molscope-dashboard" href="molscope-dashboard.html">dashboard</a>
+            <a class="tool-tab" data-tool="molscope-sar" href="molscope-sar.html">sar</a>
+            <a class="tool-tab" data-tool="molscope-mmp" href="molscope-mmp.html">mmp</a>
+            <a class="tool-tab" data-tool="molscope-search" href="molscope-search.html">search</a>
+            <a class="tool-tab" data-tool="molprop-analyze" href="molprop-analyze.html">analyze</a>
+            <a class="tool-tab" data-tool="molprop-report" href="molprop-report.html">report</a>
+            <a class="tool-tab" data-tool="molprop-sketch" href="molprop-sketch.html">sketch</a>
+            <a class="tool-tab" data-tool="molprop-series" href="molprop-series.html">series</a>
+            <a class="tool-tab" data-tool="molprop-picklists" href="molprop-picklists.html">picklists</a>
+            <a class="tool-tab is-active" data-tool="molscope-portal" href="molscope-portal.html">portal</a>
+            <a class="tool-tab" data-tool="molprop-similarity" href="molprop-similarity.html">similarity</a>
+            <a class="tool-tab" data-tool="molprop-featurize" href="molprop-featurize.html">featurize</a>
+            <a class="tool-tab" data-tool="molprop-retro" href="molprop-retro.html">retro</a>
+            <a class="tool-tab" data-tool="validate-schema" href="validate-schema.html">schema</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="card">
+            <h3>Typical usage</h3>
+            <pre><code>molscope portal --report-dir reports/demo \
+  --picklists-dir picklists/demo \
+  --compare-dir compare/demo \
+  --learnings-dir learnings/demo \
+  --dashboard-dir dashboard/campaign_alpha \
+  -o portal/demo</code></pre>
+          </div>
+          <div class="card">
+            <h3>What you get</h3>
+            <p class="muted" style="margin:0">
+              A static folder with a top-level <code>index.html</code>, copied sub-bundles for each supplied artifact
+              directory, and metadata describing which sections were assembled.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Build a review-ready workspace</h2>
+          <div class="card">
+            <pre><code>molscope report campaign.csv --outdir reports/round5
+molscope picklists campaign.csv --outdir picklists/round5 --html
+molscope learnings --picklists-dir picklists/round5 -o learnings/round5
+molscope dashboard --learnings-dir learnings/round5 -o dashboard/campaign_alpha
+molscope sar campaign.csv -o sar/round5
+molscope mmp campaign.csv -o mmp/round5
+molscope portal \
+  --report-dir reports/round5 \
+  --picklists-dir picklists/round5 \
+  --learnings-dir learnings/round5 \
+  --dashboard-dir dashboard/campaign_alpha \
+  --sar-dir sar/round5 \
+  --mmp-dir mmp/round5 \
+  -o portal/round5</code></pre>
+            <p class="muted" style="margin:12px 0 0">
+              The portal command does not rerun those analyses. It assembles the outputs you already created and gives
+              project teams one browseable starting point, including the persistent dashboard that carries lessons forward
+              across rounds.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Why it matters</h2>
+          <div class="card">
+            <p class="muted" style="margin:0">
+              <code>molscope portal</code> is the bridge from generated artifacts to a campaign-facing workspace. Instead
+              of shipping several folders and asking collaborators where to start, you hand them one linked bundle with
+              direct paths into report, picklist, compare, learnings, dashboard, SAR, MMP, and retrosynthesis evidence.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <div class="footer-title">MolScope Toolkit</div>
+          <div class="muted">Created by <a href="https://www.uwyo.edu/pharmacy/faculty-and-staff-directory/faculty/khaled-elokely.html" target="_blank" rel="noreferrer" style="color:var(--muted)">Elokely Lab</a> • University of Wyoming School of Pharmacy</div>
+          <div class="muted">Tool reference • <code>molscope portal</code></div>
+        </div>
+        <div class="footer-links">
+          <a href="./">Tools index</a>
+          <a href="../quickstart.html">Quickstart</a>
+          <a href="https://github.com/kelokely/-molprop-toolkit">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
