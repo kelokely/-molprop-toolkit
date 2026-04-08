@@ -31,11 +31,13 @@ body::before{
   content:"";
   position:fixed;
   inset:0;
-  background-image:url("medchem-lab-watermark.svg");
+  background-image:url("background-watermark.webp");
   background-repeat:no-repeat;
-  background-position:right -130px top 84px;
-  background-size:min(62vw, 920px);
-  opacity:.08;
+  background-position:center center;
+  background-size:cover;
+  opacity:.038;
+  filter:saturate(.92) contrast(1.02);
+  transform:scale(1.02);
   pointer-events:none;
   z-index:0;
 }
@@ -758,9 +760,9 @@ li{ margin:8px 0; }
 
 @media (max-width: 940px){
   body::before{
-    background-position:center top 120px;
-    background-size:min(94vw, 760px);
-    opacity:.06;
+    background-position:center top;
+    background-size:cover;
+    opacity:.028;
   }
   .hero-grid{ grid-template-columns:1fr; }
   .grid-4,.grid-3,.grid-2{ grid-template-columns:1fr; }
