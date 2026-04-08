@@ -4,6 +4,7 @@ __pycache__/
 *.pyd
 *.csv
 !tests/data/*.csv
+!docs/manuscript-data/**/*.csv
 *.tsv
 *.xlsx
 *.parquet

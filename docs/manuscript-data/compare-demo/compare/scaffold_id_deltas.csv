@@ -1,0 +1,4 @@
+Scaffold_ID,reference_count,candidate_count,count_delta,shared_compounds
+SCF_A,3,3,0,2
+SCF_B,2,2,0,1
+SCF_C,1,2,1,1
