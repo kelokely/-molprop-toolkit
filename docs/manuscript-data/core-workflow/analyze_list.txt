@@ -1,0 +1,22 @@
+
+Available categories:
+
+  cns_mpo            | CNS MPO Analysis | columns available: 16
+  oral_bioavailability | Oral Bioavailability Analysis | columns available: 10
+  rule_of_5          | Rule of 5 (Lipinski) Analysis | columns available: 10
+  rule_of_3          | Rule of 3 (Fragment) Analysis | columns available: 8
+  medchem_flags      | MedChem Flags (PAINS/BRENK/NIH/ZINC) | columns available: 6
+  toxicity           | Toxicity Structural Alerts | columns available: 19
+  metabolism         | Metabolism and Soft Spots | columns available: 15
+  herg               | hERG Risk | columns available: 5
+  cyp                | CYP Inhibition Risk | columns available: 5
+  solubility         | Solubility | columns available: 3
+  permeability       | Permeability | columns available: 7
+  pk                 | PK heuristics | columns available: 9
+  lead               | Lead optimization metrics | columns available: 8
+  qed                | QED | columns available: 1
+  sa_complexity      | Synthetic accessibility + complexity | columns available: 11
+  scaffolds          | Murcko scaffolds | columns available: 0
+  clustering         | Similarity clusters | columns available: 0
+  developability     | Developability indices | columns available: 10
+  shape3d            | 3D shape descriptors | columns available: 0

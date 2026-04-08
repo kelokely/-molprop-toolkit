@@ -1,0 +1,4 @@
+REP_SALT	O=C([O-])c1ccccc1.[Na+]
+REP_TAUT	Oc1ccccn1
+REP_STEREO	CC(O)C(=O)O
+REP_PROTOMER	C[NH+](C)CCO.[Cl-]

@@ -1,0 +1,58 @@
+{
+  "reference_name": "round4",
+  "candidate_name": "round5",
+  "group_column": "Scaffold_ID",
+  "positive_shifts": [
+    {
+      "endpoint": "Measured_Microsomal_t12_min",
+      "paired_mean_delta": 5.5,
+      "shared_non_null": 4
+    },
+    {
+      "endpoint": "Lead_BEI",
+      "paired_mean_delta": 2.415,
+      "shared_non_null": 4
+    },
+    {
+      "endpoint": "Lead_SEI",
+      "paired_mean_delta": 1.1702,
+      "shared_non_null": 4
+    }
+  ],
+  "negative_shifts": [
+    {
+      "endpoint": "Measured_Solubility_uM",
+      "paired_mean_delta": -6.0,
+      "shared_non_null": 3
+    },
+    {
+      "endpoint": "Retro_Rerank_Rank",
+      "paired_mean_delta": -4.0,
+      "shared_non_null": 4
+    },
+    {
+      "endpoint": "Measured_Caco2_AtoB",
+      "paired_mean_delta": -2.0,
+      "shared_non_null": 1
+    }
+  ],
+  "low_coverage_endpoints": [
+    {
+      "endpoint": "Measured_Caco2_AtoB",
+      "shared_non_null": 1
+    }
+  ],
+  "expanded_groups": [
+    {
+      "group": "SCF_C",
+      "count_delta": 1,
+      "reference_count": 1,
+      "candidate_count": 2
+    }
+  ],
+  "contracted_groups": [],
+  "open_questions": [
+    "Add more overlapping measurements for Measured_Caco2_AtoB before treating it as a stable round-over-round signal.",
+    "Check whether the expanded scaffold_id groups preserved property balance or only increased campaign breadth."
+  ]
+}
